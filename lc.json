@@ -1,0 +1,31 @@
+{
+  "serviceName": "homedesign",
+  "containers": {
+    "server": {
+      "image": ":homedesign.homedesign-server.3",
+      "ports": {
+        "3000": "HTTP"
+      },
+      "environment": {
+        "NODE_ENV": "production",
+        "DB_SSL": "true",
+        "DB_SYNC": "true",
+        "DB_HOST": "ep-proud-salad-81117033.eu-central-1.aws.neon.tech",
+        "DB_NAME": "homedesigndb",
+        "DB_USER": "luca.vassos",
+        "DB_PASSWORD": "lqKGBP3C7VER",
+        "OPENAI_API_KEY": "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",
+        "TOKEN_KEY": "t$$J6eEwg&",
+        "TOKEN_EXPIRES_IN": "1h"
+      }
+    }
+  },
+  "publicEndpoint": {
+    "containerName": "server",
+    "containerPort": 3000,
+    "healthCheck": {
+      "intervalSeconds": 15,
+      "path": "/health"
+    }
+  }
+}

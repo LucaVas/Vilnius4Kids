@@ -1,0 +1,16 @@
+{
+  "name": "homedesign",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "devDependencies": {
+    "uuid": "^9.0.1"
+  },
+  "dependencies": {
+    "@types/uuid": "^9.0.7"
+  }
+}
