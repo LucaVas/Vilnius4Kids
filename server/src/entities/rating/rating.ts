@@ -1,10 +1,5 @@
-import {
-  Column,
-  Entity,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Playground } from '../plaground/playground';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Playground } from '../playground/playground';
 
 @Entity('ratings')
 export class Rating {

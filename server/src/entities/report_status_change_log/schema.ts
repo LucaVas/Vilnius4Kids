@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { validates } from '@server/utils/validation';
 import { ReportStatusChangeLog } from './reportStatusChangeLog';
-import { ReportStatus } from '../report/reportStatus';
+import { ReportStatus } from '../report/ReportStatus';
 
 export type BareChangeLog = Omit<
   ReportStatusChangeLog,

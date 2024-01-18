@@ -1,49 +1,52 @@
 import { random } from '@tests/utils/random';
-import { Category, Item, Message, User } from '..';
-import { Room } from '../room/room';
-
+import { Address, Playground, Rating, Report, ReportStatusChangeLog, User } from '..';
 const randomId = () => random.integer({ min: 1, max: 2147483647 });
 
 export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
-    id: randomId(),
-    email: random.email(),
-    password: 'Password.123!',
-    ...overrides,
+  id: randomId(),
+  username: random.string(),
+  email: random.email(),
+  password: 'Password.123!',
+  ...overrides,
 });
 
-export const fakeMessage = <T extends Partial<Message>>(overrides: T = {} as T) => ({
-    id: randomId(),
-    role: 'user',
-    content: random.string(),
-    ...overrides,
-});
-
-export const fakeItem = <T extends Partial<Item>>(overrides: T = {} as T) => ({
-    id: randomId(),
-    name: random.string(),
-    description: 'This is a description',
-    imageUrl: 'http://www.example.com',
-    price: random.integer({ min: 0, max: 999 }),
-    width: random.integer({ min: 1, max: 999 }),
-    length: random.integer({ min: 1, max: 999 }),
-    x: random.integer({ min: 1, max: 1000 }),
-    y: random.integer({ min: 1, max: 1000 }),
-    ...overrides,
-});
-
-export const fakeRoom = <T extends Partial<Room>>(overrides: T = {} as T) => ({
-    id: randomId(),
-    name: random.string(),
-    width: random.integer({ min: 0.01, max: 50 }),
-    length: random.integer({ min: 0.01, max: 50 }),
-    area: 0.0,
-    ...overrides,
-});
-
-export const fakeCategory = <T extends Partial<Category>>(
-    overrides: T = {} as T
+export const fakeAddress = <T extends Partial<Address>>(
+  overrides: T = {} as T
 ) => ({
-    id: randomId(),
-    name: random.string(),
-    ...overrides,
+  id: randomId(),
+  street: random.string(),
+  city: random.string(),
+  state: random.string(),
+  zip: random.string(),
+  ...overrides,
 });
+
+export const fakePlayground = <T extends Partial<Playground>>(
+  overrides: T = {} as T
+) => ({
+  id: randomId(),
+  isPrivate: false,
+  isOpen: true,
+  ...overrides,
+});
+
+export const fakeRating = <T extends Partial<Rating>>(overrides: T = {} as T) => ({
+  id: randomId(),
+  rating: random.integer({ min: 0.1, max: 5 }),
+  votes: random.integer({ min: 1, max: 5000 }),
+  ...overrides,
+});
+
+export const fakeReport = <T extends Partial<Report>>(overrides: T = {} as T) => ({
+    id: randomId(),
+    description: random.string(),
+    status: 'open',
+    ...overrides,
+})
+
+export const fakeChangeLog = <T extends Partial<ReportStatusChangeLog>>(overrides: T = {} as T) => ({
+    id: randomId(),
+    status: 'open',
+    changeStatusMessage: random.string(),
+    ...overrides,
+})

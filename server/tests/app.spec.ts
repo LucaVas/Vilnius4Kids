@@ -1,12 +1,10 @@
 // starts with the real database configuration
 import createApp from '@server/app';
 import supertest from 'supertest';
-import { fakeAi } from '@server/modules/message/chat/test/fakes';
 import { createTestDatabase } from './utils/database';
 
 const database = await createTestDatabase();
-const ai = fakeAi('test');
-const app = createApp(database, ai);
+const app = createApp(database);
 
 afterAll(() => {
     database.destroy();

@@ -1,6 +1,6 @@
 /* eslint-disable import/export */
 export { Address } from './address/address';
-export { Playground } from './plaground/playground';
+export { Playground } from './playground/playground';
 export { Rating } from './rating/rating';
 export { Report } from './report/report';
 export { ReportStatusChangeLog } from './report_status_change_log/reportStatusChangeLog';

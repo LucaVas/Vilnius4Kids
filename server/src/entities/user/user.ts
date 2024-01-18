@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Address } from '../address/address';
-import { Playground } from '../plaground/playground';
+import { Playground } from '../playground/playground';
 import { Report } from '../report/report';
 import { Role } from './Role';
 

@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../user/user';
-import { Playground } from '../plaground/playground';
+import { Playground } from '../playground/playground';
 
 @Entity('addresses')
 export class Address {

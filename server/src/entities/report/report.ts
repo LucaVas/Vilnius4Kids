@@ -9,9 +9,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user';
-import { Playground } from '../plaground/playground';
+import { Playground } from '../playground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
-import { ReportStatus } from './reportStatus';
+import { ReportStatus } from './ReportStatus';
 
 @Entity('reports')
 export class Report {
@@ -19,7 +19,7 @@ export class Report {
   id: number;
 
   @Column('varchar', { length: 500, nullable: false })
-  text: string;
+  description: string;
 
   @Column('enum', {
     enum: ReportStatus,

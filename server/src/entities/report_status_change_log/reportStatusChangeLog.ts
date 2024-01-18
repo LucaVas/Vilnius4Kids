@@ -5,9 +5,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Playground } from '../plaground/playground';
+import { Playground } from '../playground/playground';
 import { Report } from '../report/report';
-import { ReportStatus } from '../report/reportStatus';
+import { ReportStatus } from '../report/ReportStatus';
 
 @Entity('report_status_change_logs')
 export class ReportStatusChangeLog {

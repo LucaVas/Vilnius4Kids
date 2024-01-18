@@ -19,8 +19,7 @@ vi.mock('jsonwebtoken', () => ({
 }))
 
 const db = {} as any
-const ai = {} as any
-const authenticated = routes.createCaller(authContext({ db, ai }))
+const authenticated = routes.createCaller(authContext({ db }))
 
 it('should pass if user is already authenticated', async () => {
   const response = await authenticated.testCall()
@@ -31,7 +30,6 @@ it('should pass if user is already authenticated', async () => {
 it('should pass if user provides a valid token', async () => {
   const usingValidToken = routes.createCaller({
     db,
-    ai,
     req: {
       header: () => `Bearer ${VALID_TOKEN}`,
     } as any,
@@ -43,7 +41,7 @@ it('should pass if user provides a valid token', async () => {
 })
 
 it('should throw an error if user is not logged in', async () => {
-  const unauthenticated = routes.createCaller(requestContext({ db, ai }))
+  const unauthenticated = routes.createCaller(requestContext({ db }))
 
   await expect(unauthenticated.testCall()).rejects.toThrow(
     // any authentication-like error
@@ -55,7 +53,6 @@ it('should throw an error if it is run without access to headers', async () => {
   const invalidToken = routes.createCaller(
     requestContext({
       db,
-      ai,
       req: undefined as any,
     })
   )
@@ -67,7 +64,6 @@ it('should throw an error if user provides invalid token', async () => {
   const invalidToken = routes.createCaller(
     requestContext({
       db,
-      ai,
       req: {
         header: () => 'Bearer invalid-token',
       } as any,

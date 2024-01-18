@@ -6,7 +6,7 @@ export type BareRating = Omit<Rating, 'playground'>;
 
 export const ratingSchema = validates<BareRating>().with({
   id: z.number().int().positive(),
-  rating: z.number().positive(),
+  rating: z.number().positive().max(5),
   votes: z.number().int().positive(),
   createdAt: z.date(),
   updatedAt: z.date(),
