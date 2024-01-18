@@ -19,14 +19,13 @@ export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
     ...overrides,
 });
 
-export const fakeAddress = <T extends Partial<Address>>(
-    overrides: T = {} as T
-) => ({
+export const fakeAddress = <T extends Partial<Address>>(overrides: T = {} as T) => ({
     id: randomId(),
     street: random.string(),
     city: random.string(),
     state: random.string(),
-    zip: random.string(),
+    number: random.integer({ min: 1, max: 999 }),
+    zipCode: random.integer({ min: 10000, max: 99999 }),
     ...overrides,
 });
 
