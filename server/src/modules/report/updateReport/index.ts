@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
-import { Report } from '@server/entities';
+import { Report, ReportStatusChangeLog } from '@server/entities';
 import { reportUpdateSchema } from '../../../entities/report/schema';
 
 export default authenticatedProcedure
@@ -22,6 +22,13 @@ export default authenticatedProcedure
                 message: `Report with ID [${id}] does not exist.`,
             });
         }
+
+        await db.getRepository(ReportStatusChangeLog).insert({
+            report: raw[0],
+            playground: raw[0].playground,
+            status,
+            changeStatusMessage: description,
+        });
 
         return {
             message: `Report with ID [${id}] updated successfully.`,

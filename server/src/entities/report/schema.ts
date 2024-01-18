@@ -3,7 +3,7 @@ import { validates } from '@server/utils/validation';
 import { Report } from './report';
 import { ReportStatus } from './ReportStatus';
 
-export type BareReport = Omit<Report, 'user' | 'changeLogs' | 'playgrounds'>;
+export type BareReport = Omit<Report, 'user' | 'changeLogs' | 'playground'>;
 
 export const reportSchema = validates<BareReport>().with({
     id: z.number().int().positive(),
@@ -18,6 +18,7 @@ export const reportSchema = validates<BareReport>().with({
         })
         .describe('Report description'),
     status: z.nativeEnum(ReportStatus).describe('Report status'),
+
     createdAt: z.date(),
     updatedAt: z.date(),
 });
@@ -31,13 +32,10 @@ export const reportInsertSchema = reportSchema
     })
     .extend({ playgroundId: z.number().int().positive() });
 
-export const reportUpdateSchema = reportSchema
-    .omit({
-        createdAt: true,
-        updatedAt: true,
-    })
-    .partial()
-    .required({ status: true });
+export const reportUpdateSchema = reportSchema.omit({
+    createdAt: true,
+    updatedAt: true,
+});
 
 export const reportIdSchema = reportSchema.pick({ id: true });
 

@@ -27,7 +27,7 @@ export class ReportStatusChangeLog {
   changedAt: Date;
 
   @ManyToOne(() => Report, report => report.changeLogs, { onDelete: 'CASCADE' })
-  reports: Report[];
+  report: Report;
 
   @OneToMany(() => Playground, playground => playground.address, {
     onDelete: 'CASCADE',

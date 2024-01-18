@@ -1,10 +1,7 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
-import {
-    fakePlayground,
-    fakeUser,
-} from '@server/entities/tests/fakes';
-import { Playground, User } from '@server/entities';
+import { fakePlayground, fakeUser } from '@server/entities/tests/fakes';
+import { Playground, ReportStatusChangeLog, User } from '@server/entities';
 import router from '..';
 
 const db = await createTestDatabase();
@@ -24,6 +21,11 @@ describe('Report a new issue', async () => {
 
         expect(message).toEqual('Report added successfully.');
         expect(newReport.description).toEqual('Test report description');
+
+        const logs = await db
+            .getRepository(ReportStatusChangeLog)
+            .findBy({ report: newReport });
+        expect(logs).toHaveLength(1);
     });
 
     it('User cannot report if playground does not exist', async () => {
@@ -32,20 +34,21 @@ describe('Report a new issue', async () => {
                 playgroundId: 100,
                 description: 'Test report description',
             })
-        ).rejects.toThrow("Playground with ID [100] does not exist.");
+        ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
 
     it('User cannot report with a too short description', async () => {
-
         const playground = await db
             .getRepository(Playground)
             .save(fakePlayground());
 
         await expect(
             report({
-            playgroundId: playground.id,
-            description: '',
+                playgroundId: playground.id,
+                description: '',
             })
-        ).rejects.toThrow(/Report description should be at least 5 characters long./);
+        ).rejects.toThrow(
+            /Report description should be at least 5 characters long./
+        );
     });
 });

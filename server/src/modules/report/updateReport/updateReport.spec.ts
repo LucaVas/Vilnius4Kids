@@ -33,22 +33,6 @@ describe('Update an existing report', async () => {
         ).rejects.toThrow('Report with ID [100] does not exist.');
     });
 
-    it('User can update partially an existing report', async () => {
-        const existingReport = fakeReport();
-        const existing = await db.getRepository(Report).save(existingReport);
-
-        const { message, report } = await updateReport({
-            id: existing.id,
-            status: getStatusFromString('in progress')!,
-        });
-
-        expect(message).toEqual(
-            `Report with ID [${existing.id}] updated successfully.`
-        );
-        expect(report.description).toEqual(existingReport.description);
-        expect(report.status).not.toEqual(existingReport.status);
-    });
-
     it('User cannot update a report with an invalid status', async () => {
         const existingReport = fakeReport();
         const existing = await db.getRepository(Report).save(existingReport);

@@ -35,7 +35,7 @@ export class Report {
     })
     user: User;
 
-    @OneToMany(() => ReportStatusChangeLog, (log) => log.reports, {
+    @OneToMany(() => ReportStatusChangeLog, (log) => log.report, {
         onDelete: 'SET NULL',
     })
     changeLogs: ReportStatusChangeLog[];
