@@ -6,18 +6,15 @@ import SuperJSON from 'superjson';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 import { TRPCPanelMeta } from 'trpc-panel';
-import OpenAI from 'openai';
 
 export type Context = {
     db: Database;
-    ai: OpenAI;
-    // Express types
     req?: Request;
     res?: Response;
     authUser?: AuthUser;
 };
 
-export type ContextMinimal = Pick<Context, 'db' | 'ai'>;
+export type ContextMinimal = Pick<Context, 'db'>;
 
 const t = initTRPC.context<Context>().meta<TRPCPanelMeta>().create({
     transformer: SuperJSON,

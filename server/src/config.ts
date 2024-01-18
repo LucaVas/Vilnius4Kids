@@ -59,18 +59,6 @@ const schema = z
             ),
             ssl: z.preprocess(coerceBoolean, z.boolean().default(false)),
         }),
-
-        ai: z.object({
-            apiKey: z.string().default(() => {
-                if (isDevTest) {
-                    return '';
-                }
-
-                throw new Error(
-                    'You must provide an API key in production env!'
-                );
-            }),
-        }),
     })
     .readonly();
 
@@ -95,10 +83,6 @@ const config = schema.parse({
         logging: env.DB_LOGGING,
         synchronize: env.DB_SYNC,
         ssl: env.DB_SSL,
-    },
-
-    ai: {
-        apiKey: env.OPENAI_API_KEY,
     },
 });
 

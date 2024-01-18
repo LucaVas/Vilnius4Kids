@@ -4,7 +4,7 @@ import { User } from './user';
 import { Role } from './Role';
 
 export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports'>;
-export type AuthUser = Pick<BareUser, 'id'>;
+export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role' >;
 
 export const userSchema = validates<BareUser>().with({
   id: z.number().int().positive(),
@@ -21,12 +21,21 @@ export const userSchema = validates<BareUser>().with({
 });
 
 export const userInsertSchema = userSchema.omit({ id: true, role: true, createdAt: true, updatedAt: true });
+export const userLoginSchema = userSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const userUpdateSchema = userInsertSchema.partial()
 
 export const authUserSchema = validates<AuthUser>().with({
   id: z.number().int().positive(),
+  username: z.string().trim().toLowerCase().min(3).max(60),
+  role: z.nativeEnum(Role),
 });
 
 export type UserInsert = z.infer<typeof userInsertSchema>;
 export type UserUpdate = z.infer<typeof userUpdateSchema>;
 export type UserSelect = z.infer<typeof userSchema>;
+export type UserLogin = z.infer<typeof userLoginSchema>;

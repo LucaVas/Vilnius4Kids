@@ -1,9 +1,12 @@
+import { Role } from '@server/entities/user/Role';
 import type { AuthUser } from '@server/entities/user/schema';
 import z from 'zod';
 
 const tokenPayloadSchema = z.object({
     user: z.object({
         id: z.number(),
+        username: z.string(),
+        role: z.nativeEnum(Role),
     }),
 });
 

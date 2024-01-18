@@ -5,12 +5,11 @@ import {
 } from '@trpc/server/adapters/express';
 import cors from 'cors';
 import { renderTrpcPanel } from 'trpc-panel';
-import OpenAI from 'openai';
 import type { Database } from './database';
 import { appRouter } from './modules';
 import type { Context } from './trpc';
 
-export default function createApp(db: Database, ai: OpenAI) {
+export default function createApp(db: Database) {
     const app = express();
 
     app.use(cors());
@@ -43,7 +42,6 @@ export default function createApp(db: Database, ai: OpenAI) {
                 db,
                 req,
                 res,
-                ai,
             }),
 
             router: appRouter,
