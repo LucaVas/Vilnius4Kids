@@ -31,10 +31,13 @@ export class User {
   })
   role: Role;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP'})
+  @Column('boolean', { default: false, nullable: false })
+  isRegistered: boolean;
+
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP'})
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @ManyToOne(() => Address, address => address.users, {

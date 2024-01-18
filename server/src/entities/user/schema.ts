@@ -16,13 +16,15 @@ export const userSchema = validates<BareUser>().with({
     .max(64)
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]$/),
   role: z.nativeEnum(Role),
+  isRegistered: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
-export const userInsertSchema = userSchema.omit({ id: true, role: true, createdAt: true, updatedAt: true });
+export const userInsertSchema = userSchema.omit({ id: true, role: true, isRegistered: true, createdAt: true, updatedAt: true });
 export const userLoginSchema = userSchema.omit({
   id: true,
+  isRegistered: true,
   createdAt: true,
   updatedAt: true,
 });
