@@ -44,8 +44,7 @@ export class Playground {
   @JoinTable()
   users: User[];
 
-  @ManyToMany(() => Report, report => report.playgrounds)
-  @JoinTable()
+  @OneToMany(() => Report, report => report.playground)
   reports: Report[];
 
   @OneToMany(() => Rating, rating => rating.playground, {

@@ -1,8 +1,6 @@
 import {
     Column,
     Entity,
-    JoinTable,
-    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -42,7 +40,6 @@ export class Report {
     })
     changeLogs: ReportStatusChangeLog[];
 
-    @ManyToMany(() => Playground, (playground) => playground.reports)
-    @JoinTable()
-    playgrounds: Playground[];
+    @ManyToOne(() => Playground, (playground) => playground.reports)
+    playground: Playground;
 }
