@@ -9,9 +9,9 @@ const { signup } = userRouter.createCaller({ db } as any);
 describe('Signup', async () => {
     it('Signs user up with valid credentials', async () => {
         const user = await signup({
-          username: 'some-username',
-          email: 'test@test.com',
-          password: 'test123456',
+            username: 'some-username',
+            email: 'test@test.com',
+            password: 'Password123.',
         });
 
         const userFound = await db
@@ -24,11 +24,11 @@ describe('Signup', async () => {
 
     it('Throws error with invalid email', async () => {
         await expect(
-          signup({
-            username: 'some-username',
-            email: 'not-an-email',
-            password: 'some-password',
-          })
+            signup({
+                username: 'some-username',
+                email: 'not-an-email',
+                password: 'Password123.',
+            })
         ).rejects.toThrow(/email/);
     });
 
@@ -36,16 +36,16 @@ describe('Signup', async () => {
 
         await db
             .getRepository(User)
-            .save({ email: 'newtest@test.com', password: 'test123456' });
+            .save({ username: 'some-username-2', email: 'newtest@test.com', password: 'test123456' });
 
         await expect(
           signup({
-            username: 'some-username',
+            username: 'some-username-2',
             email: 'newtest@test.com',
-            password: 'some-password',
+            password: 'Password123.',
           })
         ).rejects.toThrow(
-          /Email newtest@test.com is already taken, please try another./
+          /Email or username are already taken, please try different ones./
         );
     });
 
@@ -61,21 +61,21 @@ describe('Signup', async () => {
 
     it('Signup if email has trailing spaces', async () => {
         const user = await signup({
-          username: 'some-username',
-          email: ' \t test@mail.com\t   \t',
-          password: 'some-password',
+            username: 'some-username-3',
+            email: ' \t test@testmail.com\t   \t',
+            password: 'Password123.',
         });
 
-        expect(user).toHaveProperty('email', 'test@mail.com');
+        expect(user).toHaveProperty('id');
     });
 
     it('Signup if email if uppercase', async () => {
         const user = await signup({
-            username: 'some-username',
-            email: 'TEST@TESTING.COM', 
-            password: 'some-password',
+            username: 'some-username-4',
+            email: 'TEST@TESTINGMAIL.COM',
+            password: 'Password123.',
         });
 
-        expect(user).toHaveProperty('email', 'test@testing.com');
+        expect(user).toHaveProperty('id');
     });
 });

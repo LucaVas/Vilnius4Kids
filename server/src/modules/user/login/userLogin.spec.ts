@@ -10,6 +10,7 @@ const { login } = userRouter.createCaller({ db } as any);
 
 beforeAll(async () => {
     await db.getRepository(User).save({
+        username: 'test-username',
         email: 'test@test.com',
         password: await bcrypt.hash('test123456', 10),
     });

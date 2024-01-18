@@ -4,37 +4,43 @@ import { User } from './user';
 import { Role } from './Role';
 
 export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports'>;
-export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role' >;
+export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role'>;
 
 export const userSchema = validates<BareUser>().with({
-  id: z.number().int().positive(),
-  email: z.string().trim().toLowerCase().min(5).max(255).email(),
-  username: z.string().trim().toLowerCase().min(3).max(60),
-  password: z
-    .string()
-    .min(8)
-    .max(64)
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]$/),
-  role: z.nativeEnum(Role),
-  isRegistered: z.boolean(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+    id: z.number().int().positive(),
+    email: z.string().trim().toLowerCase().min(5).max(255).email(),
+    username: z.string().trim().toLowerCase().min(3).max(60),
+    password: z
+        .string()
+        .min(8)
+        .max(64)
+        .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/),
+    role: z.nativeEnum(Role),
+    isRegistered: z.boolean(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 });
 
-export const userInsertSchema = userSchema.omit({ id: true, role: true, isRegistered: true, createdAt: true, updatedAt: true });
+export const userInsertSchema = userSchema.omit({
+    id: true,
+    role: true,
+    isRegistered: true,
+    createdAt: true,
+    updatedAt: true,
+});
 export const userLoginSchema = userSchema.omit({
-  id: true,
-  isRegistered: true,
-  createdAt: true,
-  updatedAt: true,
+    id: true,
+    isRegistered: true,
+    createdAt: true,
+    updatedAt: true,
 });
 
-export const userUpdateSchema = userInsertSchema.partial()
+export const userUpdateSchema = userInsertSchema.partial();
 
 export const authUserSchema = validates<AuthUser>().with({
-  id: z.number().int().positive(),
-  username: z.string().trim().toLowerCase().min(3).max(60),
-  role: z.nativeEnum(Role),
+    id: z.number().int().positive(),
+    username: z.string().trim().toLowerCase().min(3).max(60),
+    role: z.nativeEnum(Role),
 });
 
 export type UserInsert = z.infer<typeof userInsertSchema>;
