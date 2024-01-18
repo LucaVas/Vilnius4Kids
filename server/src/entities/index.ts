@@ -1,6 +1,7 @@
 /* eslint-disable import/export */
-export { Item } from './item/item';
-export { Category } from './category/category';
+export { Address } from './address/address';
+export { Playground } from './plaground/playground';
+export { Rating } from './rating/rating';
+export { Report } from './report/report';
+export { ReportStatusChangeLog } from './report_status_change_log/reportStatusChangeLog';
 export { User } from './user/user';
-export { Room } from './room/room';
-export { Message } from './message/message';

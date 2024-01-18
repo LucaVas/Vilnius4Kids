@@ -1,5 +1,5 @@
 {
-    "name": "@homedesign/server",
+    "name": "@vilnius4kids/server",
     "version": "1.0.0",
     "description": "",
     "main": "dist/index.js",
@@ -55,7 +55,6 @@
         "http-status-codes": "^2.3.0",
         "jsonwebtoken": "^9.0.2",
         "lodash": "^4.17.21",
-        "openai": "^4.24.1",
         "pg": "^8.11.3",
         "readline-sync": "^1.4.10",
         "superjson": "^2.2.1",

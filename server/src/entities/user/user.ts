@@ -1,28 +1,54 @@
 import {
-    Column,
-    Entity,
-    OneToMany,
-    PrimaryGeneratedColumn,
-    Unique,
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Room } from '..';
-import { Message } from '../message/message';
+import { Address } from '../address/address';
+import { Playground } from '../plaground/playground';
+import { Report } from '../report/report';
 
-@Entity()
+export enum Role {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
+@Entity('users')
 export class User {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Unique(['email'])
-    @Column('text')
-    email: string;
+  @Column('varchar', { length: 255, nullable: false, unique: true })
+  email: string;
 
-    @Column('text', { select: false })
-    password: string;
+  @Column('varchar', { length: 60, nullable: false, unique: true })
+  username: string;
 
-    @OneToMany(() => Room, (room) => room.user, { cascade: true })
-    rooms: Room[];
+  @Column('varchar', { length: 60, select: false, nullable: false })
+  password: string;
 
-    @OneToMany(() => Message, (message) => message.user, { cascade: true })
-    messages: Message[];
+  @Column('enum', {
+    enum: Role,
+    default: Role.USER,
+  })
+  role: Role;
+
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
+
+  @ManyToOne(() => Address, address => address.users, {
+    onDelete: 'SET NULL',
+  })
+  address: Address;
+
+  @ManyToMany(() => Playground, playground => playground.users)
+  playgrounds: Playground[];
+
+  @OneToMany(() => Report, report => report.user, { onDelete: 'SET NULL' })
+  reports: Report[];
 }
