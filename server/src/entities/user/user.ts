@@ -9,11 +9,7 @@ import {
 import { Address } from '../address/address';
 import { Playground } from '../plaground/playground';
 import { Report } from '../report/report';
-
-export enum Role {
-  USER = 'user',
-  ADMIN = 'admin',
-}
+import { Role } from './Role';
 
 @Entity('users')
 export class User {
@@ -26,7 +22,7 @@ export class User {
   @Column('varchar', { length: 60, nullable: false, unique: true })
   username: string;
 
-  @Column('varchar', { length: 60, select: false, nullable: false })
+  @Column('varchar', { length: 64, select: false, nullable: false })
   password: string;
 
   @Column('enum', {
@@ -35,10 +31,10 @@ export class User {
   })
   role: Role;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP'})
   createdAt: Date;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP'})
   updatedAt: Date;
 
   @ManyToOne(() => Address, address => address.users, {

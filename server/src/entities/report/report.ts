@@ -11,12 +11,7 @@ import {
 import { User } from '../user/user';
 import { Playground } from '../plaground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
-
-export enum ReportStatus {
-  OPEN = 'open',
-  IN_PROGRESS = 'in progress',
-  CLOSED = 'closed',
-}
+import { ReportStatus } from './reportStatus';
 
 @Entity('reports')
 export class Report {

@@ -6,7 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Playground } from '../plaground/playground';
-import { Report, ReportStatus } from '../report/report';
+import { Report } from '../report/report';
+import { ReportStatus } from '../report/reportStatus';
 
 @Entity('report_status_change_logs')
 export class ReportStatusChangeLog {

@@ -1,14 +1,9 @@
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Address } from '../address/address';
-import { User } from '../user/user';
 import { Playground } from '../plaground/playground';
 
 @Entity('ratings')
