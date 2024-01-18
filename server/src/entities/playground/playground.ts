@@ -4,6 +4,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -47,9 +48,8 @@ export class Playground {
   @JoinTable()
   reports: Report[];
 
-  @OneToOne(() => Rating, rating => rating.playground, {
+  @OneToMany(() => Rating, rating => rating.playground, {
     onDelete: 'SET NULL',
   })
-  @JoinColumn()
-  rating: Rating;
+  ratings: Rating[];
 }
