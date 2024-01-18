@@ -4,7 +4,6 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -30,9 +29,14 @@ export class Playground {
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToMany(() => Address, address => address.playground, {
+  @Column('integer', { nullable: true })
+  addressId: number;
+
+  @OneToOne(() => Address, address => address.playground, {
     onDelete: 'SET NULL',
+    cascade: ['insert']
   })
+  @JoinColumn()
   address: Address;
 
   @ManyToMany(() => User, user => user.playgrounds)
