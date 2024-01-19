@@ -1,30 +1,87 @@
 
 # Project Title
 
-HomeDesignApp is an application created for those who want a simple, yet complete tool to layout rooms' design, whether for home or office.
-It is completely free, and will help you avoid some of the most common mistakes, as well as provide advice, with the help of OpenAI technology.
+Explore the city with Vilnius4Kids, the must-have app for parents, caregivers, and anyone looking to make the most of outdoor playtime for kids. 
+Whether you're a local or just passing through, Vilnius4Kids is your go-to guide for finding, enjoying, and contributing to safe and enjoyable playground experiences.
+
+Vilnius4Kids goes beyond being a playground locator. It's a community-driven platform that empowers users to actively contribute to the well-being of local play areas. By reporting issues and sharing experiences, you become an essential part of creating safer and more enjoyable spaces for children to play and grow.
+
+## Key Features:
+
+1. Find a playground: Easily locate nearby playgrounds with our user-friendly map interface. Discover hidden gems and popular play areas suitable for children of all ages.
+
+2. Detailed Playground Profiles: Get comprehensive information on each playground, including amenities, safety features, and user reviews to ensure a delightful playtime experience.
+
+3. Report Issues: Be a community hero! Report any issues or concerns you encounter at a playground directly through the app. From broken equipment to safety hazards, your feedback helps improve play spaces for everyone.
+
+4. Safety Ratings: Benefit from crowd-sourced safety ratings provided by fellow users. Make informed decisions about the best and safest places for your child to play.
+
+5. Personalized Playlists: Save and create personalized playlists of your favorite playgrounds for quick access. Plan your playdates and weekend adventures with ease.
+
 
 ## User stories
 
-Users will find the following features available:
+Both users and administrators will find the following features available:
 
-- Sign up for a new account
-- Log into their account
-- Create new rooms
-- See all rooms created
-- Open a room (and see items within)
-- Add new items to the room
-- Change position of the item in the room
-- Update rooms
-- Update items
-- Remove items from a room
-- Delete rooms (and everything within)
-- Add categories
-- Update categories
-- Assign categories to items
-- Remove categories
-- Delete categories
-- Chat with AI for consultation about interior design
+### Users
+
+```http
+GET /signup
+```
+- Sign up for a new account.
+```http
+GET /login
+```
+- Log into their account.
+```http
+GET /
+```
+See latest updates in Homepage.
+```http
+GET /MyPlaygrounds
+```
+See favorite playgrounds saved.
+```http
+GET /playgrounds
+```
+See all playgrounds available.
+```http
+GET /playgrounds/:id
+```
+View a specific playground information.
+```http
+GET /playgrounds/:id/report
+```
+Make a report on a specific playground.
+```http
+GET /report
+```
+Make a new report. Playground can be chosen by the list.
+```http
+GET /reports
+```
+View all reports for a logged-in user.
+```http
+GET /reports/:id
+```
+View a specific report for logged-in user.
+```http
+GET /addresses/add
+```
+Add a new address.
+```http
+GET /profile
+```
+Make changes in profile, such as address, etc.
+
+### Administrators
+
+```http
+GET /playgrounds/add
+```
+Add a new playground to the list.
+
+
 
 ## Test & Run
 
