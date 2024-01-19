@@ -2,9 +2,7 @@ import { random } from '@tests/utils/random';
 import {
     Address,
     Playground,
-    Rating,
     Report,
-    ReportStatusChangeLog,
     User,
 } from '..';
 
@@ -38,29 +36,11 @@ export const fakePlayground = <T extends Partial<Playground>>(
     ...overrides,
 });
 
-export const fakeRating = <T extends Partial<Rating>>(
-    overrides: T = {} as T
-) => ({
-    id: randomId(),
-    rating: random.integer({ min: 0.1, max: 5 }),
-    votes: random.integer({ min: 1, max: 5000 }),
-    ...overrides,
-});
-
 export const fakeReport = <T extends Partial<Report>>(
     overrides: T = {} as T
 ) => ({
     id: randomId(),
     description: random.string(),
     status: 'open',
-    ...overrides,
-});
-
-export const fakeChangeLog = <T extends Partial<ReportStatusChangeLog>>(
-    overrides: T = {} as T
-) => ({
-    id: randomId(),
-    status: 'open',
-    changeStatusMessage: random.string(),
     ...overrides,
 });
