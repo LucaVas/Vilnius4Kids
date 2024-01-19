@@ -1,17 +1,22 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import DashboardLayout from '@/layouts/DashboardLayout.vue'
-import { authenticate } from './guards'
-import HomeLayout from '@/layouts/HomeLayout.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import { authenticate } from './guards';
+import HomeLayout from '@/layouts/HomeLayout.vue';
+import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
+import HomeViewVue from '@/views/HomeView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/myPlaygrounds',
-      component: DashboardLayout,
+      path: '/myHome',
+      component: MyHomeLayoutVue,
       beforeEnter: [authenticate],
       children: [
+        // {
+        //   path: '/myHome',
+        //   name: 'MyHome',
+        //   component: () => import('../views/MyHomeView.vue'),
+        // },
         // {
         //   path: '',
         //   name: 'MyPlaygrounds',
@@ -86,11 +91,11 @@ const router = createRouter({
         {
           path: '',
           name: 'Home',
-          component: HomeView,
+          component: HomeViewVue,
         },
       ],
     },
   ],
 });
 
-export default router
+export default router;

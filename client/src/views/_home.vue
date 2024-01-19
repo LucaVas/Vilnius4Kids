@@ -14,7 +14,7 @@ import { FwbButton } from 'flowbite-vue';
             The best playgrounds in Vilnius, at your fingertips.
           </p>
 
-          <div class="mt-6 flex items-center justify-center sm:justify-start gap-2">
+          <div class="mt-6 flex items-center gap-2">
             <!-- prettier-ignore -->
             <FwbButton
               component="RouterLink"
@@ -23,11 +23,19 @@ import { FwbButton } from 'flowbite-vue';
             >
               Find a playground
             </FwbButton>
+            <FwbButton
+              component="RouterLink"
+              tag="router-link"
+              color="alternative"
+              :href="{ name: 'Login' } as any"
+            >
+              Log in
+            </FwbButton>
           </div>
         </div>
 
-        <div class="mt-12 lg:mt-0 lg:w-1/2">
-        <img src="../assets/playing-children.svg" alt="family">
+        <div class="mt-8 lg:mt-0 lg:w-1/2">
+        <img src="../assets/family.svg" alt="family">
         </div>
       </div>
     </div>

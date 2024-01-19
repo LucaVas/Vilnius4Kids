@@ -7,7 +7,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const links = [
-  { label: 'My rooms', name: 'Dashboard' },
+  { label: 'My playgrounds', name: 'Login' },
+  { label: 'Report an issue', name: 'Login' },
 ]
 
 function logoutUser() {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { FwbAvatar, FwbNavbar, FwbNavbarCollapse, FwbNavbarLink, FwbNavbarLogo } from 'flowbite-vue'
+import { FwbAvatar, FwbNavbar, FwbNavbarCollapse, FwbNavbarLink } from 'flowbite-vue'
 
 const { links } = defineProps<{
   links: {
@@ -38,7 +38,7 @@ const navigation = computed(() =>
         </FwbNavbarLink>
         <slot name="menu" />
       </FwbNavbar-collapse>
-      <FwbAvatar img="/assets/avatar.svg" status="online" rounded />
+      <FwbAvatar img="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp" status="online" rounded />
     </template>
   </FwbNavbar>
 
