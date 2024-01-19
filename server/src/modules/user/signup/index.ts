@@ -21,6 +21,7 @@ export default publicProcedure
                 id: user.id,
             };
         } catch (error) {
+
             if (!(error instanceof Error)) {
                 throw error;
             }

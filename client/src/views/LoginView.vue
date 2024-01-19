@@ -5,7 +5,6 @@ import PageForm from '@/components/PageForm.vue'
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import { useRouter } from 'vue-router'
 import useErrorMessage from '@/composables/useErrorMessage'
-import LogoSection from '@/components/LogoSection.vue';
 
 const router = useRouter()
 
@@ -22,8 +21,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-row">
-    <LogoSection></LogoSection>
+  <div class="w-full h-full flex justify-center bg-slate-300">
     <PageForm heading="Log in" formLabel="Login" @submit="submitLogin">
       <template #default>
         <FwbInput label="Email" type="email" v-model="userForm.email" :required="true" class="border-transparent border-b-black"/>
