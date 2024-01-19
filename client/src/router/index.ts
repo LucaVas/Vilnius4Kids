@@ -8,24 +8,64 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/dashboard',
+      path: '/myPlaygrounds',
       component: DashboardLayout,
       beforeEnter: [authenticate],
       children: [
         {
           path: '',
-          name: 'Dashboard',
-          component: () => import('../views/DashboardView.vue'),
+          name: 'MyPlaygrounds',
+          component: () => import('../views/MyPlaygroundsView.vue'),
         },
         {
-          path: 'room/create',
-          name: 'CreateRoom',
-          component: () => import('../views/CreateRoomView.vue'),
+          path: '/profile',
+          name: 'Profile',
+          component: () => import('../views/ProfileView.vue'),
         },
         {
-          path: 'room/:id',
-          name: 'Room',
-          component: () => import('../views/RoomView.vue'),
+          path: '/addresses/add',
+          name: 'AddAddress',
+          component: () => import('../views/AddAddressView.vue'),
+        },
+        {
+          path: 'playgrounds',
+          name: 'SeePlaygrounds',
+          component: () => import('../views/SeePlaygroundsView.vue'),
+        },
+        {
+          path: 'playgrounds/add',
+          name: 'AddPlayground',
+          component: () => import('../views/AddPlaygroundVue.vue'),
+        },
+        {
+          path: 'playgrounds/:id',
+          name: 'Playground',
+          component: () => import('../views/PlaygroundView.vue'),
+        },
+        {
+          path: 'playgrounds/:id/reports',
+          name: 'PlaygroundReports',
+          component: () => import('../views/PlaygroundReportsView.vue'),
+        },
+        {
+          path: 'playgrounds/:id/report',
+          name: 'PlaygroundReport',
+          component: () => import('../views/NewReportView.vue'),
+        },
+        {
+          path: 'report',
+          name: 'NewReport',
+          component: () => import('../views/NewReportView.vue'),
+        },
+        {
+          path: 'reports/:id',
+          name: 'Report',
+          component: () => import('../views/ReportView.vue'),
+        },
+        {
+          path: 'reports',
+          name: 'NewReport',
+          component: () => import('../views/NewReportView.vue'),
         },
       ],
     },
@@ -51,6 +91,6 @@ const router = createRouter({
       ],
     },
   ],
-})
+});
 
 export default router
