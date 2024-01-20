@@ -21,6 +21,8 @@ describe('Add a new playground', async () => {
             isPrivate: false,
             isOpen: true,
             addressId: address.id,
+            latitude: 1,
+            longitude: 1,
         });
 
         expect(message).toEqual('Playground added successfully.');

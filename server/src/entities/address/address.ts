@@ -25,6 +25,9 @@ export class Address {
     @Column('varchar', { length: 255, nullable: false })
     city: string;
 
+    @Column('varchar', { length: 255, nullable: false })
+    district: string;
+
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 

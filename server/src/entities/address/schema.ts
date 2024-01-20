@@ -20,7 +20,15 @@ export const addressSchema = validates<BareAddress>().with({
         .trim()
         .toLowerCase()
         .min(2)
-        .max(255, { message: 'City cannot exceed 255 characters.' }).describe('City name'),
+        .max(255, { message: 'City cannot exceed 255 characters.' })
+        .describe('City name'),
+    district: z
+        .string()
+        .trim()
+        .toLowerCase()
+        .min(2)
+        .max(255, { message: 'City cannot exceed 255 characters.' })
+        .describe('City name'),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

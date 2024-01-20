@@ -24,10 +24,10 @@ export class Playground {
   @Column('boolean', { nullable: false, default: true })
   isOpen: boolean;
 
-  @Column('decimal', { nullable: false, precision: 7, scale: 4 })
+  @Column('decimal', { nullable: false, precision: 9, scale: 6 })
   latitude: number;
 
-  @Column('decimal', { nullable: false, precision: 7, scale: 4 })
+  @Column('decimal', { nullable: false, precision: 9, scale: 6 })
   longitude: number;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })

@@ -1,10 +1,11 @@
 import { z } from 'zod';
 import { validates } from '@server/utils/validation';
-import { Address } from '..';
 import { Playground } from './playground';
 
-export type BarePlayground = Omit<Playground, 'users' | 'reports' | 'ratings'>;
-const Addresstype: z.ZodType<Address> = z.any();
+export type BarePlayground = Omit<
+    Playground,
+    'users' | 'reports' | 'ratings' | 'address'
+>;
 
 export const playgroundSchema = validates<BarePlayground>().with({
     id: z.number().int().positive(),
@@ -12,7 +13,8 @@ export const playgroundSchema = validates<BarePlayground>().with({
     isOpen: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    address: Addresstype,
+    latitude: z.number(),
+    longitude: z.number(),
 });
 
 export const playgroundInsertSchema = playgroundSchema

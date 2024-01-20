@@ -7,16 +7,16 @@ export default authenticatedProcedure
     .input(addressUpdateSchema)
     .mutation(
         async ({
-            input: { id, number, street, zipCode, city },
+            input: { id, number, street, zipCode, city, district },
             ctx: { db },
         }) => {
             const { affected, raw } = await db
                 .getRepository(Address)
                 .createQueryBuilder()
                 .update()
-                .set({ number, street, zipCode, city })
+                .set({ number, street, zipCode, city, district })
                 .where('id = :id', { id })
-                .returning(['number', 'street', 'zipCode', 'city'])
+                .returning(['number', 'street', 'zipCode', 'city', 'district'])
                 .execute();
 
             if (affected === 0) {

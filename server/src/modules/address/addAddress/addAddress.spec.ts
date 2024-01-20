@@ -30,6 +30,7 @@ describe('Add a new address', async () => {
                 city: 'City',
                 zipCode: 12345,
                 number: 123,
+                district: 'District',
             })
         ).rejects.toThrow(/Street should be at least 3 characters long./);
     });

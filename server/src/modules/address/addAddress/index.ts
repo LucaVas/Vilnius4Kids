@@ -5,10 +5,10 @@ import { addressInsertSchema } from '../../../entities/address/schema';
 export default authenticatedProcedure
     .input(addressInsertSchema)
     .mutation(
-        async ({ input: { number, street, zipCode, city }, ctx: { db } }) => {
+        async ({ input: { number, street, zipCode, city, district }, ctx: { db } }) => {
             const address = await db
                 .getRepository(Address)
-                .save({ number, street, zipCode, city });
+                .save({ number, street, zipCode, city, district });
 
             return {
                 address,

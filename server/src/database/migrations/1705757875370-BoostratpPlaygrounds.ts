@@ -41,8 +41,8 @@ export class BoostratpPlaygrounds1705755908980 implements MigrationInterface {
                 );
 
                 await queryRunner.query(
-                    `INSERT INTO "playgrounds" (is_open, is_private, address_id) VALUES ($1, $2, $3)`,
-                    [true, false, id]
+                    `INSERT INTO "playgrounds" (is_open, is_private, address_id, latitude, longitude) VALUES ($1, $2, $3, $4, $5)`,
+                    [true, false, id, p.latitude, p.longitude]
                 );
             });
         }

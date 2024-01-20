@@ -6,7 +6,7 @@ import { playgroundInsertSchema } from '../../../entities/playground/schema';
 export default authenticatedProcedure
     .input(playgroundInsertSchema)
     .mutation(
-        async ({ input: { isPrivate, isOpen, addressId }, ctx: { db } }) => {
+        async ({ input: { isPrivate, isOpen, addressId, longitude, latitude }, ctx: { db } }) => {
             const address = await db
                 .getRepository(Address)
                 .findOneBy({ id: addressId });
@@ -21,7 +21,9 @@ export default authenticatedProcedure
             const playground = await db.getRepository(Playground).save({
                 isPrivate,
                 isOpen,
-                address
+                address,
+                longitude,
+                latitude,
             });
 
             return {

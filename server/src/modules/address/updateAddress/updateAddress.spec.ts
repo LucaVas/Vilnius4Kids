@@ -17,6 +17,7 @@ describe('Update an existing address', async () => {
             street: 'street',
             city: 'city',
             zipCode: 12345,
+            district: 'district',
         });
 
         expect(address.number).toEqual(123);
