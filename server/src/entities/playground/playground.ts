@@ -24,6 +24,12 @@ export class Playground {
   @Column('boolean', { nullable: false, default: true })
   isOpen: boolean;
 
+  @Column('decimal', { nullable: false, precision: 7, scale: 4 })
+  latitude: number;
+
+  @Column('decimal', { nullable: false, precision: 7, scale: 4 })
+  longitude: number;
+
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

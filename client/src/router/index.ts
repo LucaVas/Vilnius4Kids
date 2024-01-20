@@ -18,11 +18,6 @@ const router = createRouter({
           component: () => import('../views/MyHomeView.vue'),
         },
         // {
-        //   path: '',
-        //   name: 'MyPlaygrounds',
-        //   component: () => import('../views/MyPlaygroundsView.vue'),
-        // },
-        // {
         //   path: '/profile',
         //   name: 'Profile',
         //   component: () => import('../views/ProfileView.vue'),
@@ -32,11 +27,11 @@ const router = createRouter({
         //   name: 'AddAddress',
         //   component: () => import('../views/AddAddressView.vue'),
         // },
-        // {
-        //   path: 'playgrounds',
-        //   name: 'SeePlaygrounds',
-        //   component: () => import('../views/SeePlaygroundsView.vue'),
-        // },
+        {
+          path: 'playgrounds',
+          name: 'Playgrounds',
+          component: () => import('../views/PlaygroundsView.vue'),
+        },
         {
           path: 'playgrounds/add',
           name: 'AddPlayground',

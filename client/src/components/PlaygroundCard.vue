@@ -18,12 +18,7 @@ defineProps<{
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>
 
-      <FwbButton
-        component="RouterLink"
-        tag="router-link"
-        class="pr-3"
-        >View</FwbButton
-      >
+      <FwbButton component="RouterLink" tag="router-link" class="pr-3">View</FwbButton>
       <!--         :href="{ name: 'Playground', params: { id: playground.id } } as any" -->
     </div>
   </FwbCard>

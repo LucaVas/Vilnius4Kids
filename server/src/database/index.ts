@@ -40,7 +40,7 @@ function createMemoryDatabase(): DataSource {
   });
 }
 
-function relative(...paths: string[]) {
+export function relative(...paths: string[]) {
   return join(__dirname, ...paths)
 }
 

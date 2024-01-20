@@ -1,0 +1,59 @@
+{
+    "playgrounds": [
+        {
+            "address": {
+                "street": "Antakalnio g.",
+                "number": 75,
+                "city": "Vilnius",
+                "zipCode": "10215",
+                "district": "Antakalnis"
+            },
+            "latitude": 54.71522,
+            "longitude": 25.317531
+        },
+        {
+            "address": {
+                "street": "Antakalnio g.",
+                "number": 120,
+                "city": "Vilnius",
+                "zipCode": "10200",
+                "district": "Antakalnis"
+            },
+            "latitude": 54.717343,
+            "longitude": 25.313329
+        },
+        {
+            "address": {
+                "street": "S. Nėries g.",
+                "number": 301,
+                "city": "Vilnius",
+                "zipCode": "06316",
+                "district": "Fabijoniškės"
+            },
+            "latitude": 54.734854,
+            "longitude": 25.240476
+        },
+        {
+            "address": {
+                "street": "S. Nėries g.",
+                "number": 49,
+                "city": "Vilnius",
+                "zipCode": "06316",
+                "district": "Fabijoniškės"
+            },
+            "latitude": 54.738526,
+            "longitude": 25.234760
+        },
+        {
+            "address": {
+                "street": "Fabijoniškių g.",
+                "number": 1,
+                "city": "Vilnius",
+                "zipCode": "07131",
+                "district": "Fabijoniškės"
+            },
+            "latitude": 54.720871,
+            "longitude": 25.254033
+        }
+    ]
+}
