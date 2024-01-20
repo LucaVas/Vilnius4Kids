@@ -4,23 +4,24 @@ import { Playground } from './playground';
 
 export type BarePlayground = Omit<
     Playground,
-    'address' | 'users' | 'reports' | 'rating'
+    'address' | 'users' | 'reports' | 'ratings'
 >;
 
 export const playgroundSchema = validates<BarePlayground>().with({
     id: z.number().int().positive(),
     isPrivate: z.boolean(),
     isOpen: z.boolean(),
-    addressId: z.number().int().positive(),
     createdAt: z.date(),
     updatedAt: z.date(),
 });
 
-export const playgroundInsertSchema = playgroundSchema.omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-});
+export const playgroundInsertSchema = playgroundSchema
+    .omit({
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+    })
+    .extend({ addressId: z.number().int().positive() });
 export const playgroundUpdateSchema = playgroundSchema
     .omit({ addressId: true, createdAt: true, updatedAt: true })
     .required({ id: true })

@@ -1,30 +1,36 @@
 <script lang="ts" setup>
-import { login } from '@/stores/user'
-import { ref } from 'vue'
-import PageForm from '@/components/PageForm.vue'
-import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
-import { useRouter } from 'vue-router'
-import useErrorMessage from '@/composables/useErrorMessage'
+import { login } from '@/stores/user';
+import { ref } from 'vue';
+import PageForm from '@/components/PageForm.vue';
+import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
+import { useRouter } from 'vue-router';
+import useErrorMessage from '@/composables/useErrorMessage';
 
-const router = useRouter()
+const router = useRouter();
 
 const userForm = ref({
   email: '',
   password: '',
-})
+});
 
 const [submitLogin, errorMessage] = useErrorMessage(async () => {
-  await login(userForm.value)
+  await login(userForm.value);
 
-  router.push({ name: 'myPlaygrounds' })
-})
+  router.push({ name: 'MyHome' });
+});
 </script>
 
 <template>
-  <div class="w-full h-full flex justify-center bg-slate-300">
+  <div class="flex h-full w-full justify-center bg-slate-300">
     <PageForm heading="Log in" formLabel="Login" @submit="submitLogin">
       <template #default>
-        <FwbInput label="Email" type="email" v-model="userForm.email" :required="true" class="border-transparent border-b-black"/>
+        <FwbInput
+          label="Email"
+          type="email"
+          v-model="userForm.email"
+          :required="true"
+          class="border-transparent border-b-black"
+        />
 
         <FwbInput
           label="Password"

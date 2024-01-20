@@ -12,11 +12,11 @@ const router = createRouter({
       component: MyHomeLayoutVue,
       beforeEnter: [authenticate],
       children: [
-        // {
-        //   path: '/myHome',
-        //   name: 'MyHome',
-        //   component: () => import('../views/MyHomeView.vue'),
-        // },
+        {
+          path: '/myHome',
+          name: 'MyHome',
+          component: () => import('../views/MyHomeView.vue'),
+        },
         // {
         //   path: '',
         //   name: 'MyPlaygrounds',
@@ -37,11 +37,11 @@ const router = createRouter({
         //   name: 'SeePlaygrounds',
         //   component: () => import('../views/SeePlaygroundsView.vue'),
         // },
-        // {
-        //   path: 'playgrounds/add',
-        //   name: 'AddPlayground',
-        //   component: () => import('../views/AddPlaygroundVue.vue'),
-        // },
+        {
+          path: 'playgrounds/add',
+          name: 'AddPlayground',
+          component: () => import('../views/MyHomeView.vue'),
+        },
         // {
         //   path: 'playgrounds/:id',
         //   name: 'Playground',

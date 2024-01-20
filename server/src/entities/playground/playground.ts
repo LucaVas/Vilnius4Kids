@@ -30,9 +30,6 @@ export class Playground {
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @Column('integer', { nullable: true })
-  addressId: number;
-
   @OneToOne(() => Address, address => address.playground, {
     onDelete: 'SET NULL',
     cascade: ['insert']
