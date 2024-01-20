@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { FwbCard, FwbButton } from 'flowbite-vue';
-import { type BarePlayground } from '../../../server/src/entities/playground/schema';
+import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 
 defineProps<{
-  playground: BarePlayground;
+  playground: PlaygroundSelectWithAddress;
 }>();
 </script>
 
