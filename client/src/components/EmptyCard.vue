@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbCard } from 'flowbite-vue';
+import { FwbCard, FwbButton } from 'flowbite-vue';
 </script>
 
 <template>
@@ -8,11 +8,17 @@ import { FwbCard } from 'flowbite-vue';
     img-src="https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg"
     variant="image"
   >
-    <div class="p-5">
-      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        No favorite playground yet
+    <div class="flex flex-col sm:flex-row items-center justify-between p-5">
+      <h5 class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white">
+        No favorite playgrounds yet
       </h5>
-      <p class="font-normal text-gray-700 dark:text-gray-400">Click to add a new playground</p>
+      <FwbButton
+        component="RouterLink"
+        tag="router-link"
+        class="pr-3"
+        >Add new</FwbButton
+      >
+      <!--         :href="{ name: 'Playground', params: { id: playground.id } } as any" -->
     </div>
   </FwbCard>
 </template>
