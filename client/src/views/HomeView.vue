@@ -5,7 +5,7 @@ import { FwbButton } from 'flowbite-vue';
 <template>
   <!-- landing page with Tailwind -->
   <div class="bg-white dark:bg-gray-800">
-    <div class="container mx-auto bg-gradient-to-r px-6 py-8">
+    <div class="container mx-auto px-6 py-8">
       <div class="items-center lg:flex">
         <div class="lg:w-1/2">
           <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Vilnius4Kids</h2>
