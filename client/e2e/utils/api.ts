@@ -1,6 +1,6 @@
 import { apiOrigin, apiPath } from './config'
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
-import type { AppRouter } from '@mono/server/src/shared/trpc'
+import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc'
 import { fakeUser } from './fakeData'
 import type { Page } from '@playwright/test'
 import { superjson } from './superjson/common'
@@ -45,4 +45,4 @@ export async function loginNewUser(page: Page, userLogin = fakeUser()) {
   return userLogin
 }
 
-export const reportBug = trpc.bug.report.mutate
+// export const reportBug = trpc.bug.report.mutate

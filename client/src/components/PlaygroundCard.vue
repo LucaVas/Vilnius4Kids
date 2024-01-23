@@ -5,6 +5,9 @@ import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/p
 defineProps<{
   playground: PlaygroundSelectWithAddress;
 }>();
+defineEmits<{
+  delete: [id: number];
+}>();
 </script>
 
 <template>
@@ -14,7 +17,7 @@ defineProps<{
     variant="image"
   >
     <div class="flex flex-col items-center justify-around p-5">
-      <h5 class="font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl mb-5">
+      <h5 class="mb-5 font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>
 
@@ -35,7 +38,13 @@ defineProps<{
               />
             </svg> </template
         ></FwbButton>
-        <FwbButton component="RouterLink" tag="router-link" class="min-w-min" color="red" outline
+        <FwbButton
+          component="RouterLink"
+          tag="router-link"
+          class="min-w-min"
+          color="red"
+          outline
+          @click="$emit('delete', playground.id)"
           >Remove
         </FwbButton>
       </FwbButtonGroup>

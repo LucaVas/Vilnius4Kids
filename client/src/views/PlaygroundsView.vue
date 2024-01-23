@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onMounted } from 'vue';
 import { trpc } from '../trpc';
 import { Address } from '../../../server/src/entities/address/address';
 import { FwbButton, FwbButtonGroup, FwbCard } from 'flowbite-vue';
@@ -48,7 +48,7 @@ async function savePlayground(id: number) {
   }
 }
 
-onBeforeMount(async () => {
+onMounted(async () => {
   const { playgrounds } = await trpc.playground.getPlaygrounds.query();
   mapInfo.value.markers = playgrounds.map((p) => ({
     id: p.id,

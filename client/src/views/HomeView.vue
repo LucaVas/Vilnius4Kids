@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { FwbButton } from 'flowbite-vue';
+
 </script>
 
 <template>

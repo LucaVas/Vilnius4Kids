@@ -7,6 +7,11 @@ import PlaygroundCard from '@/components/PlaygroundCard.vue';
 
 const favoritePlaygrounds = ref<PlaygroundSelectWithAddress[]>([]);
 
+async function removeFromPlaygrounds(id: number) {
+  await trpc.playground.deleteFavoritePlayground.mutate({ id });
+  favoritePlaygrounds.value = favoritePlaygrounds.value.filter((p) => p.id !== id);
+}
+
 onBeforeMount(async () => {
   const { playgrounds } = await trpc.playground.getFavoritePlaygrounds.query();
   favoritePlaygrounds.value = playgrounds;
@@ -17,12 +22,13 @@ onBeforeMount(async () => {
   <div class="h-full w-full">
     <div
       v-if="favoritePlaygrounds.length > 0"
-      class="grid justify-items-center grid-flow-row grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4 overflow-y-auto"
+      class="grid grid-flow-row grid-cols-1 justify-items-center gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <PlaygroundCard
         v-for="playground in favoritePlaygrounds"
         :key="playground.id"
         :playground="playground"
+        @delete="removeFromPlaygrounds(playground.id)"
       />
     </div>
     <EmptyCard v-else />

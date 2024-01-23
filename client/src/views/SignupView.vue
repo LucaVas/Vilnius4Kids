@@ -27,6 +27,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
         <FwbInput
           type="text"
           placeholder="Username"
+          id="username"
           v-model="userForm.username"
           :required="true"
           class="border-transparent border-b-black"
@@ -51,7 +52,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           class="border-transparent border-b-black"
         />
 
-        <FwbAlert v-if="hasSucceeded" type="success">
+        <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">
           You have successfully signed up! You can now log in.
           <RouterLink
             :to="{ name: 'Login' }"
