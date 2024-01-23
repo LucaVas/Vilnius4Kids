@@ -3,7 +3,7 @@ import { validates } from '@server/utils/validation';
 import { Report } from './report';
 import { ReportStatus } from './ReportStatus';
 
-export type BareReport = Omit<Report, 'user' | 'changeLogs' | 'playground'>;
+export type BareReport = Omit<Report, 'user' | 'changeLogs' | 'playground' | 'category'>;
 
 export const reportSchema = validates<BareReport>().with({
     id: z.number().int().positive(),

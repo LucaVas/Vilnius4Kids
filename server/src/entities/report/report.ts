@@ -1,13 +1,16 @@
 import {
     Column,
     Entity,
+    JoinColumn,
     ManyToOne,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user';
 import { Playground } from '../playground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
+import { ReportCategory } from '../reportCategory/reportCategory';
 import { ReportStatus } from './ReportStatus';
 
 @Entity('reports')
@@ -29,6 +32,12 @@ export class Report {
 
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
+
+    @OneToOne(() => ReportCategory, (category) => category.report, {
+        cascade: true,
+    })
+    @JoinColumn()
+    category: ReportCategory;
 
     @ManyToOne(() => User, (user) => user.reports, {
         onDelete: 'SET NULL',

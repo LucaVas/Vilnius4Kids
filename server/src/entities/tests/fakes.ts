@@ -1,10 +1,5 @@
 import { random } from '@tests/utils/random';
-import {
-    Address,
-    Playground,
-    Report,
-    User,
-} from '..';
+import { Address, Playground, Report, ReportCategory, User } from '..';
 
 const randomId = () => random.integer({ min: 1, max: 2147483647 });
 
@@ -17,7 +12,9 @@ export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
     ...overrides,
 });
 
-export const fakeAddress = <T extends Partial<Address>>(overrides: T = {} as T) => ({
+export const fakeAddress = <T extends Partial<Address>>(
+    overrides: T = {} as T
+) => ({
     id: randomId(),
     street: random.string(),
     city: random.string(),
@@ -44,5 +41,13 @@ export const fakeReport = <T extends Partial<Report>>(
     id: randomId(),
     description: random.string(),
     status: 'open',
+    ...overrides,
+});
+
+export const fakeReportCategory = <T extends Partial<ReportCategory>>(
+    overrides: T = {} as T
+) => ({
+    id: randomId(),
+    name: random.string(),
     ...overrides,
 });
