@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbCard, FwbButton } from 'flowbite-vue';
+import { FwbCard, FwbButton, FwbButtonGroup } from 'flowbite-vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 
 defineProps<{
@@ -13,12 +13,33 @@ defineProps<{
     img-src="https://flowbite.com/docs/images/blog/image-1.jpg"
     variant="image"
   >
-    <div class="flex flex-col sm:flex-row items-center justify-between p-5">
-      <h5 class="sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div class="flex flex-col items-center justify-around p-5">
+      <h5 class="font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl mb-5">
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>
 
-      <FwbButton component="RouterLink" tag="router-link" class="pr-3">View</FwbButton>
+      <FwbButtonGroup class="align-center flex w-full justify-around">
+        <FwbButton component="RouterLink" tag="router-link" class="min-w-min" color="blue" outline
+          >View
+          <template #suffix>
+            <svg
+              class="h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clip-rule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                fill-rule="evenodd"
+              />
+            </svg> </template
+        ></FwbButton>
+        <FwbButton component="RouterLink" tag="router-link" class="min-w-min" color="red" outline
+          >Remove
+        </FwbButton>
+      </FwbButtonGroup>
+
       <!--         :href="{ name: 'Playground', params: { id: playground.id } } as any" -->
     </div>
   </FwbCard>

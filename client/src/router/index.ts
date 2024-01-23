@@ -8,12 +8,12 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/myHome',
+      path: '/',
       component: MyHomeLayoutVue,
       beforeEnter: [authenticate],
       children: [
         {
-          path: '/',
+          path: '/myHome',
           name: 'MyHome',
           component: () => import('../views/MyHomeView.vue'),
         },
