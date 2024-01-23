@@ -13,8 +13,8 @@ defineProps<{
     img-src="https://flowbite.com/docs/images/blog/image-1.jpg"
     variant="image"
   >
-    <div class="flex flex-row items-center justify-between p-5">
-      <h5 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div class="flex flex-col sm:flex-row items-center justify-between p-5">
+      <h5 class="sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>
 

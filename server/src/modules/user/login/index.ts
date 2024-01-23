@@ -39,7 +39,8 @@ export default publicProcedure
     const token = jwt.sign(payload, tokenKey, { expiresIn });
 
     return {
-      id: user.id,
-      token,
+        id: user.id,
+        token,
+        username: user.username,
     };
   });

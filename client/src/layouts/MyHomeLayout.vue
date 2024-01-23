@@ -7,7 +7,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const links = [
-  { label: 'My playgrounds', name: 'Login' },
+  { label: 'My playgrounds', name: 'MyHome' },
+  { label: 'Find a playground', name: 'Playgrounds' },
   { label: 'Report an issue', name: 'Login' },
 ]
 

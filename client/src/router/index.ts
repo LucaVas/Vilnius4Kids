@@ -13,7 +13,7 @@ const router = createRouter({
       beforeEnter: [authenticate],
       children: [
         {
-          path: '/myHome',
+          path: '/',
           name: 'MyHome',
           component: () => import('../views/MyHomeView.vue'),
         },
@@ -28,12 +28,12 @@ const router = createRouter({
         //   component: () => import('../views/AddAddressView.vue'),
         // },
         {
-          path: 'playgrounds',
+          path: '/playgrounds',
           name: 'Playgrounds',
           component: () => import('../views/PlaygroundsView.vue'),
         },
         {
-          path: 'playgrounds/add',
+          path: '/playgrounds/add',
           name: 'AddPlayground',
           component: () => import('../views/MyHomeView.vue'),
         },

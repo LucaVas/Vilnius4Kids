@@ -18,12 +18,13 @@ beforeAll(async () => {
 
 describe('User login', async () => {
     it('User can log in with valid credentials', async () => {
-        const { id, token } = await login({
+        const { id, username, token } = await login({
             email: 'test@test.com',
             password: 'test123456',
         });
 
         expect(id).toBe(1);
+        expect(username).toBe('test-username')
         expect(token.slice(0, 3)).toEqual('eyJ');
     });
 
