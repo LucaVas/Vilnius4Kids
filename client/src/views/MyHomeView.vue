@@ -4,8 +4,10 @@ import { ref, onBeforeMount } from 'vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 import EmptyCard from '@/components/EmptyCard.vue';
 import PlaygroundCard from '@/components/PlaygroundCard.vue';
+import { FwbSpinner } from 'flowbite-vue';
 
 const favoritePlaygrounds = ref<PlaygroundSelectWithAddress[]>([]);
+const pageLoaded = ref(false);
 
 async function removeFromPlaygrounds(id: number) {
   await trpc.playground.deleteFavoritePlayground.mutate({ id });
@@ -15,11 +17,15 @@ async function removeFromPlaygrounds(id: number) {
 onBeforeMount(async () => {
   const { playgrounds } = await trpc.playground.getFavoritePlaygrounds.query();
   favoritePlaygrounds.value = playgrounds;
+  pageLoaded.value = true;
 });
 </script>
 
 <template>
-  <div class="h-full w-full">
+  <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
+    <FwbSpinner size="12" />
+  </div>
+  <div v-else>
     <div
       v-if="favoritePlaygrounds.length > 0"
       class="grid grid-flow-row grid-cols-1 justify-items-center gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"

@@ -6,7 +6,10 @@ import { playgroundIdSchema } from '../../../entities/playground/schema';
 export default authenticatedProcedure
     .input(playgroundIdSchema)
     .query(async ({ input: { id }, ctx: { db } }) => {
-        const playground = await db.getRepository(Playground).findOneBy({ id });
+        const playground = await db.getRepository(Playground).findOne({
+            where: { id },
+            relations: ['address', 'reports', 'users'],
+        });
 
         if (!playground) {
             throw new TRPCError({

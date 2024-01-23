@@ -30,18 +30,18 @@ const router = createRouter({
         {
           path: '/playgrounds',
           name: 'Playgrounds',
-          component: () => import('../views/PlaygroundsView.vue'),
+          component: () => import('../views/PlaygroundsMapView.vue'),
         },
         {
           path: '/playgrounds/add',
           name: 'AddPlayground',
           component: () => import('../views/MyHomeView.vue'),
         },
-        // {
-        //   path: 'playgrounds/:id',
-        //   name: 'Playground',
-        //   component: () => import('../views/PlaygroundView.vue'),
-        // },
+        {
+          path: '/playgrounds/:id',
+          name: 'Playground',
+          component: () => import('../views/PlaygroundView.vue'),
+        },
         // {
         //   path: 'playgrounds/:id/reports',
         //   name: 'PlaygroundReports',

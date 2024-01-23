@@ -27,6 +27,6 @@ export default authenticatedProcedure
 
         return {
             count: playground.ratings.length,
-            rating: rating === 'NaN' ? 0.00 : rating,
+            rating: rating === 'NaN' ? 0.00 : Number(rating),
         };
     });

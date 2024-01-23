@@ -22,7 +22,13 @@ defineEmits<{
       </h5>
 
       <FwbButtonGroup class="align-center flex w-full justify-around">
-        <FwbButton component="RouterLink" tag="router-link" class="min-w-min" color="blue" outline
+        <FwbButton
+          component="RouterLink"
+          tag="router-link"
+          :href="{ name: 'Playground', params: { id: playground.id } } as any"
+          class="min-w-min"
+          color="blue"
+          outline
           >View
           <template #suffix>
             <svg
