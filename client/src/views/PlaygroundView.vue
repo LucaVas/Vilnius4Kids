@@ -143,7 +143,10 @@ async function unsavePlayground(id: number) {
         Playground with high risk of injury.
       </FwbAlert>
     </div>
-    <FwbP class="mt-2 text-gray-900 dark:text-gray-400">
+    <FwbP v-if="currentPlayground.description" class="mt-2 text-gray-900 dark:text-gray-400">
+      {{ currentPlayground.description }}
+    </FwbP>
+    <FwbP v-else class="mt-2 text-gray-900 dark:text-gray-400">
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat voluptatibus deserunt minus,
       distinctio voluptas rem, dicta voluptate dignissimos dolore corporis eligendi. Iure maiores
       facere nisi consequuntur, illum voluptas, neque atque ipsam laborum unde quis? Hic numquam

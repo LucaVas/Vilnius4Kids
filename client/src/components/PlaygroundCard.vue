@@ -54,8 +54,6 @@ defineEmits<{
           >Remove
         </FwbButton>
       </FwbButtonGroup>
-
-      <!--         :href="{ name: 'Playground', params: { id: playground.id } } as any" -->
     </div>
   </FwbCard>
 </template>

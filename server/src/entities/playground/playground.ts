@@ -1,12 +1,12 @@
 import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    JoinColumn,
+    JoinTable,
+    ManyToMany,
+    OneToMany,
+    OneToOne,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Address } from '../address/address';
 import { User } from '../user/user';
@@ -15,43 +15,46 @@ import { Report } from '../report/report';
 
 @Entity('playgrounds')
 export class Playground {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+    @PrimaryGeneratedColumn('increment')
+    id: number;
 
-  @Column('boolean', { nullable: false, default: false })
-  isPrivate: boolean;
+    @Column('boolean', { nullable: false, default: false })
+    isPrivate: boolean;
 
-  @Column('boolean', { nullable: false, default: true })
-  isOpen: boolean;
+    @Column('boolean', { nullable: false, default: true })
+    isOpen: boolean;
 
-  @Column('decimal', { nullable: false, precision: 9, scale: 6 })
-  latitude: number;
+    @Column('decimal', { nullable: false, precision: 9, scale: 6 })
+    latitude: number;
 
-  @Column('decimal', { nullable: false, precision: 9, scale: 6 })
-  longitude: number;
+    @Column('decimal', { nullable: false, precision: 9, scale: 6 })
+    longitude: number;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+    @Column('varchar', { length: 500, nullable: true})
+    description: string;
 
-  @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+    @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
 
-  @OneToOne(() => Address, address => address.playground, {
-    onDelete: 'SET NULL',
-    cascade: ['insert']
-  })
-  @JoinColumn()
-  address: Address;
+    @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
+    updatedAt: Date;
 
-  @ManyToMany(() => User, user => user.playgrounds)
-  @JoinTable()
-  users: User[];
+    @OneToOne(() => Address, (address) => address.playground, {
+        onDelete: 'SET NULL',
+        cascade: ['insert'],
+    })
+    @JoinColumn()
+    address: Address;
 
-  @OneToMany(() => Report, report => report.playground)
-  reports: Report[];
+    @ManyToMany(() => User, (user) => user.playgrounds)
+    @JoinTable()
+    users: User[];
 
-  @OneToMany(() => Rating, rating => rating.playground, {
-    onDelete: 'SET NULL',
-  })
-  ratings: Rating[];
+    @OneToMany(() => Report, (report) => report.playground)
+    reports: Report[];
+
+    @OneToMany(() => Rating, (rating) => rating.playground, {
+        onDelete: 'SET NULL',
+    })
+    ratings: Rating[];
 }
