@@ -47,11 +47,11 @@ const router = createRouter({
         //   name: 'PlaygroundReports',
         //   component: () => import('../views/PlaygroundReportsView.vue'),
         // },
-        // {
-        //   path: 'playgrounds/:id/report',
-        //   name: 'PlaygroundReport',
-        //   component: () => import('../views/NewReportView.vue'),
-        // },
+        {
+          path: 'playgrounds/:id/report',
+          name: 'PlaygroundReport',
+          component: () => import('../views/NewReportView.vue'),
+        },
         {
           path: '/report',
           name: 'NewReport',

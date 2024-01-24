@@ -1,7 +1,16 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
-import { fakePlayground, fakeUser } from '@server/entities/tests/fakes';
-import { Playground, ReportStatusChangeLog, User } from '@server/entities';
+import {
+    fakePlayground,
+    fakeReportCategory,
+    fakeUser,
+} from '@server/entities/tests/fakes';
+import {
+    Playground,
+    ReportCategory,
+    ReportStatusChangeLog,
+    User,
+} from '@server/entities';
 import router from '..';
 
 const db = await createTestDatabase();
@@ -13,10 +22,14 @@ describe('Report a new issue', async () => {
         const playground = await db
             .getRepository(Playground)
             .save(fakePlayground());
+        const reportCategory = await db
+            .getRepository(ReportCategory)
+            .save(fakeReportCategory());
 
         const { message, newReport } = await report({
             playgroundId: playground.id,
             description: 'Test report description',
+            reportCategoryId: reportCategory.id,
         });
 
         expect(message).toEqual('Report added successfully.');
@@ -33,6 +46,7 @@ describe('Report a new issue', async () => {
             report({
                 playgroundId: 100,
                 description: 'Test report description',
+                reportCategoryId: 1
             })
         ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
@@ -46,6 +60,7 @@ describe('Report a new issue', async () => {
             report({
                 playgroundId: playground.id,
                 description: '',
+                reportCategoryId: 1
             })
         ).rejects.toThrow(
             /Report description should be at least 5 characters long./

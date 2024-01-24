@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Report } from '..';
 
 @Entity('report_categories')
@@ -21,8 +21,8 @@ export class ReportCategory {
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
-    @OneToOne(() => Report, (report) => report.category, {
+    @OneToMany(() => Report, (report) => report.category, {
         onDelete: 'SET NULL',
     })
-    report: Report;
+    reports: Report[];
 }

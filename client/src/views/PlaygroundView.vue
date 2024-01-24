@@ -23,7 +23,6 @@ const ratingScheme = ref({
   rating: 0,
   count: 0,
 });
-const reviewsText = ref('');
 
 onBeforeMount(async () => {
   const [playground, { count, rating }, { playgrounds }] = await Promise.all([
@@ -37,7 +36,6 @@ onBeforeMount(async () => {
     rating,
     count,
   };
-  reviewsText.value = `${count} reviews`;
   saved.value = playgrounds.some((p) => p.id === playgroundId);
   pageLoaded.value = true;
 });
@@ -86,15 +84,10 @@ async function unsavePlayground(id: number) {
       <FwbBadge size="sm" type="indigo">{{ currentPlayground.address.district }}</FwbBadge>
       <FwbBadge v-if="currentPlayground.isOpen" size="sm" type="green">Open</FwbBadge>
       <FwbBadge v-else size="sm" type="red">Closed</FwbBadge>
-      <FwbRating
-        review-link="#"
-        :review-text="reviewsText"
-        :rating="ratingScheme.rating"
-        :scale="1"
-      >
+      <FwbRating :rating="ratingScheme.rating">
         <template #besideText>
-          <p class="ml-2 text-sm font-bold text-gray-900 dark:text-white">
-            {{ ratingScheme.rating }}
+          <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+            {{ ratingScheme.rating }} out of 5
           </p>
         </template>
       </FwbRating>
@@ -123,14 +116,19 @@ async function unsavePlayground(id: number) {
     </div>
     <div class="mt-2">
       <FwbAlert
-        v-if="ratingScheme.rating <= 3.5 && ratingScheme.rating > 2.5"
+        v-if="ratingScheme.count !== 0 && ratingScheme.rating <= 3.5 && ratingScheme.rating > 2.5"
         closable
         icon
         type="warning"
       >
         Playground with moderate risk of injury.
       </FwbAlert>
-      <FwbAlert v-if="ratingScheme.rating <= 2.5" closable icon type="danger">
+      <FwbAlert
+        v-if="ratingScheme.count !== 0 && ratingScheme.rating <= 2.5"
+        closable
+        icon
+        type="danger"
+      >
         Playground with high risk of injury.
       </FwbAlert>
     </div>
@@ -169,7 +167,15 @@ async function unsavePlayground(id: number) {
           @click="unsavePlayground(currentPlayground.id)"
           >Unsave</FwbButton
         >
-        <FwbButton color="red" outline square>Report</FwbButton></FwbButtonGroup
+        <FwbButton
+          color="red"
+          outline
+          square
+          component="RouterLink"
+          tag="router-link"
+          :href="{ name: 'PlaygroundReport', params: { id: currentPlayground.id } } as any"
+          >Report</FwbButton
+        ></FwbButtonGroup
       >
     </FwbButtonGroup>
   </div>

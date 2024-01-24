@@ -30,12 +30,12 @@ export const reportInsertSchema = reportSchema
         createdAt: true,
         updatedAt: true,
     })
-    .extend({ playgroundId: z.number().int().positive() });
+    .extend({ playgroundId: z.number().int().positive(), reportCategoryId: z.number().int().positive() });
 
 export const reportUpdateSchema = reportSchema.omit({
     createdAt: true,
     updatedAt: true,
-});
+})
 
 export const reportIdSchema = reportSchema.pick({ id: true });
 

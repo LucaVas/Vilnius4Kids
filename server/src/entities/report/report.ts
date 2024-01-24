@@ -1,10 +1,8 @@
 import {
     Column,
     Entity,
-    JoinColumn,
     ManyToOne,
     OneToMany,
-    OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../user/user';
@@ -33,10 +31,9 @@ export class Report {
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
-    @OneToOne(() => ReportCategory, (category) => category.report, {
+    @ManyToOne(() => ReportCategory, (category) => category.reports, {
         cascade: true,
     })
-    @JoinColumn()
     category: ReportCategory;
 
     @ManyToOne(() => User, (user) => user.reports, {
