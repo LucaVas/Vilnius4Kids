@@ -81,7 +81,7 @@ function goBack() {
   if (playgroundId) {
     router.go(-1);
   }
-  
+
   if (showForm.value) {
     showForm.value = false;
     showCategories.value = true;
@@ -120,13 +120,12 @@ onBeforeMount(async () => {
     const playground = await trpc.playground.getPlayground.query({ id: playgroundId });
     reportInfo.value.playgroundId = playground.id;
     showTopics.value = true;
+  } else {
+    const { playgrounds } = await trpc.playground.getPlaygrounds.query();
+    availablePlaygrounds.value = playgrounds;
   }
 
-  const [{ playgrounds }, { categories }] = await Promise.all([
-    trpc.playground.getPlaygrounds.query(),
-    trpc.reportCategory.getReportCategories.query(),
-  ]);
-  availablePlaygrounds.value = playgrounds;
+  const { categories } = await trpc.reportCategory.getReportCategories.query();
   availableCategories.value = categories;
   pageLoaded.value = true;
 });

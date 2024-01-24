@@ -6,7 +6,15 @@ import { TRPCError } from '@trpc/server';
 export default authenticatedProcedure
     .input(reportIdSchema)
     .query(async ({ input: { id }, ctx: { db } }) => {
-        const report = await db.getRepository(Report).findOneBy({ id });
+        const report = await db
+            .getRepository(Report)
+            .createQueryBuilder('report')
+            .leftJoinAndSelect('report.playground', 'playground')
+            .leftJoinAndSelect('playground.address', 'address')
+            .leftJoinAndSelect('report.category', 'category')
+            .leftJoinAndSelect('report.changeLogs', 'changeLogs')
+            .where('report.id = :id', { id })
+            .getOne();
 
         if (!report) {
             throw new TRPCError({

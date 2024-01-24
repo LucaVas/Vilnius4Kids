@@ -57,16 +57,16 @@ const router = createRouter({
           name: 'NewReport',
           component: () => import('../views/NewReportView.vue'),
         },
-        // {
-        //   path: 'reports/:id',
-        //   name: 'Report',
-        //   component: () => import('../views/ReportView.vue'),
-        // },
-        // {
-        //   path: 'reports',
-        //   name: 'NewReport',
-        //   component: () => import('../views/NewReportView.vue'),
-        // },
+        {
+          path: 'reports/:id',
+          name: 'Report',
+          component: () => import('../views/ReportView.vue'),
+        },
+        {
+          path: '/myReports',
+          name: 'MyReports',
+          component: () => import('../views/MyReportsView.vue'),
+        },
       ],
     },
     {

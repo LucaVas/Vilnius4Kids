@@ -3,7 +3,10 @@ import { validates } from '@server/utils/validation';
 import { Report } from './report';
 import { ReportStatus } from './ReportStatus';
 
-export type BareReport = Omit<Report, 'user' | 'changeLogs' | 'playground' | 'category'>;
+export type BareReport = Omit<
+    Report,
+    'user' | 'changeLogs' | 'playground' | 'category'
+>;
 
 export const reportSchema = validates<BareReport>().with({
     id: z.number().int().positive(),
@@ -30,14 +33,20 @@ export const reportInsertSchema = reportSchema
         createdAt: true,
         updatedAt: true,
     })
-    .extend({ playgroundId: z.number().int().positive(), reportCategoryId: z.number().int().positive() });
+    .extend({
+        playgroundId: z.number().int().positive(),
+        reportCategoryId: z.number().int().positive(),
+    });
 
 export const reportUpdateSchema = reportSchema.omit({
     createdAt: true,
     updatedAt: true,
-})
+});
 
-export const reportIdSchema = reportSchema.pick({ id: true });
+export const reportOptionalIdSchema = reportSchema
+    .pick({ id: true })
+    .optional();
+export const reportIdSchema = reportSchema.pick({ id: true })
 
 export type ReportSelect = z.infer<typeof reportSchema>;
 export type ReportInsert = z.infer<typeof reportInsertSchema>;
