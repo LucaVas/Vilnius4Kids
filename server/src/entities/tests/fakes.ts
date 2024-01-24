@@ -49,5 +49,7 @@ export const fakeReportCategory = <T extends Partial<ReportCategory>>(
 ) => ({
     id: randomId(),
     name: random.string(),
+    topic: random.string(),
+    description: random.string(),
     ...overrides,
 });

@@ -4,9 +4,9 @@ import { reportCategoryInsertSchema } from '@server/entities/report_category/sch
 
 export default authenticatedProcedure
     .input(reportCategoryInsertSchema)
-    .mutation(async ({ input: { name }, ctx: { db } }) => {
+    .mutation(async ({ input: { name, topic, description }, ctx: { db } }) => {
         const category = await db.getRepository(ReportCategory).save({
-            name,
+            name, topic, description
         });
 
         return {

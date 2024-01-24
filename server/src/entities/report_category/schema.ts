@@ -17,6 +17,28 @@ export const reportCategorySchema = validates<BareReportCategory>().with({
             message: 'Report category name cannot exceed 50 characters',
         })
         .describe('Report category name'),
+    topic: z
+        .string()
+        .trim()
+        .min(5, {
+            message:
+                'Report category topic should be at least 5 characters long',
+        })
+        .max(50, {
+            message: 'Report category topic cannot exceed 50 characters',
+        })
+        .describe('Report category topic'),
+    description: z
+        .string()
+        .trim()
+        .min(5, {
+            message:
+                'Report category description should be at least 5 characters long',
+        })
+        .max(500, {
+            message: 'Report category description cannot exceed 50 characters',
+        })
+        .describe('Report category description'),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

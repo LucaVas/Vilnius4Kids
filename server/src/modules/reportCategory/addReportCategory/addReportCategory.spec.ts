@@ -16,6 +16,8 @@ describe('Add a new report category', async () => {
     it('User can add a new report category', async () => {
         const { message, category } = await addReportCategory({
             name: 'Category 1',
+            topic: 'Topic 1',
+            description: 'Description 1',
         });
 
         expect(message).toEqual('Report category added successfully.');
@@ -23,7 +25,7 @@ describe('Add a new report category', async () => {
     });
 
     it('User cannot add a new category with a too short name', async () => {
-        await expect(addReportCategory({ name: '' })).rejects.toThrow(
+        await expect(addReportCategory({ name: '', description: "Description 1", topic: "Topic 1" })).rejects.toThrow(
             'Report category name should be at least 5 characters long'
         );
     });
