@@ -1,0 +1,71 @@
+{
+    "categories": [
+        {
+            "topic": "Safety Hazards",
+            "subCategories": [
+                {
+                    "name": "Unsafe equipment",
+                    "description": "Poorly maintained or outdated equipment can pose safety risks. It's essential to regularly inspect and maintain playground structures to address any potential hazards."
+                },
+                {
+                    "name": "Tripping hazards",
+                    "description": "Uneven surfaces, protruding objects, or loose materials can cause children to trip and fall. Ensuring a smooth and even surface is important."
+                }
+            ]
+        },
+        {
+            "topic": "Inadequate Maintenance",
+            "subCategories": [
+                {
+                    "name": "Broken Equipment",
+                    "description": "Playground equipment that is damaged or broken can be dangerous. Regular maintenance and prompt repairs are necessary to address any issues promptly."
+                },
+                {
+                    "name": "Litter and Debris",
+                    "description": "Accumulation of litter or debris can create an unsafe environment. Regular cleaning and maintenance are essential to keep the playground area clean and safe."
+                }
+            ]
+        },
+        {
+            "topic": "Accessibility Issues",
+            "subCategories": [
+                {
+                    "name": "Lack of Inclusive Design",
+                    "description": "Playgrounds should be designed to be inclusive for children with disabilities. Lack of accessibility features can exclude some children from enjoying the play area."
+                },
+                {
+                    "name": "Limited Signage",
+                    "description": "Clear signage, including safety guidelines and age-appropriate recommendations, can help parents and caregivers ensure their children are using the equipment correctly."
+                }
+            ]
+        },
+        {
+            "topic": "Inadequate Security",
+            "subCategories": [
+                {
+                    "name": "Unsafe Surroundings",
+                    "description": "The playground's surroundings, such as proximity to busy roads or lack of fencing, can pose security risks. A secure perimeter and appropriate fencing can help keep children safe."
+                },
+                {
+                    "name": "Vandalism and Crime",
+                    "description": "Instances of vandalism or criminal activity can affect the safety and cleanliness of the playground. Adequate lighting and community involvement can help deter such activities."
+                }
+            ]
+        },
+        {
+            "topic": "Health Concerns",
+            "subCategories": [
+                {
+                    "name": "Poor Hygiene",
+                    "description": "Lack of hygiene facilities or poor upkeep of restroom facilities can be a concern for parents and caregivers. Maintaining cleanliness in and around the playground is crucial for public health."
+                }
+            ],
+            "Overcrowding": [
+                {
+                    "name": "Limited Space",
+                    "description": "Insufficient space and overcrowding can lead to conflicts among children or accidents. Proper planning and design can help prevent overcrowding issues."
+                }
+            ]
+        }
+    ]
+}

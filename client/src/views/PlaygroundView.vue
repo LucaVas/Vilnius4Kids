@@ -105,22 +105,13 @@ async function unsavePlayground(id: number) {
           class="h-6 w-6 text-gray-800 dark:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          fill="currentColor"
           viewBox="0 0 24 24"
         >
           <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-          />
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17.8 14h0a7 7 0 1 0-11.5 0h0l.1.3.3.3L12 21l5.1-6.2.6-.7.1-.2Z"
+            fill-rule="evenodd"
+            d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            clip-rule="evenodd"
           />
         </svg>
       </div>

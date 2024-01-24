@@ -7,7 +7,13 @@ export class ReportCategory {
     id: number;
 
     @Column('varchar', { length: 50, nullable: false })
+    topic: string;
+
+    @Column('varchar', { length: 50, nullable: false })
     name: string;
+
+    @Column('varchar', { length: 500, nullable: false })
+    description: string;
 
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;

@@ -10,7 +10,7 @@ import {
 import { User } from '../user/user';
 import { Playground } from '../playground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
-import { ReportCategory } from '../reportCategory/reportCategory';
+import { ReportCategory } from '../report_category/reportCategory';
 import { ReportStatus } from './ReportStatus';
 
 @Entity('reports')

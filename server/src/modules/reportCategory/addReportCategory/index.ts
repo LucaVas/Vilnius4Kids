@@ -1,6 +1,6 @@
 import { ReportCategory } from '@server/entities';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
-import { reportCategoryInsertSchema } from '@server/entities/reportCategory/schema';
+import { reportCategoryInsertSchema } from '@server/entities/report_category/schema';
 
 export default authenticatedProcedure
     .input(reportCategoryInsertSchema)

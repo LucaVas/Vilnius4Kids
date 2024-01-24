@@ -1,8 +1,6 @@
 import { ReportCategory } from '@server/entities';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
-import {
-    reportCategoryIdSchema,
-} from '@server/entities/reportCategory/schema';
+import { reportCategoryIdSchema } from '@server/entities/report_category/schema';
 import { TRPCError } from '@trpc/server';
 
 export default authenticatedProcedure
