@@ -21,7 +21,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen w-full justify-center bg-slate-300">
+  <div class="flex h-screen w-full justify-center">
     <PageForm heading="Sign up" formLabel="Signup" @submit="submitSignup">
       <template #default>
         <FwbInput
@@ -30,7 +30,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           id="username"
           v-model="userForm.username"
           :required="true"
-          class="border-transparent border-b-black"
+          class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
         <FwbInput
@@ -38,7 +38,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           placeholder="Email"
           v-model="userForm.email"
           :required="true"
-          class="border-transparent border-b-black"
+          class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
         <FwbInput
@@ -49,7 +49,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           autocomplete="current-password"
           v-model="userForm.password"
           :required="true"
-          class="border-transparent border-b-black"
+          class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
         <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">

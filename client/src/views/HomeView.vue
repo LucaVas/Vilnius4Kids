@@ -1,10 +1,8 @@
 <script lang="ts" setup>
 import { FwbButton } from 'flowbite-vue';
-
 </script>
 
 <template>
-  <!-- landing page with Tailwind -->
   <div class="bg-white dark:bg-gray-800">
     <div class="container mx-auto px-6 py-8">
       <div class="items-center lg:flex">
@@ -15,7 +13,7 @@ import { FwbButton } from 'flowbite-vue';
             The best playgrounds in Vilnius, at your fingertips.
           </p>
 
-          <div class="mt-6 flex items-center justify-center sm:justify-start gap-2">
+          <div class="mt-6 flex items-center justify-center gap-2 sm:justify-start">
             <!-- prettier-ignore -->
             <FwbButton
               component="RouterLink"
@@ -28,7 +26,7 @@ import { FwbButton } from 'flowbite-vue';
         </div>
 
         <div class="mt-12 lg:mt-0 lg:w-1/2">
-        <img src="../assets/playing-children.svg" alt="family">
+          <img src="../assets/playing-children.svg" alt="family" />
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ import { computed, ref } from 'vue';
 // Intial state.
 // Auth token is string OR null.
 const authToken = ref(getStoredAccessToken(localStorage));
-export const username = ref(getStoredUsername(localStorage))
+export const username = ref(getStoredUsername(localStorage));
 
 // Our client knowing about authUserId is not needed in our current setup
 // but it would be useful in most real-world apps.
@@ -34,9 +34,10 @@ export const isLoggedIn = computed(() => !!authToken.value);
 /**
  * Log in a user and store the access token in the store and in the local storage.
  */
-export async function login(userLogin: { email: string; password: string }) {
+export async function login(userLogin: { email: string; password: string;}) {
   // login might not be considered a mutation, but we are considering it as such
   // given that it creates a new "thing" - an access token.
+
   const { id, username, token } = await trpc.user.login.query(userLogin);
 
   authToken.value = token;

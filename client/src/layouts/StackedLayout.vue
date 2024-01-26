@@ -11,7 +11,7 @@ import {
   FwbNavbarCollapse,
   FwbNavbarLink,
 } from 'flowbite-vue';
-import { username } from '@/stores/user';
+import { isLoggedIn, username } from '@/stores/user';
 
 const { links } = defineProps<{
   links: {
@@ -48,18 +48,18 @@ const navigation = computed(() =>
         </FwbNavbarLink>
         <slot name="menu" />
       </FwbNavbar-collapse>
-      <div class="flex justify-evenly items-center gap-5">
-        <p class="max-w-24 overflow-auto">{{ username }}</p>
-      <FwbAvatar
-        img="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"
-        status="online"
-        rounded
-      />
+      <div v-if="isLoggedIn" class="flex items-center justify-evenly gap-5">
+        <p class="max-w-24 overflow-auto"> {{ username }}</p>
+        <FwbAvatar
+          img="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"
+          status="online"
+          rounded
+        />
       </div>
     </template>
   </FwbNavbar>
 
-  <main class="flex justify-center align-center">
+  <main class="align-center flex justify-center">
     <div class="container mx-auto py-6">
       <RouterView />
     </div>

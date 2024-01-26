@@ -26,12 +26,13 @@ export default authenticatedProcedure
                 });
             }
 
-            const availableRating = await db.getRepository(Rating)
-            .createQueryBuilder('rating')
-            .select('rating')
-            .where('rating.playground_id = :playgroundId', { playgroundId })
-            .andWhere('rating.user_id = :user', { user: user.id })
-            .getOne();
+            const availableRating = await db
+                .getRepository(Rating)
+                .createQueryBuilder('rating')
+                .select('rating')
+                .where('rating.playground_id = :playgroundId', { playgroundId })
+                .andWhere('rating.user_id = :user', { user: user.id })
+                .getOne();
 
             let newRating;
             if (!availableRating) {
@@ -44,20 +45,21 @@ export default authenticatedProcedure
                         playground,
                         user,
                         rating: Number(rating),
-                    }).execute();
+                    })
+                    .execute();
             } else {
-                newRating = await db.getRepository(Rating).update(
-                    {
-                        id: availableRating.id,
-                    },
-                    {
-                        rating: Number(rating),
-                    }
-                );
+                newRating = await db
+                    .getRepository(Rating)
+                    .createQueryBuilder()
+                    .update(Rating)
+                    .set({ rating: Number(rating) })
+                    .where('id = :id', { id: availableRating.id })
+                    .returning('*')
+                    .execute();
             }
 
             return {
-                newRating: newRating.raw[0].rating,
+                newRating: Number(newRating.raw[0].rating),
                 message: 'Playground rated successfully.',
             };
         }

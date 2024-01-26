@@ -19,7 +19,6 @@ const pageLoaded = ref(false);
 const loadingSave = ref(false);
 const saved = ref(false);
 const currentPlayground = ref();
-const ratingSubmitted = ref(false);
 const ratingScheme = ref({
   rating: 0,
   count: 0,
@@ -57,19 +56,10 @@ const pictures = [
 ];
 
 async function ratePlayground(starRating: number) {
-  const { message } = await trpc.rating.rate.mutate({
+  await trpc.rating.rate.mutate({
     playgroundId: playgroundId,
     rating: starRating,
   });
-
-  if (message) {
-    const { count, rating } = await trpc.rating.getRating.query({ id: playgroundId });
-    ratingScheme.value = {
-      rating,
-      count,
-    };
-    ratingSubmitted.value = true;
-  }
 }
 
 async function savePlayground(id: number) {
@@ -97,7 +87,7 @@ async function removePlaygroundFromFavorites(id: number) {
   </div>
   <div v-else class="flex h-full w-full flex-col gap-2 px-4 py-2">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
-    <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center mt-2" id="badges">
+    <div class="mt-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center" id="badges">
       <div class="flex flex-row justify-evenly">
         <FwbBadge size="sm" type="indigo">{{ currentPlayground.address.district }}</FwbBadge>
         <FwbBadge v-if="currentPlayground.isOpen" class="ml-2" size="sm" type="green"
@@ -109,7 +99,7 @@ async function removePlaygroundFromFavorites(id: number) {
         <RatingStars
           @rate="ratePlayground"
           :playgroundId="currentPlayground.id"
-          :rating="ratingScheme.rating"
+          :ratingScheme="ratingScheme"
         ></RatingStars>
         <FwbP class="ml-2 text-sm font-bold text-gray-900 dark:text-white">{{
           ratingScheme.rating.toFixed(2)
@@ -118,17 +108,6 @@ async function removePlaygroundFromFavorites(id: number) {
           >&#183; {{ ratingScheme.count }} rates
         </FwbP>
       </div>
-    </div>
-    <div id="rating_message">
-      <FwbAlert
-        v-if="ratingSubmitted"
-        closable
-        icon
-        type="success"
-        class="flex"
-      >
-        Playground rated successfully!
-      </FwbAlert>
     </div>
     <div class="flex items-center gap-2" id="address">
       <div>

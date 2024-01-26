@@ -21,26 +21,26 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="flex h-screen justify-center bg-slate-300">
+  <div class="flex h-screen justify-center">
     <PageForm heading="Log in" formLabel="Login" @submit="submitLogin">
       <template #default>
         <FwbInput
-          label="Email"
+          placeholder="Email"
           type="email"
           v-model="userForm.email"
           :required="true"
-          class="border-transparent border-b-black"
+          class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
         <FwbInput
-          label="Password"
+          placeholder="Password"
           id="password"
           name="password"
           type="password"
           autocomplete="current-password"
           v-model="userForm.password"
           :required="true"
-          class="border-transparent border-b-black"
+          class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
         <FwbAlert v-if="errorMessage" data-testid="errorMessage" type="danger">

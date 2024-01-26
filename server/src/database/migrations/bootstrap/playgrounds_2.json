@@ -1,0 +1,191 @@
+{
+    "playgrounds": [
+        {
+            "address": {
+                "street": "Kovo 11 g.",
+                "number": 32,
+                "city": "Vilnius",
+                "zipCode": "27107",
+                "district": "Grigiškės"
+            },
+            "latitude": 54.67067,
+            "longitude": 25.09307
+        },
+        {
+            "address": {
+                "street": "Kauno Vokės g.",
+                "number": 1,
+                "city": "Vilnius",
+                "zipCode": "27101",
+                "district": "Grigiškės"
+            },
+            "latitude": 54.6784,
+            "longitude": 25.0775
+        },
+        {
+            "address": {
+                "street": "Sudervės kl.",
+                "number": 40,
+                "city": "Vilnius",
+                "zipCode": "05270",
+                "district": "Justiniškės"
+            },
+            "latitude": 54.71519,
+            "longitude": 25.22559
+        },
+        {
+            "address": {
+                "street": "I.Šimulionio g.",
+                "number": 10,
+                "city": "Vilnius",
+                "zipCode": "04330",
+                "district": "Karoliniškės"
+            },
+            "latitude": 54.69573,
+            "longitude": 25.22867
+        },
+        {
+            "address": {
+                "street": "Laisvės pr.",
+                "number": 40,
+                "city": "Vilnius",
+                "zipCode": "04340",
+                "district": "Karoliniškės"
+            },
+            "latitude": 54.69717,
+            "longitude": 25.21971
+        },
+        {
+            "address": {
+                "street": "R. Jankausko g.",
+                "number": 15,
+                "city": "Vilnius",
+                "zipCode": "04315",
+                "district": "Karoliniškės"
+            },
+            "latitude": 54.69176,
+            "longitude": 25.20844
+        },
+        {
+            "address": {
+                "street": "Architektų g.",
+                "number": 104,
+                "city": "Vilnius",
+                "zipCode": "04222",
+                "district": "Lazdynai"
+            },
+            "latitude": 54.67642,
+            "longitude": 25.1991
+        },
+        {
+            "address": {
+                "street": "Subačiaus g.",
+                "number": 113,
+                "city": "Vilnius",
+                "zipCode": "11343",
+                "district": "Markučiai"
+            },
+            "latitude": 54.67445,
+            "longitude": 54.67445
+        },
+        {
+            "address": {
+                "street": "Naugarduko g.",
+                "number": 50,
+                "city": "Vilnius",
+                "zipCode": "03227",
+                "district": "Naujamiestis"
+            },
+            "latitude": 54.67372,
+            "longitude": 25.26705
+        },
+        {
+            "address": {
+                "street": "Lukiškių g., 01107",
+                "number": 1,
+                "city": "Vilnius",
+                "zipCode": "01107",
+                "district": "Naujamiestis"
+            },
+            "latitude": 54.69049,
+            "longitude": 25.2706
+        },
+        {
+            "address": {
+                "street": "Žemaitės skveras, Gedimino pr.",
+                "number": 29,
+                "city": "Vilnius",
+                "zipCode": "01104",
+                "district": "Naujamiestis"
+            },
+            "latitude": 54.68827,
+            "longitude": 25.27422
+        },
+        {
+            "address": {
+                "street": "Rodūnios Sodų 4-oji g.",
+                "number": 2,
+                "city": "Vilnius",
+                "zipCode": "02195",
+                "district": "Naujininkai"
+            },
+            "latitude": 54.63037,
+            "longitude": 25.27855
+        },
+        {
+            "address": {
+                "street": "Gerovės g.",
+                "number": 5,
+                "city": "Vilnius",
+                "zipCode": "11211",
+                "district": "Naujoji Vilnia"
+            },
+            "latitude": 54.69118,
+            "longitude": 25.41371
+        },
+        {
+            "address": {
+                "street": "Ižos g.",
+                "number": 9,
+                "city": "Vilnius",
+                "zipCode": "02241",
+                "district": "Paneriai"
+            },
+            "latitude": 54.63471,
+            "longitude": 25.12781
+        },
+        {
+            "address": {
+                "street": "Gabijos g.",
+                "number": 55,
+                "city": "Vilnius",
+                "zipCode": "06105",
+                "district": "Pašilaičiai"
+            },
+            "latitude": 54.73381,
+            "longitude": 25.22516
+        },
+        {
+            "address": {
+                "street": "Aukštaičių g.",
+                "number": 7,
+                "city": "Vilnius",
+                "zipCode": "11341",
+                "district": "Paupys"
+            },
+            "latitude": 54.68003,
+            "longitude": 25.30568
+        },
+        {
+            "address": {
+                "street": "Vandens g. 9",
+                "number": 7,
+                "city": "Vilnius",
+                "zipCode": "11306",
+                "district": "Pavilnys"
+            },
+            "latitude": 54.66901,
+            "longitude": 25.35804
+        }
+    ]
+}
