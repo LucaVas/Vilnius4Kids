@@ -14,8 +14,8 @@ jobs:
         image: postgres:16.1-alpine
         env:
           # Postgres will create a database with the following credentials
-          POSTGRES_USER: turing
-          POSTGRES_PASSWORD: turing
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
           POSTGRES_DB: testdb
         ports:
           - 5432:5432
@@ -50,10 +50,11 @@ jobs:
     - name: Start server
       run: npm run start -w=server
       env:
-          DB_USER: turing
-          DB_PASSWORD: turing
+          DB_USER: testuser
+          DB_PASSWORD: testpassword
           DB_NAME: testdb
           DB_HOST: localhost
+          DB_SSL: false
           PORT: 3000
 
     - name: Health probe
