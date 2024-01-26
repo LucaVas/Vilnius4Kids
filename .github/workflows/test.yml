@@ -45,10 +45,10 @@ jobs:
       run: npm test -w=server
 
     - name: Build server
-      run: npm build -w=server
+      run: npm run build -w=server
 
     - name: Start server
-      run: npm start -w=server
+      run: npm run start -w=server
       env:
           DB_USER: postgres
           DB_PASSWORD: postgres
