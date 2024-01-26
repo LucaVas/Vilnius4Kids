@@ -101,7 +101,7 @@ function getCategoriesByTopic(topic: string) {
 }
 
 const [submitReport, errorMessage] = useErrorMessage(async () => {
-  const { message } = await trpc.report.report.mutate({
+  await trpc.report.report.mutate({
     description: reportInfo.value.message,
     reportCategoryId: reportInfo.value.categoryId,
     playgroundId: reportInfo.value.playgroundId,

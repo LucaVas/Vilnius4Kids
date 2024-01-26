@@ -19,7 +19,7 @@ const pageLoaded = ref(false);
 const loadingSave = ref(false);
 const saved = ref(false);
 const currentPlayground = ref();
-const ratingSumitted = ref(false);
+const ratingSubmitted = ref(false);
 const ratingScheme = ref({
   rating: 0,
   count: 0,
@@ -68,7 +68,7 @@ async function ratePlayground(starRating: number) {
       rating,
       count,
     };
-    ratingSumitted.value = true;
+    ratingSubmitted.value = true;
   }
 }
 
@@ -81,7 +81,7 @@ async function savePlayground(id: number) {
   }
 }
 
-async function unsavePlayground(id: number) {
+async function removePlaygroundFromFavorites(id: number) {
   loadingSave.value = true;
   const success = await trpc.playground.deleteFavoritePlayground.mutate({ id });
   if (success.message) {
@@ -121,7 +121,7 @@ async function unsavePlayground(id: number) {
     </div>
     <div id="rating_message">
       <FwbAlert
-        v-if="ratingSumitted"
+        v-if="ratingSubmitted"
         closable
         icon
         type="success"
@@ -202,7 +202,7 @@ async function unsavePlayground(id: number) {
           outline
           square
           :loading="loadingSave"
-          @click="unsavePlayground(currentPlayground.id)"
+          @click="removePlaygroundFromFavorites(currentPlayground.id)"
           >Unsave</FwbButton
         >
         <FwbButton
