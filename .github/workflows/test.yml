@@ -36,19 +36,19 @@ jobs:
       run: npm ci
 
     - name: Type check server
-      run: npm run typecheck -w=server
+      run: npm typecheck -w=server
 
     - name: Lint server
-      run: npm run lint -w=server
+      run: npm lint -w=server
 
     - name: Test server
-      run: npm run test -w=server
+      run: npm test -w=server
 
     - name: Build server
-      run: npm run build -w=server
+      run: npm build -w=server
 
     - name: Start server
-      run: npm run start -w=server &
+      run: npm start -w=server
       env:
           DB_USER: postgres
           DB_PASSWORD: postgres
