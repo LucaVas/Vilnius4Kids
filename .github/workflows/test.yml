@@ -14,8 +14,8 @@ jobs:
         image: postgres:16.1-alpine
         env:
           # Postgres will create a database with the following credentials
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
           POSTGRES_DB: testdb
         ports:
           - 5432:5432
@@ -50,8 +50,8 @@ jobs:
     - name: Start server
       run: npm run start -w=server
       env:
-          DB_USER: postgres
-          DB_PASSWORD: postgres
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_NAME: testdb
           PORT: 3000
 
