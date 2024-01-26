@@ -28,21 +28,24 @@ describe('Get playgrounds rating', async () => {
             db.getRepository(Rating).save({
                 rating: 1.5,
                 playground,
+                user,
             }),
             db.getRepository(Rating).save({
                 rating: 3,
                 playground,
+                user,
             }),
             db.getRepository(Rating).save({
                 rating: 5,
                 playground,
+                user,
             }),
         ]);
 
         const { count, rating } = await getRating({ id: playground.id });
 
         expect(count).toBe(3);
-        expect(rating).toBe('3.17');
+        expect(rating).toBe(3.17);
     });
 
     it('User cannot get rating of a non existing playground', async () => {

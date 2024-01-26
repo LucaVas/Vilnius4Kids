@@ -57,7 +57,7 @@ export default authenticatedProcedure
             }
 
             return {
-                newRating,
+                newRating: newRating.raw[0].rating,
                 message: 'Playground rated successfully.',
             };
         }

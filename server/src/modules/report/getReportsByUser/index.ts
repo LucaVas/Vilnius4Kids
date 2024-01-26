@@ -7,7 +7,7 @@ export default authenticatedProcedure
     .input(reportOptionalIdSchema)
     .query(async ({ input, ctx: { db, authUser } }) => {
         const id = input?.id || authUser.id;
-        const user = await db.getRepository(User).findOneBy({ id: 8 });
+        const user = await db.getRepository(User).findOneBy({ id });
 
         if (!user) {
             throw new TRPCError({

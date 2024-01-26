@@ -32,6 +32,7 @@ export const fakePlayground = <T extends Partial<Playground>>(
     isOpen: true,
     latitude: random.latitude({ min: -90, max: 90 }),
     longitude: random.longitude({ min: -180, max: 180 }),
+    description: random.string(),
     ...overrides,
 });
 

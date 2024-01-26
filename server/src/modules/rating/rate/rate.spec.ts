@@ -29,7 +29,7 @@ describe('Rate playgrounds', async () => {
             .getOne();
 
         expect(message).toEqual('Playground rated successfully.');
-        expect(newRating.rating).toEqual(1.5);
+        expect(newRating).toEqual(1.5);
         expect(rated!.ratings[0].rating).toEqual(1.5);
     });
 

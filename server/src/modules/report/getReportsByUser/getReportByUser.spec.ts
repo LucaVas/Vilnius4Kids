@@ -16,6 +16,7 @@ describe('Get reports by user', async () => {
 
         expect(count).toEqual(0);
         expect(reports).toEqual([]);
+
     });
 
     it('User gets an existing reports of a user', async () => {

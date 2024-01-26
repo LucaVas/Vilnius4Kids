@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { validates } from '@server/utils/validation';
 import { ReportCategory } from './reportCategory';
 
-export type BareReportCategory = Omit<ReportCategory, 'report'>;
+export type BareReportCategory = Omit<ReportCategory, 'reports'>;
 
 export const reportCategorySchema = validates<BareReportCategory>().with({
     id: z.number().int().positive(),
