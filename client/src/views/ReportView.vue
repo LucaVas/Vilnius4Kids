@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import {
   FwbBadge,
-  FwbCarousel,
-  FwbRating,
   FwbSpinner,
-  FwbAlert,
   FwbP,
-  FwbButtonGroup,
-  FwbButton,
   FwbTimeline,
   FwbTimelineItem,
   FwbTimelinePoint,
@@ -58,21 +53,26 @@ onBeforeMount(async () => {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div v-else class="flex h-full w-full flex-col px-4 py-2">
+  <div v-else class="flex h-full w-full flex-col p-4 bg-slate-200 rounded-lg">
     <form class="mb-6">
+      <div class="mb-2 flex flex-row justify-between">
+        <FwbHeading tag="h5" class="w-full"> Report details </FwbHeading>
+        <FwbHeading tag="h5" class="max-w-max text-slate-500"> # {{ currentReport?.id }} </FwbHeading>
+      </div>
+      
       <div class="mb-2 flex flex-row justify-between gap-2">
-        <FwbInput class="w-1/2 text-black" :value="currentReport!.category.topic" label="Topic" disabled />
-        <FwbInput class="w-1/2 text-black" :value="currentReport!.category.name" label="Category" disabled />
+        <FwbInput class="w-1/2 text-black" :placeholder="currentReport!.category.topic" label="Topic" disabled />
+        <FwbInput class="w-1/2 text-black" :placeholder="currentReport!.category.name" label="Category" disabled />
       </div>
       <div class="mb-4">
         <FwbInput
           class="w-full text-black"
-          :value="getStringifiedStreet(currentReport!.playground.address)"
+          :placeholder="getStringifiedStreet(currentReport!.playground.address)"
           label="Playground"
           disabled
         />
       </div>
-      <div class="flex gap-2">
+      <div class="flex flex-col sm:flex-row gap-2 justify-between sm:items-center">
         <div class="flex items-center gap-2">
           <FwbP class="text-sm">Status</FwbP>
           <FwbBadge v-if="currentReport!.status === 'open'" size="sm" type="green">Open</FwbBadge>
@@ -82,23 +82,23 @@ onBeforeMount(async () => {
           <FwbBadge v-if="currentReport!.status === 'closed'" size="sm" type="red">Closed</FwbBadge>
         </div>
         <div class="flex gap-2">
-          <FwbP class="text-sm">Aging: {{ getAge(currentReport!.createdAt) }} days</FwbP>
+          <FwbP class="text-sm"> Opened: {{ getAge(currentReport!.createdAt) }} days ago | </FwbP>
           <FwbP class="text-sm"
-            >Last update:
+            > Last update:
             {{ getAge(currentReport!.changeLogs[currentReport!.changeLogs.length - 1].changedAt) }}
-            days ago</FwbP
+            days ago </FwbP
           >
         </div>
       </div>
     </form>
-    <div class="bg-gray-600 p-4">
+    <div>
       <FwbHeading tag="h5" class="mb-4">Timeline</FwbHeading>
       <FwbTimeline>
         <FwbTimelineItem v-for="log in currentReport?.changeLogs" :key="log.id">
           <FwbTimelinePoint />
           <FwbTimelineContent>
             <FwbTimelineTime> {{ convertDate(log.changedAt) }} </FwbTimelineTime>
-            <FwbTimelineTitle> Status: {{ log.status }} </FwbTimelineTitle>
+            <FwbTimelineTitle class="text-slate-600"> Status: {{ log.status }} </FwbTimelineTitle>
             <FwbTimelineBody>
               {{ log.changeStatusMessage }}
             </FwbTimelineBody>

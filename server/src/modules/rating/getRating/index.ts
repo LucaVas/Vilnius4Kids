@@ -21,7 +21,7 @@ export default authenticatedProcedure
         }
 
         const rating = (
-            playground.ratings.reduce((acc, curr) => acc + curr.rating, 0) /
+            playground.ratings.reduce((acc, curr) => acc + Number(curr.rating), 0) /
             playground.ratings.length
         ).toFixed(2);
 

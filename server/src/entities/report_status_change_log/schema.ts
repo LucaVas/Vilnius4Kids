@@ -5,7 +5,7 @@ import { ReportStatusChangeLog } from './reportStatusChangeLog';
 
 export type BareChangeLog = Omit<
     ReportStatusChangeLog,
-    'reports' | 'playground'
+    'report' | 'playground'
 >;
 
 export const changeLogSchema = validates<BareChangeLog>().with({

@@ -2,7 +2,6 @@
 import {
   FwbBadge,
   FwbCarousel,
-  FwbRating,
   FwbSpinner,
   FwbAlert,
   FwbP,
@@ -12,6 +11,7 @@ import {
 import { trpc } from '../trpc';
 import { ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
+import RatingStars from '@/components/RatingStars.vue';
 
 const route = useRoute();
 const playgroundId = Number(route.params.id);
@@ -19,6 +19,7 @@ const pageLoaded = ref(false);
 const loadingSave = ref(false);
 const saved = ref(false);
 const currentPlayground = ref();
+const ratingSumitted = ref(false);
 const ratingScheme = ref({
   rating: 0,
   count: 0,
@@ -55,6 +56,22 @@ const pictures = [
   },
 ];
 
+async function ratePlayground(starRating: number) {
+  const { message } = await trpc.rating.rate.mutate({
+    playgroundId: playgroundId,
+    rating: starRating,
+  });
+
+  if (message) {
+    const { count, rating } = await trpc.rating.getRating.query({ id: playgroundId });
+    ratingScheme.value = {
+      rating,
+      count,
+    };
+    ratingSumitted.value = true;
+  }
+}
+
 async function savePlayground(id: number) {
   loadingSave.value = true;
   const success = await trpc.playground.addFavoritePlayground.mutate({ id });
@@ -78,21 +95,42 @@ async function unsavePlayground(id: number) {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div v-else class="flex h-full w-full flex-col bg-gray-200 px-4 py-2">
+  <div v-else class="flex h-full w-full flex-col gap-2 px-4 py-2">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
-    <div class="mt-2 flex items-center gap-2">
-      <FwbBadge size="sm" type="indigo">{{ currentPlayground.address.district }}</FwbBadge>
-      <FwbBadge v-if="currentPlayground.isOpen" size="sm" type="green">Open</FwbBadge>
-      <FwbBadge v-else size="sm" type="red">Closed</FwbBadge>
-      <FwbRating :rating="ratingScheme.rating">
-        <template #besideText>
-          <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-            {{ ratingScheme.rating }} out of 5
-          </p>
-        </template>
-      </FwbRating>
+    <div class="flex flex-col items-start gap-2 sm:flex-row sm:items-center mt-2" id="badges">
+      <div class="flex flex-row justify-evenly">
+        <FwbBadge size="sm" type="indigo">{{ currentPlayground.address.district }}</FwbBadge>
+        <FwbBadge v-if="currentPlayground.isOpen" class="ml-2" size="sm" type="green"
+          >Open</FwbBadge
+        >
+        <FwbBadge v-else class="ml-2" size="sm" type="red">Closed</FwbBadge>
+      </div>
+      <div class="flex flex-row justify-evenly">
+        <RatingStars
+          @rate="ratePlayground"
+          :playgroundId="currentPlayground.id"
+          :rating="ratingScheme.rating"
+        ></RatingStars>
+        <FwbP class="ml-2 text-sm font-bold text-gray-900 dark:text-white">{{
+          ratingScheme.rating.toFixed(2)
+        }}</FwbP>
+        <FwbP class="ml-2 text-sm text-gray-900 dark:text-white"
+          >&#183; {{ ratingScheme.count }} rates
+        </FwbP>
+      </div>
     </div>
-    <div class="mt-2 flex items-center gap-2">
+    <div id="rating_message">
+      <FwbAlert
+        v-if="ratingSumitted"
+        closable
+        icon
+        type="success"
+        class="flex"
+      >
+        Playground rated successfully!
+      </FwbAlert>
+    </div>
+    <div class="flex items-center gap-2" id="address">
       <div>
         <svg
           class="h-6 w-6 text-gray-800 dark:text-white"
@@ -114,7 +152,7 @@ async function unsavePlayground(id: number) {
         {{ currentPlayground.address.city }}
       </FwbP>
     </div>
-    <div class="mt-2">
+    <div id="warning_messages">
       <FwbAlert
         v-if="ratingScheme.count !== 0 && ratingScheme.rating <= 3.5 && ratingScheme.rating > 2.5"
         closable
@@ -132,10 +170,10 @@ async function unsavePlayground(id: number) {
         Playground with high risk of injury.
       </FwbAlert>
     </div>
-    <FwbP v-if="currentPlayground.description" class="mt-2 text-gray-900 dark:text-gray-400">
+    <FwbP v-if="currentPlayground.description" class="text-gray-900 dark:text-gray-400">
       {{ currentPlayground.description }}
     </FwbP>
-    <FwbP v-else class="mt-2 text-gray-900 dark:text-gray-400">
+    <FwbP v-else class="text-gray-900 dark:text-gray-400">
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat voluptatibus deserunt minus,
       distinctio voluptas rem, dicta voluptate dignissimos dolore corporis eligendi. Iure maiores
       facere nisi consequuntur, illum voluptas, neque atque ipsam laborum unde quis? Hic numquam
@@ -146,7 +184,7 @@ async function unsavePlayground(id: number) {
       adipisci repellendus. Asperiores quia laudantium veritatis reprehenderit quas dolore
       voluptatem impedit pariatur?
     </FwbP>
-    <FwbButtonGroup class="my-4 flex justify-between">
+    <FwbButtonGroup class="my-2 flex justify-between">
       <FwbButton color="dark" outline square @click="$router.go(-1)">Back</FwbButton>
       <FwbButtonGroup class="gap-2">
         <FwbButton

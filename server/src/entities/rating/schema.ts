@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { validates } from '@server/utils/validation';
 import { Rating } from './rating';
 
-export type BareRating = Omit<Rating, 'playground'>;
+export type BareRating = Omit<Rating, 'playground' | 'user'>;
 
 export const ratingSchema = validates<BareRating>().with({
     id: z.number().int().positive(),

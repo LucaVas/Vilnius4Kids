@@ -3,7 +3,7 @@ import { validates } from '@server/utils/validation';
 import { User } from './user';
 import { Role } from './Role';
 
-export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports'>;
+export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports' | 'ratings'>;
 export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role'>;
 
 export const userSchema = validates<BareUser>().with({

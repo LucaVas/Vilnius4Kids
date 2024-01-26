@@ -44,7 +44,6 @@ const reportInfo = ref({
   message: '',
 });
 const reportSent = ref(false);
-const sendingReport = ref(false);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -102,16 +101,11 @@ function getCategoriesByTopic(topic: string) {
 }
 
 const [submitReport, errorMessage] = useErrorMessage(async () => {
-  sendingReport.value = true;
   const { message } = await trpc.report.report.mutate({
     description: reportInfo.value.message,
     reportCategoryId: reportInfo.value.categoryId,
     playgroundId: reportInfo.value.playgroundId,
   });
-  if (errorMessage.value !== '') {
-    sendingReport.value = false;
-  }
-  sendingReport.value = false;
   reportSent.value = true;
 });
 
@@ -177,7 +171,7 @@ onBeforeMount(async () => {
               <FwbTableHeadCell>District</FwbTableHeadCell>
               <FwbTableHeadCell>Address</FwbTableHeadCell>
               <FwbTableHeadCell>
-                <span class="sr-only">Edit</span>
+                <span class="sr-only">Select</span>
               </FwbTableHeadCell>
             </FwbTableHead>
             <FwbTableBody>
@@ -187,15 +181,29 @@ onBeforeMount(async () => {
                   {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
                 >
                 <FwbTableCell>
-                  <FwbButton
+                  <fwb-button
+                    color="default"
+                    pill
+                    square
                     @click="
                       reportInfo.playgroundId = playground.id;
                       showPlaygroundSearch = false;
                       showTopics = true;
                     "
                   >
-                    Select
-                  </FwbButton>
+                    <svg
+                      class="h-5 w-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        fill-rule="evenodd"
+                      />
+                    </svg>
+                  </fwb-button>
                 </FwbTableCell>
               </FwbTableRow>
             </FwbTableBody>
@@ -248,7 +256,7 @@ onBeforeMount(async () => {
               v-model="reportInfo.message"
               :rows="5"
               custom
-              label="Write a description"
+              label="Write a description of your issue"
               placeholder="What is the nature of this report?"
             >
               <template #footer>
@@ -265,27 +273,6 @@ onBeforeMount(async () => {
                       >
                         <path
                           d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </FwbButton>
-                    <FwbButton class="rounded-lg hover:bg-gray-200 hover:dark:bg-gray-600" square>
-                      <svg
-                        class="h-6 w-6"
-                        fill="none"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                           stroke-linecap="round"
                           stroke-linejoin="round"
                         />
@@ -332,7 +319,6 @@ onBeforeMount(async () => {
       <FwbButton
         v-if="showForm && !reportSent"
         :disabled="reportSent"
-        :loading="sendingReport"
         square
         @click="submitReport"
       >

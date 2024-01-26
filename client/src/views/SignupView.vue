@@ -21,7 +21,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex justify-center bg-slate-300">
+  <div class="flex h-screen w-full justify-center bg-slate-300">
     <PageForm heading="Sign up" formLabel="Signup" @submit="submitSignup">
       <template #default>
         <FwbInput

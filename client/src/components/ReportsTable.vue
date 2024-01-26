@@ -27,9 +27,9 @@ function convertDate(date: Date) {
 
 <template>
   <FwbTable hoverable class="h-full w-full">
-    <FwbTableHead class="bg-gray-800 dark:bg-gray-200">
+    <FwbTableHead class="bg-gray-800 dark:bg-gray-200 ">
       <FwbTableHeadCell class="text-slate-50 dark:text-slate-800">Playground</FwbTableHeadCell>
-      <FwbTableHeadCell class="text-slate-50 dark:text-slate-800">Date</FwbTableHeadCell>
+      <FwbTableHeadCell class="hidden sm:table-cell text-slate-50 dark:text-slate-800">Date</FwbTableHeadCell>
       <FwbTableHeadCell class="text-slate-50 dark:text-slate-800">Status</FwbTableHeadCell>
       <FwbTableHeadCell class="align-center flex justify-center text-slate-50 dark:text-slate-800"
         >Actions
@@ -41,7 +41,7 @@ function convertDate(date: Date) {
           >{{ report.playground.address.street }}
           {{ report.playground.address.number }}</FwbTableCell
         >
-        <FwbTableCell>{{ convertDate(report.createdAt) }}</FwbTableCell>
+        <FwbTableCell class="hidden sm:table-cell">{{ convertDate(report.createdAt) }}</FwbTableCell>
         <FwbTableCell>
           <FwbBadge v-if="report.status === 'open'" size="sm" type="green">Open</FwbBadge>
           <FwbBadge v-if="report.status === 'in progress'" size="sm" type="yellow"
