@@ -48,7 +48,7 @@ jobs:
       run: npm run build -w=server
 
     - name: Start server
-      run: npm run start -w=server
+      run: npm run start -w=server &
       env:
           DB_USER: testuser
           DB_PASSWORD: testpassword
