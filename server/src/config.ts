@@ -37,10 +37,10 @@ const schema = z
             host: z.string().default('smtp.gmail.com'),
             port: z.coerce.number().default(465),
             secure: z.coerce.boolean().default(true),
-            sender: z.string().email(),
+            sender: z.string().email().default('vilniusforkids@gmail.com'),
             auth: z.object({
-                user: z.string().email(),
-                pass: z.string(),
+                user: z.string().email().default(''),
+                pass: z.string().default(''),
             }),
         }),
 
