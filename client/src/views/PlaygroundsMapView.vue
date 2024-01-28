@@ -135,6 +135,7 @@ onMounted(async () => {
                   color="yellow"
                   outline
                   square
+                  data-testid="go-to-playground-button"
                   component="RouterLink"
                   tag="router-link"
                   :href="{ name: 'Playground', params: { id: m.id } } as any"

@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <FwbAlert v-if="message" data-testid="errorMessage" type="danger">
+  <FwbAlert v-if="message" data-testid="error-message" type="danger">
     {{ message }}
   </FwbAlert>
 </template>

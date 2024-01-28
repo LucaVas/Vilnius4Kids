@@ -6,6 +6,7 @@ export const fakeUser = () => ({
   email: random.email(),
   username: random.string(),
   password: 'Password123.',
+  role: 'tester'
 });
 
 export const fakeAddress = () => ({

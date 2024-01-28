@@ -1,3 +1,4 @@
+import { Role } from '@server/entities/user/Role';
 import { z } from 'zod';
 
 export const signupSchema = z.object({
@@ -23,6 +24,7 @@ export const signupSchema = z.object({
         .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
         .trim()
         .describe('User password'),
+    role: z.nativeEnum(Role).optional(),
     toRemember: z
         .boolean()
         .optional()

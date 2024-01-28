@@ -307,7 +307,7 @@ onBeforeMount(async () => {
       </Transition>
     </div>
     <div class="mb-4">
-      <FwbAlert v-if="reportSent" type="success">
+      <FwbAlert v-if="reportSent" type="success" data-testid="success-message">
         Report sent successfully! Thank you for your contribution.
       </FwbAlert>
       <AlertError :message="errorMessage">

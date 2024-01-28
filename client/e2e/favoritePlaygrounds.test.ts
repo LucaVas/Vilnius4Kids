@@ -49,59 +49,5 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     await expect(playgroundCard).toBeHidden({ timeout: 5000 });
     await page.reload();
     await expect(playgroundCard).toBeHidden({ timeout: 5000 });
-
   });
-
-  //   test('can see project bugs', async ({ page }) => {
-  //     // Give (Arrange)
-  //     await loginNewUser(page, user);
-  //     await page.goto('/dashboard');
-  //     await page.getByTestId('viewProjectBugs').click();
-
-  //     // expect to see the project id as the last part of the URL
-  //     // slight coupling to the implementation, but it's fine for now
-  //     await page.waitForURL(/.+\/\d+$/);
-  //     const projectId = Number(page.url().split('/').pop());
-  //     expect(projectId).toBeGreaterThan(0); // sanity check
-
-  //     const bug = {
-  //       projectId,
-  //       code: '500',
-  //       name: random.word({ capitalize: true }),
-  //       stacktrace: random.sentence({ words: 10 }),
-  //     };
-
-  //     // creating a bug directly through the API
-  //     const bugCreated = await reportBug(bug);
-  //     expect(bugCreated).toMatchObject(bug); // sanity check
-
-  //     // When (Act)
-  //     // reload page to see fresh data
-  //     await page.reload();
-
-  //     // Then (Assert)
-  //     // expect to see our created bug in the list of bugs
-  //     const bugList = page.getByRole('list', { name: 'Bugs' });
-  //     const bugLatest = bugList.getByRole('listitem').first();
-  //     await expect(bugLatest).toContainText(bug.name);
-  //     await expect(bugLatest).toContainText(bug.stacktrace);
-  //   });
-
-  //   test('can mark a bug as resolved', async ({ page }) => {
-  //     // Give (Arrange)
-  //     await loginNewUser(page, user);
-  //     await page.goto('/dashboard');
-  //     await page.getByTestId('viewProjectBugs').click();
-
-  //     // When (Act)
-  //     const bugList = page.getByRole('list', { name: 'Bugs' });
-  //     const bugLatest = bugList.getByRole('listitem').first();
-  //     // expect to see our created bug in the list of bugs
-  //     // click on the button to mark the bug as resolved
-  //     await bugLatest.getByTestId('resolveBug').click();
-
-  //     // Then (Assert)
-  //     // expect to see the bug marked as resolved
-  //     await expect(bugLatest.getByTestId('bugResolved')).toContainText('Resolved');
-  //   });
 });

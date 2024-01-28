@@ -85,7 +85,11 @@ async function removePlaygroundFromFavorites(id: number) {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div v-else class="flex h-full w-full flex-col gap-2 px-4 py-2">
+  <div
+    v-else
+    class="flex h-full w-full flex-col gap-2 px-4 py-2"
+    data-testid="playground-view-card"
+  >
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
     <div class="mt-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center" id="badges">
       <div class="flex flex-row justify-evenly">
@@ -98,6 +102,7 @@ async function removePlaygroundFromFavorites(id: number) {
       <div class="flex flex-row justify-evenly">
         <RatingStars
           @rate="ratePlayground"
+          data-testid="rating-stars"
           :playgroundId="currentPlayground.id"
           :ratingScheme="ratingScheme"
         ></RatingStars>
@@ -188,6 +193,7 @@ async function removePlaygroundFromFavorites(id: number) {
           color="red"
           outline
           square
+          data-testid="report-button"
           component="RouterLink"
           tag="router-link"
           :href="{ name: 'PlaygroundReport', params: { id: currentPlayground.id } } as any"
