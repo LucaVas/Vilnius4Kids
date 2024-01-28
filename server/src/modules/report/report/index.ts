@@ -8,6 +8,7 @@ import {
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
+import mailSender from '@server/modules/report/service/index';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
 export default authenticatedProcedure
@@ -33,7 +34,7 @@ export default authenticatedProcedure
             }
             if (!reportCategory) {
                 throw new TRPCError({
-                    message: `Report category with ID [${reportCategory}] does not exist.`,
+                    message: `Report category with ID [${reportCategoryId}] does not exist.`,
                     code: 'NOT_FOUND',
                 });
             }
@@ -44,9 +45,12 @@ export default authenticatedProcedure
                 });
             }
 
-            const newReport = await db
-                .getRepository(Report)
-                .save({ description, playground, category: reportCategory, user});
+            const newReport = await db.getRepository(Report).save({
+                description,
+                playground,
+                category: reportCategory,
+                user,
+            });
 
             await db.getRepository(ReportStatusChangeLog).insert({
                 report: newReport,
@@ -54,6 +58,9 @@ export default authenticatedProcedure
                 status: ReportStatus.OPEN,
                 changeStatusMessage: description,
             });
+
+            const sender = mailSender(user.username, user.email, newReport.id);
+            sender.send();
 
             return {
                 newReport,

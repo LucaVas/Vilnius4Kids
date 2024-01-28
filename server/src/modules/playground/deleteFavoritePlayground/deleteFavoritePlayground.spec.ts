@@ -6,13 +6,14 @@ import router from '..';
 import { fakePlayground } from '../../../entities/tests/fakes';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
-const { deleteFavoritePlayground } = router.createCaller(
-    authContext({ db }, user)
-);
 
 describe('Delete a playground from favorites', async () => {
     it('User can delete an existing playground from favorites', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { deleteFavoritePlayground } = router.createCaller(
+            authContext({ db }, user)
+        );
+
         const playground = await db
             .getRepository(Playground)
             .save(fakePlayground());
@@ -44,4 +45,15 @@ describe('Delete a playground from favorites', async () => {
             'Playground with ID 1 deleted successfully from favorites.'
         );
     });
+
+    it('Playground cannot be deleted from favorites if user does not exists', async () => {
+        const user = db.getRepository(User).create(fakeUser());
+        const { deleteFavoritePlayground } = router.createCaller(
+            authContext({ db }, user)
+        );
+
+        await expect(
+            deleteFavoritePlayground({ id: 1 })
+        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+    })
 });

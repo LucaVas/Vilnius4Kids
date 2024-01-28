@@ -9,13 +9,14 @@ import { Address, Playground, User } from '@server/entities';
 import router from '..';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
-const { addFavoritePlayground } = router.createCaller(
-    authContext({ db }, user)
-);
 
 describe('Add a favorite playground', async () => {
     it('User can add a new playground to its favorites', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { addFavoritePlayground } = router.createCaller(
+            authContext({ db }, user)
+        );
+
         const address = await db.getRepository(Address).save(fakeAddress());
         const existing = await db
             .getRepository(Playground)
@@ -32,9 +33,25 @@ describe('Add a favorite playground', async () => {
     it(
         'User cannot add a playground to favorites if it does not exist',
         async () => {
+            const user = await db.getRepository(User).save(fakeUser());
+            const { addFavoritePlayground } = router.createCaller(
+                authContext({ db }, user)
+            );
+
             await expect(
                 addFavoritePlayground({ id: 100 })
             ).rejects.toThrow('Playground with ID [100] does not exist.');
         }
     );
+
+    it('Playground cannot be deleted to favorites if user does not exists', async () => {
+        const user = db.getRepository(User).create(fakeUser());
+        const { addFavoritePlayground } = router.createCaller(
+            authContext({ db }, user)
+        );
+
+        await expect(addFavoritePlayground({ id: 1 })).rejects.toThrow(
+            `User with ID [${user.id}] does not exist.`
+        );
+    });
 });

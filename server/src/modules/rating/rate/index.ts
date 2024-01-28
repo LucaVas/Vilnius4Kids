@@ -21,7 +21,7 @@ export default authenticatedProcedure
 
             if (!user) {
                 throw new TRPCError({
-                    message: `User with ID [${playgroundId}] does not exist.`,
+                    message: `User with ID [${authUser.id}] does not exist.`,
                     code: 'NOT_FOUND',
                 });
             }

@@ -14,11 +14,12 @@ import {
 import router from '..';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
-const { report } = router.createCaller(authContext({ db }, user));
 
 describe('Report a new issue', async () => {
     it('User can report an issue', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { report } = router.createCaller(authContext({ db }, user));
+
         const playground = await db
             .getRepository(Playground)
             .save(fakePlayground());
@@ -42,6 +43,9 @@ describe('Report a new issue', async () => {
     });
 
     it('User cannot report if playground does not exist', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { report } = router.createCaller(authContext({ db }, user));
+
         await expect(
             report({
                 playgroundId: 100,
@@ -51,7 +55,36 @@ describe('Report a new issue', async () => {
         ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
 
+    it('User cannot report if category does not exist', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { report } = router.createCaller(authContext({ db }, user));
+
+        await expect(
+            report({
+                playgroundId: 1,
+                description: 'Test report description',
+                reportCategoryId: 100,
+            })
+        ).rejects.toThrow('Report category with ID [100] does not exist.');
+    });
+
+    it('Report cannot be created if user does not exist', async () => {
+        const user = await db.getRepository(User).create(fakeUser());
+        const { report } = router.createCaller(authContext({ db }, user));
+
+        await expect(
+            report({
+                playgroundId: 1,
+                description: 'Test report description',
+                reportCategoryId: 1,
+            })
+        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+    });
+
     it('User cannot report with a too short description', async () => {
+        const user = await db.getRepository(User).save(fakeUser());
+        const { report } = router.createCaller(authContext({ db }, user));
+
         const playground = await db
             .getRepository(Playground)
             .save(fakePlayground());

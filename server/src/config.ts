@@ -32,6 +32,18 @@ const schema = z
             passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
         }),
 
+        smtp: z.object({
+            service: z.string().default('Gmail'),
+            host: z.string().default('smtp.gmail.com'),
+            port: z.coerce.number().default(465),
+            secure: z.coerce.boolean().default(true),
+            sender: z.string().email(),
+            auth: z.object({
+                user: z.string().email(),
+                pass: z.string(),
+            }),
+        }),
+
         database: z.object({
             type: z
                 .enum([
@@ -83,6 +95,18 @@ const config = schema.parse({
         logging: env.DB_LOGGING,
         synchronize: env.DB_SYNC,
         ssl: env.DB_SSL,
+    },
+
+    smtp: {
+        service: env.SMTP_SERVICE,
+        host: env.SMTP_HOST,
+        port: env.SMTP_PORT,
+        secure: env.SMTP_SECURE_CONNECTION,
+        sender: env.SMTP_SENDER,
+        auth: {
+            user: env.SMTP_USERNAME,
+            pass: env.SMTP_PASSWORD,
+        },
     },
 });
 
