@@ -48,6 +48,7 @@ defineEmits<{
           component="RouterLink"
           tag="router-link"
           class="min-w-min"
+          data-testid="delete-playground-button"
           color="red"
           outline
           @click="$emit('delete', playground.id)"

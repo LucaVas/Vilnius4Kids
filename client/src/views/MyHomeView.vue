@@ -34,6 +34,7 @@ onBeforeMount(async () => {
         v-for="playground in favoritePlaygrounds"
         :key="playground.id"
         :playground="playground"
+        data-testid="playground-card"
         @delete="removeFromPlaygrounds(playground.id)"
       />
     </div>

@@ -1,9 +1,9 @@
-import { apiOrigin, apiPath } from './config'
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
-import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc'
-import { fakeUser } from './fakeData'
-import type { Page } from '@playwright/test'
-import { superjson } from './superjson/common'
+import { apiOrigin, apiPath } from './config';
+import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc';
+import { fakeUser } from './fakeData';
+import type { Page } from '@playwright/test';
+import { superjson } from './superjson/common';
 
 const trpc = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
@@ -12,7 +12,15 @@ const trpc = createTRPCProxyClient<AppRouter>({
       url: `${apiOrigin}${apiPath}`,
     }),
   ],
-})
+});
+
+export async function signupNewUser(userSignup = fakeUser()) {
+  try {
+    await trpc.user.signup.mutate(userSignup);
+  } catch (error) {
+    // ignore cases when user already exists
+  }
+}
 
 /**
  * Logs in a new user by signing them up and logging them in with the provided
@@ -20,14 +28,16 @@ const trpc = createTRPCProxyClient<AppRouter>({
  */
 export async function loginNewUser(page: Page, userLogin = fakeUser()) {
   try {
-    await trpc.user.signup.mutate(userLogin)
+    await trpc.user.signup.mutate(userLogin);
   } catch (error) {
     // ignore cases when user already exists
   }
 
-  const { accessToken } = await trpc.user.login.mutate(userLogin)
-
-  await page.goto('/')
+  const { accessToken } = await trpc.user.login.query({
+    email: userLogin.email,
+    password: userLogin.password,
+  });
+  await page.goto('/');
 
   // unfortunate that we are dealing with page internals and
   // implementation details here, but as long as we make sure that
@@ -35,14 +45,14 @@ export async function loginNewUser(page: Page, userLogin = fakeUser()) {
   // we should be fine.
   await page.evaluate(
     ({ accessToken }) => {
-      localStorage.setItem('token', accessToken)
+      localStorage.setItem('token', accessToken);
     },
     { accessToken }
-  )
+  );
 
   // returning the only thing that was generated inside (fakeUser)
   // in case we want to make assertions based on generated user data
-  return userLogin
+  return userLogin;
 }
 
 // export const reportBug = trpc.bug.report.mutate

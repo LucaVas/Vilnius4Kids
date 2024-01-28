@@ -73,7 +73,7 @@ onMounted(async () => {
 
 <template>
   <!-- landing page with Tailwind -->
-  <div class="flex items-center justify-center">
+  <div class="flex items-center justify-center" data-testid="playgrounds-map">
     <GMapMap
       v-if="mapInfo.markers.length !== 0"
       :center="mapInfo.center"
@@ -84,12 +84,14 @@ onMounted(async () => {
       <GMapMarker
         :key="index"
         v-for="(m, index) in mapInfo.markers"
+        :data-testid='"map-marker-" + m.id'
         :position="m.position"
         :clickable="true"
         :draggable="true"
         @click="openMarker(m.id)"
       >
         <GMapInfoWindow
+          data-testid="infobox"
           :closeclick="true"
           @closeclick="openMarker(null)"
           :opened="openedMarkerID === m.id"
@@ -121,6 +123,7 @@ onMounted(async () => {
                 <FwbButton
                   v-else
                   :loading="loadingSave"
+                  data-testid="save-playground-button"
                   color="green"
                   outline
                   square
