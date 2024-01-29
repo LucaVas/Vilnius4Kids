@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup src/index.ts && npm run sentry:sourcemaps",
+    "build": "tsup src/index.ts && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",
@@ -21,7 +21,7 @@
     "migration:revert": "npm run typeorm migration:revert -- -d src/database/cli/dataSource.ts",
     "migration:run": "tsx ../node_modules/typeorm/cli.js migration:run -d ./src/database/cli/dataSource.ts",
     "migration:show": "npm run typeorm migration:show -- -d src/database/cli/dataSource.ts",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org vilnius4kids --project vilnius4kids_server ./dist && sentry-cli sourcemaps upload --org vilnius4kids --project vilnius4kids_server ./dist"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org vilnius4kids-rb --project vilnius4kids_server ./dist && sentry-cli sourcemaps upload --org vilnius4kids-rb --project vilnius4kids_server ./dist"
   },
   "keywords": [],
   "author": "",
