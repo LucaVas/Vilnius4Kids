@@ -7,6 +7,7 @@ import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 import { type TRPCPanelMeta } from 'trpc-panel';
 
+
 export type Context = {
     db: Database;
     req?: Request;
@@ -16,25 +17,28 @@ export type Context = {
 
 export type ContextMinimal = Pick<Context, 'db'>;
 
-const t = initTRPC.context<Context>().meta<TRPCPanelMeta>().create({
-    transformer: SuperJSON,
-    errorFormatter(opts) {
-        const { shape, error } = opts;
+const t = initTRPC
+    .context<Context>()
+    .meta<TRPCPanelMeta>()
+    .create({
+        transformer: SuperJSON,
+        errorFormatter(opts) {
+            const { shape, error } = opts;
 
-        if (error.cause instanceof ZodError) {
-            const validationError = fromZodError(error.cause);
+            if (error.cause instanceof ZodError) {
+                const validationError = fromZodError(error.cause);
 
-            return {
-                ...shape,
-                data: {
-                    message: validationError.message,
-                },
-            };
-        }
+                return {
+                    ...shape,
+                    data: {
+                        message: validationError.message,
+                    },
+                };
+            }
 
-        return shape;
-    },
-});
+            return shape;
+        },
+    });
 
 export const {
     middleware,
