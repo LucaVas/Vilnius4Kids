@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { validates } from '@server/utils/validation';
+import { validates } from '@vilnius4kids/server/src/utils/validation';
 import { Rating } from './rating';
 
 export type BareRating = Omit<Rating, 'playground' | 'user'>;

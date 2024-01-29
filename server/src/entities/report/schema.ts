@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { validates } from '@server/utils/validation';
+import { validates } from '@vilnius4kids/server/src/utils/validation';
 import { Report } from './report';
 import { ReportStatus } from './ReportStatus';
 
