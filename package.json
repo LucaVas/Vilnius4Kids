@@ -6,11 +6,5 @@
   "workspaces": [
     "client",
     "server"
-  ],
-  "devDependencies": {
-    "uuid": "^9.0.1"
-  },
-  "dependencies": {
-    "@types/uuid": "^9.0.7"
-  }
+  ]
 }
