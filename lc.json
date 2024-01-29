@@ -1,8 +1,8 @@
 {
-  "serviceName": "homedesign",
+  "serviceName": "vilnius4kids",
   "containers": {
     "server": {
-      "image": ":homedesign.homedesign-server.3",
+      "image": ":vilnius4kids.vilnius4kids-server.3",
       "ports": {
         "3000": "HTTP"
       },
@@ -10,13 +10,19 @@
         "NODE_ENV": "production",
         "DB_SSL": "true",
         "DB_SYNC": "true",
-        "DB_HOST": "ep-proud-salad-81117033.eu-central-1.aws.neon.tech",
-        "DB_NAME": "homedesigndb",
+        "DB_HOST": "ep-ancient-boat-a28sy491.eu-central-1.aws.neon.tech",
+        "DB_NAME": "vilnius4kidsdb",
         "DB_USER": "luca.vassos",
-        "DB_PASSWORD": "lqKGBP3C7VER",
-        "OPENAI_API_KEY": "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",
+        "DB_PASSWORD": "MfZDaLt38zvS",
         "TOKEN_KEY": "t$$J6eEwg&",
-        "TOKEN_EXPIRES_IN": "1h"
+        "TOKEN_EXPIRES_IN": "1h",
+        "SMTP_SERVICE": "Gmail",
+        "SMTP_HOST": "smtp.gmail.com",
+        "SMTP_PORT": 465,
+        "SMTP_SECURE_CONNECTION": true,
+        "SMTP_USERNAME": "vilniusforkids@gmail.com",
+        "SMTP_PASSWORD": "sqee snbp qspd pcnq",
+        "SMTP_SENDER": "vilniusforkids@gmail.com"
       }
     }
   },

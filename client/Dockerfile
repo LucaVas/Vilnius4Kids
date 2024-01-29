@@ -40,7 +40,7 @@ WORKDIR /app/client
 RUN npm run build
 
 # Stage 2: Serve the application with Nginx
-FROM nginx:1.25.3-alpine3.18
+FROM --platform=linux/amd64 nginx:1.25.3-alpine3.18
 
 # Delete the default welcome page.
 RUN rm /usr/share/nginx/html/* -rf
