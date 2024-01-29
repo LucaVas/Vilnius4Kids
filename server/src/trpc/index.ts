@@ -5,7 +5,7 @@ import type { Database } from '@server/database';
 import SuperJSON from 'superjson';
 import { ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
-import { TRPCPanelMeta } from 'trpc-panel';
+import { type TRPCPanelMeta } from 'trpc-panel';
 
 export type Context = {
     db: Database;

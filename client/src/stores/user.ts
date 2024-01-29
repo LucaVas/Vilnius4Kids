@@ -38,7 +38,7 @@ export async function login(userLogin: { email: string; password: string;}) {
   // login might not be considered a mutation, but we are considering it as such
   // given that it creates a new "thing" - an access token.
 
-  const { id, username, token } = await trpc.user.login.query(userLogin);
+  const { username, token } = await trpc.user.login.query(userLogin);
 
   authToken.value = token;
   storeAccessToken(localStorage, token);
