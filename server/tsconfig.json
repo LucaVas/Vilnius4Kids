@@ -4,20 +4,26 @@
     "compilerOptions": {
         "baseUrl": ".",
         "rootDir": "..",
-
         "module": "ES2022",
         "target": "ES2022",
         "moduleResolution": "Bundler",
-
         "experimentalDecorators": true,
         "strict": true,
         "strictPropertyInitialization": false,
         "outDir": "dist",
-
         "types": ["vitest/globals"],
+
         "paths": {
             "@server/*": ["./src/*"],
             "@tests/*": ["./tests/*"]
-        }
+        },
+
+        "sourceMap": true,
+        "inlineSources": true,
+
+        // Set `sourceRoot` to  "/" to strip the build path prefix
+        // from generated source code references.
+        // This improves issue grouping in Sentry.
+        "sourceRoot": "/"
     }
 }

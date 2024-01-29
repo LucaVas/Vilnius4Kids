@@ -17,3 +17,5 @@ coverage
 data/database*
 
 .env
+# Sentry Config File
+.sentryclirc
