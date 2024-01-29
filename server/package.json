@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup src/index.ts && npm run sentry:sourcemaps && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
+    "build": "tsup src/index.ts && npm run sentry:sourcemaps && npm run sentry:sourcemaps && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
     "coverage": "DB_TYPE=pg-mem vitest run --coverage",
     "dev": "tsx watch src",
     "dev:mem": "DB_TYPE=pg-mem tsx watch src",

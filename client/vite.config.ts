@@ -12,6 +12,9 @@ export default defineConfig({
   }), sentryVitePlugin({
     org: "vilnius4kids-rb",
     project: "vilnius4kids_client"
+  }), sentryVitePlugin({
+    org: "vilnius4kids-rb",
+    project: "vilnius4kids_client"
   })],
 
   resolve: {
