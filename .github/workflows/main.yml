@@ -61,8 +61,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Build server
+        run: npm run build -w=server
+
       - name: Start server
-        run: npm run dev:mem -w=server &
+        run: npm run start:mem -w=server &
         env:
           DB_USER: testuser
           DB_PASSWORD: testpassword
