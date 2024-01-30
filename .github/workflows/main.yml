@@ -75,7 +75,7 @@ jobs:
           PORT: 3000
 
       - name: Run migrations
-        run: npm run migration:run
+        run: npm run migration:run -w=server
 
       - name: Build front end for E2E tests
         run: npm run build -w=client
