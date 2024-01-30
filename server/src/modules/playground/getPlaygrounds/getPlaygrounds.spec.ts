@@ -24,7 +24,7 @@ describe('Get all existing playgrounds', async () => {
             db.getRepository(Playground).save(fakePlayground()),
             db.getRepository(Playground).save(fakePlayground()),
         ]);
-
+        
         const { playgrounds, count } = await getPlaygrounds();
 
         expect(count).toEqual(2);

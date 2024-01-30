@@ -16,7 +16,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: ./server/Dockerfile-compose
+      dockerfile: ./server/Dockerfile
     env_file:
       - ./server/.env
     environment:
@@ -24,10 +24,9 @@ services:
       DB_PASSWORD: postgres
       DB_NAME: vilnius4kids
       DB_SSL: false
-      DB_HOST: localhost
-      PORT: 3000
+      DB_HOST: database
     ports:
-      - "3000"
+      - "3000:3000"
     depends_on:
       - database
 

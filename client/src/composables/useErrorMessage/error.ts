@@ -1,4 +1,4 @@
-import { DEFAULT_SERVER_ERROR } from '@/consts'
+import { DEFAULT_SERVER_ERROR, DEFAULT_TRPC_CLIENT_ERROR } from '@/consts';
 import { TRPCClientError } from '@trpc/client'
 import type { Ref } from 'vue'
 
@@ -46,7 +46,7 @@ function getErrorMessage(error: unknown) {
   }
 
   if (!(error instanceof TRPCClientError)) {
-    return error.message
+    return error.message ?? DEFAULT_TRPC_CLIENT_ERROR;
   }
 
   return error.data.message || error.message

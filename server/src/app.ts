@@ -36,25 +36,25 @@ export default function createApp(db: Database) {
     app.use(cors());
     app.use(express.json());
 
-    app.use('/health', (_, res) => {
+    app.use('/api/health', (_, res) => {
         res.status(200).send('OK');
     });
 
-    app.use('/ready', (_, res) => {
+    app.use('/api/ready', (_, res) => {
         res.status(200).send('OK');
     });
 
-    app.use('/panel', (_, res) =>
+    app.use('/api/panel', (_, res) =>
         res.status(200).send(
             renderTrpcPanel(appRouter, {
-                url: 'http://localhost:3000/v1/trpc',
+                url: 'http://localhost:3000/api/v1/trpc',
                 transformer: 'superjson',
             })
         )
     );
 
     app.use(
-        '/v1/trpc',
+        '/api/v1/trpc',
         createExpressMiddleware({
             createContext: ({
                 req,
@@ -69,7 +69,6 @@ export default function createApp(db: Database) {
         })
     );
 
-    // The error handler must be before any other error middleware and after all controllers
     app.use(Sentry.Handlers.errorHandler());
 
     return app;

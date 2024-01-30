@@ -1,15 +1,18 @@
 import { Playground } from '@server/entities';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { DataSource } from 'typeorm';
+import config from '@server/config';
 
-let cache: { data: Playground[]; timestamp: number } = {
-    data: [],
-    timestamp: 0,
+type Cache = {
+    data: Playground[];
+    timestamp: number;
 };
-const HOUR_MS = 60 * 60 * 1000;
+
+let cache: Cache = { data: [], timestamp: Date.now() };
+const HOUR_MS = config.env === 'test' ? 0 : 60 * 60 * 1000;
 
 export default authenticatedProcedure.query(async ({ ctx: { db } }) => {
-    const playgrounds = await getPlaygrounds(db);
+    const playgrounds = await getPlaygroundsFromStore(db);
 
     return {
         playgrounds,
@@ -17,8 +20,8 @@ export default authenticatedProcedure.query(async ({ ctx: { db } }) => {
     };
 });
 
-async function getPlaygrounds(db: DataSource) {
-    if (cache?.timestamp > Date.now() - HOUR_MS) {
+async function getPlaygroundsFromStore(db: DataSource) {
+    if (cache.timestamp > Date.now() - HOUR_MS) {
         return cache.data;
     }
 
@@ -28,6 +31,7 @@ async function getPlaygrounds(db: DataSource) {
             users: true,
         },
     });
+
     cache = { data: playgrounds, timestamp: Date.now() }; // Update cache
     return playgrounds;
 }
