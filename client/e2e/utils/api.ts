@@ -1,7 +1,7 @@
 import { apiOrigin, apiPath } from './config';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc';
-import { fakeUser } from './fakeData';
+import { fakeAddress, fakePlayground, fakeUser } from './fakeData';
 import type { Page } from '@playwright/test';
 import { superjson } from './superjson/common';
 
@@ -19,6 +19,22 @@ export async function signupNewUser(userSignup = fakeUser()) {
     await trpc.user.signup.mutate(userSignup);
   } catch (error) {
     // ignore cases when user already exists
+  }
+}
+
+export async function addTestPlayground() {
+  try {
+    const address = await trpc.address.addAddress.mutate(fakeAddress())
+    await trpc.playground.addPlayground.mutate({
+      isPrivate: false,
+      isOpen: true,
+      addressId: address.id,
+      latitude: 58.2344,
+      longitude: 21.3443,
+      description: 'Test description',
+    });
+  } catch (error) {
+    // ignore errors
   }
 }
 

@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 import { signupNewUser } from './utils/api';
 import { fakeUser } from './utils/fakeData';
 
-const { email, username, password } = fakeUser();
+const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {
-  await signupNewUser({ email, username, password });
+  await signupNewUser({ email, username, password, role });
 });
 
 // login before each test
