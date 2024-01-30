@@ -24,6 +24,7 @@ jobs:
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN_SERVER }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.1.1
@@ -70,14 +71,12 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN_SERVER }}
 
       - name: Build front end for E2E tests
         run: npm run build -w=client
         env:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN_CLIENT }}
 
       - name: Health probe
         uses: Jtalk/url-health-check-action@v4
