@@ -70,11 +70,11 @@ jobs:
       with:
         max-attempts: 5
         retry-delay: 5s
-        url: http://localhost:3000/health
+        url: http://localhost:3000/api/health
     
     - name: Readiness probe
       uses: Jtalk/url-health-check-action@v4
       with:
         max-attempts: 5
         retry-delay: 5s
-        url: http://localhost:3000/ready
+        url: http://localhost:3000/api/ready
