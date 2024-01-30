@@ -164,6 +164,7 @@ jobs:
         run: >-
           docker build
           -t $SERVER_IMAGE_TAG
+          --build-arg SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
           -f ./server/Dockerfile .
 
       - name: Build client image
