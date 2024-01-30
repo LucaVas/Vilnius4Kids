@@ -123,6 +123,18 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     env:
+      TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
+      TOKEN_EXPIRES_IN: 1h
+      SMTP_SERVICE: ${{ vars.SMTP_SERVICE }}
+      SMTP_HOST: ${{ vars.SMTP_HOST }}
+      SMTP_PORT: ${{ vars.SMTP_PORT }}
+      SMTP_SECURE_CONNECTION: true
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      VITE_API_ORIGIN: http://localhost:3000
+      VITE_API_PATH: /api/v1/trpc
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: /api/v1/trpc
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
