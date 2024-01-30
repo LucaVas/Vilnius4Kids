@@ -24,7 +24,6 @@ jobs:
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
     steps:
@@ -132,7 +131,6 @@ jobs:
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
       API_ORIGIN: ${{ vars.API_ORIGIN }}
@@ -164,7 +162,6 @@ jobs:
         run: >-
           docker build
           -t $SERVER_IMAGE_TAG
-          --build-arg VITE_API_ORIGIN=$SENTRY_AUTH_TOKEN
           -f ./server/Dockerfile .
 
       - name: Build client image

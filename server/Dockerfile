@@ -10,7 +10,6 @@ RUN npm ci
 COPY server/ server/
 
 WORKDIR /app/server
-ARG SENTRY_AUTH_TOKEN
 RUN npm run build
 
 EXPOSE 3000
