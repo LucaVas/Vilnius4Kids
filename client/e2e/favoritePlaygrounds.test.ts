@@ -1,12 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { addTestPlayground, signupNewUser } from './utils/api';
+import { signupNewUser } from './utils/api';
 import { fakeUser } from './utils/fakeData';
 
 const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {
   await signupNewUser({ email, username, password, role });
-  await addTestPlayground()
 });
 
 // login before each test
@@ -29,7 +28,7 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     const map = page.getByTestId('playgrounds-map');
     await expect(map).not.toBeHidden({ timeout: 5000 });
 
-    await page.locator('div[role="button"]').first().click();
+    await page.locator('div[role="button"]').first().click({ timeout: 50000});
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 

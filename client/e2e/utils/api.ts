@@ -1,7 +1,7 @@
 import { apiOrigin, apiPath } from './config';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc';
-import { fakeAddress, fakePlayground, fakeUser } from './fakeData';
+import { fakeAddress, fakeUser } from './fakeData';
 import type { Page } from '@playwright/test';
 import { superjson } from './superjson/common';
 
@@ -34,7 +34,7 @@ export async function addTestPlayground() {
       description: 'Test description',
     });
   } catch (error) {
-    // ignore errors
+    console.error('ERROR', error)
   }
 }
 

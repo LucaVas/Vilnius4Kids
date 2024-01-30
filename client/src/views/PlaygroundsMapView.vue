@@ -16,6 +16,7 @@ type Marker = {
 };
 
 const loadingSave = ref(false);
+const pageLoaded = ref(false);
 
 const mapInfo = ref({
   center: {
@@ -58,6 +59,7 @@ async function unsavePlayground(id: number) {
 }
 
 onMounted(async () => {
+  pageLoaded.value = false;
   const { playgrounds } = await trpc.playground.getPlaygrounds.query();
   mapInfo.value.markers = playgrounds.map((p) => ({
     id: p.id,
@@ -68,6 +70,7 @@ onMounted(async () => {
     address: p.address,
     saved: p.users.some((user) => user.id === authUserId.value),
   }));
+  pageLoaded.value = true;
 });
 </script>
 
@@ -75,7 +78,7 @@ onMounted(async () => {
   <!-- landing page with Tailwind -->
   <div class="flex items-center justify-center" data-testid="playgrounds-map">
     <GMapMap
-      v-if="mapInfo.markers.length !== 0"
+      v-if="pageLoaded"
       :center="mapInfo.center"
       :zoom="11"
       map-type-id="terrain"
