@@ -65,7 +65,7 @@ jobs:
         run: npm run build -w=server
 
       - name: Start server
-        run: npm run start:mem -w=server &
+        run: npm run start -w=server &
         env:
           DB_USER: testuser
           DB_PASSWORD: testpassword
@@ -73,6 +73,9 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
+
+      - name: Run migrations
+        run: npm run migration:run
 
       - name: Build front end for E2E tests
         run: npm run build -w=client

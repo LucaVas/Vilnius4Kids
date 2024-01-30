@@ -11,7 +11,6 @@
         "format": "prettier --write \"src/**/*.ts\"",
         "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
         "start": "node ./dist/index.js",
-        "start:mem": "DB_TYPE=pg-mem npm run migration:run && node ./dist/index.js",
         "test": "npm run test:mem",
         "test:mem": "DB_TYPE=pg-mem vitest",
         "test:db": "vitest",
