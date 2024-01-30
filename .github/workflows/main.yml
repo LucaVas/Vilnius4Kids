@@ -76,6 +76,13 @@ jobs:
 
       - name: Run migrations
         run: npm run migration:run -w=server
+        env:
+          DB_USER: testuser
+          DB_PASSWORD: testpassword
+          DB_NAME: testdb
+          DB_HOST: localhost
+          DB_SSL: false
+          PORT: 3000
 
       - name: Build front end for E2E tests
         run: npm run build -w=client
