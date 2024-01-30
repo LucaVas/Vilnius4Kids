@@ -4,7 +4,7 @@
     "description": "",
     "main": "dist/index.js",
     "scripts": {
-        "build": "tsup src/index.ts && npm run sentry:sourcemaps",
+        "build": "tsup src/index.ts",
         "coverage": "DB_TYPE=pg-mem vitest run --coverage",
         "dev": "tsx watch src",
         "dev:mem": "DB_TYPE=pg-mem npm run migration:run && tsx watch src",
@@ -20,8 +20,7 @@
         "migration:generate": "node src/database/cli 'migration:generate src/database/migrations/$0 -d src/database/cli/dataSource.ts'",
         "migration:revert": "npm run typeorm migration:revert -- -d src/database/cli/dataSource.ts",
         "migration:run": "tsx ../node_modules/typeorm/cli.js migration:run -d ./src/database/cli/dataSource.ts",
-        "migration:show": "npm run typeorm migration:show -- -d src/database/cli/dataSource.ts",
-        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org vilnius4kids-rb --project vilnius4kids_server ./dist && sentry-cli sourcemaps upload --org vilnius4kids-rb --project vilnius4kids_server ./dist"
+        "migration:show": "npm run typeorm migration:show -- -d src/database/cli/dataSource.ts"
     },
     "keywords": [],
     "author": "",
@@ -50,7 +49,6 @@
         "vitest": "^0.34.6"
     },
     "dependencies": {
-        "@sentry/cli": "^2.26.0",
         "@trpc/server": "^10.41.0",
         "@types/chance": "^1.1.6",
         "@types/nodemailer": "^6.4.14",
