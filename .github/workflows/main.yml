@@ -160,24 +160,12 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./server/Dockerfile
-          push: false
-          tags: $SERVER_IMAGE_TAG
-          secrets: |
-            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-
-
-      # - name: Build server image
-      #   run: >-
-      #     docker build
-      #     -t $SERVER_IMAGE_TAG
-      #     -f ./server/Dockerfile .
-      #   env:
-      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      - name: Build server image
+        run: >-
+          docker build
+          -t $SERVER_IMAGE_TAG
+          --build-arg VITE_API_ORIGIN=$SENTRY_AUTH_TOKEN
+          -f ./server/Dockerfile .
 
       - name: Build client image
         run: >-
