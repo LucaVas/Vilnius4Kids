@@ -218,6 +218,15 @@ jobs:
                 "DB_NAME": "${{ secrets.PROD_DB_NAME }}",
                 "DB_USER": "${{ secrets.PROD_DB_USER }}",
                 "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}"
+                "TOKEN_KEY": ${{ secrets.TOKEN_KEY }},
+                "TOKEN_EXPIRES_IN": "1h",
+                "SMTP_SERVICE": ${{ vars.SMTP_SERVICE }},
+                "SMTP_HOST": ${{ vars.SMTP_HOST }},
+                "SMTP_PORT": ${{ vars.SMTP_PORT }},
+                "SMTP_SECURE_CONNECTION": "true",
+                "SMTP_USERNAME": ${{ secrets.SMTP_USERNAME }},
+                "SMTP_PASSWORD": ${{ secrets.SMTP_PASSWORD }},
+                "SMTP_SENDER": ${{ secrets.SMTP_USERNAME }}
               }
             }
           }' > containers.json
