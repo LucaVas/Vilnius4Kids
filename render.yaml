@@ -2,9 +2,6 @@ services:
 - type: web
   name: app-client
   runtime: docker
-  region: europe
-  repo: https://github.com/LucaVas/Vilnius4Kids
-  branch: main
   rootDir: .
   dockerfilePath: ./client/Dockerfile
   dockerContext: .
@@ -14,8 +11,6 @@ services:
 - type: web
   name: app-server
   runtime: docker
-  repo: https://github.com/LucaVas/Vilnius4Kids
-  branch: main
   rootDir: .
   dockerfilePath: ./server/Dockerfile
   dockerContext: .
