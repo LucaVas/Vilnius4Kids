@@ -87,7 +87,7 @@ async function removePlaygroundFromFavorites(id: number) {
   </div>
   <div
     v-else
-    class="flex h-full w-full flex-col gap-2 px-4 py-2"
+    class="flex h-full w-full flex-col gap-2"
     data-testid="playground-view-card"
   >
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />

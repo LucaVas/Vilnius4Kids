@@ -53,7 +53,7 @@ onBeforeMount(async () => {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div v-else class="flex h-full w-full flex-col p-4 bg-slate-200 rounded-lg">
+  <div v-else class="flex h-full w-full flex-col bg-slate-300 rounded-lg p-4">
     <form class="mb-6">
       <div class="mb-2 flex flex-row justify-between">
         <FwbHeading tag="h5" class="w-full"> Report details </FwbHeading>

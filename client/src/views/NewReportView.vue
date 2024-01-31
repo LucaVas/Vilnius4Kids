@@ -126,7 +126,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div v-if="pageLoaded" class="flex h-full w-full flex-col bg-gray-200 p-6">
+  <div v-if="pageLoaded" class="flex h-full w-full flex-col bg-gray-200">
     <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
     <FwbP class="mb-4 font-light">
       A public playground for kids can be a wonderful place for children to play, socialize, and

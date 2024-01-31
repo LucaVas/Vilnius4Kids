@@ -60,7 +60,7 @@ const navigation = computed(() =>
   </FwbNavbar>
 
   <main class="align-center flex justify-center">
-    <div class="container mx-auto py-6">
+    <div class="container mx-auto py-4 px-4">
       <RouterView />
     </div>
   </main>

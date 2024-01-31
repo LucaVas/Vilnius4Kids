@@ -26,26 +26,22 @@ function convertDate(date: Date) {
 
 <template>
   <FwbTable hoverable class="h-full w-full">
-    <FwbTableHead class="bg-gray-800 dark:bg-gray-200">
-      <FwbTableHeadCell class="text-slate-50 dark:text-slate-800">Playground</FwbTableHeadCell>
-      <FwbTableHeadCell class="hidden text-slate-50 dark:text-slate-800 sm:table-cell"
-        >Date</FwbTableHeadCell
-      >
-      <FwbTableHeadCell class="text-slate-50 dark:text-slate-800">Status</FwbTableHeadCell>
-      <FwbTableHeadCell class="align-center flex justify-center text-slate-50 dark:text-slate-800"
-        >Actions
-      </FwbTableHeadCell>
+    <FwbTableHead>
+      <FwbTableHeadCell>Playground</FwbTableHeadCell>
+      <FwbTableHeadCell class="hidden sm:table-cell">Date</FwbTableHeadCell>
+      <FwbTableHeadCell class="hidden sm:table-cell">Status</FwbTableHeadCell>
+      <FwbTableHeadCell> </FwbTableHeadCell>
     </FwbTableHead>
     <FwbTableBody>
       <FwbTableRow v-for="report in reports" :key="report.id" data-testid="report-row">
-        <FwbTableCell
+        <FwbTableCell class="pr-0"
           >{{ report.playground.address.street }}
           {{ report.playground.address.number }}</FwbTableCell
         >
         <FwbTableCell class="hidden sm:table-cell">{{
           convertDate(report.createdAt)
         }}</FwbTableCell>
-        <FwbTableCell>
+        <FwbTableCell class="hidden sm:table-cell">
           <FwbBadge v-if="report.status === 'open'" size="sm" type="green">Open</FwbBadge>
           <FwbBadge v-if="report.status === 'in progress'" size="sm" type="yellow"
             >In progress</FwbBadge

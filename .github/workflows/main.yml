@@ -88,6 +88,7 @@ jobs:
         env:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
 
       - name: Health probe
         uses: Jtalk/url-health-check-action@v4
@@ -146,6 +147,7 @@ jobs:
   #     SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
   #     SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
   #     SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
+  #     VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
   #     API_ORIGIN: ${{ vars.API_ORIGIN }}
   #     API_PATH: ${{ vars.API_PATH }}
   #     AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
@@ -184,6 +186,7 @@ jobs:
   #         -t $CLIENT_IMAGE_TAG
   #         --build-arg VITE_API_ORIGIN=$API_ORIGIN
   #         --build-arg VITE_API_PATH=$API_PATH
+  #         --build-arg VITE_GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
   #         -f ./client/Dockerfile .
 
   #     - name: Push server image
@@ -218,7 +221,7 @@ jobs:
   #               "80": "HTTP"
   #             },
   #             "environment": {
-  #               "API_PROXY_PASS":"${{ vars.API_ORIGIN }}${{ vars.API_PATH }}"
+  #               "API_PROXY_PASS": "${{ vars.API_ORIGIN }}${{ vars.API_PATH }}",
   #             }
   #           },
   #           "server": {

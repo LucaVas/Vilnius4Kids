@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from './router';
+import { googleMapsApiKey } from './config';
 
 const app = createApp(App);
 
@@ -14,7 +15,7 @@ app.use(router);
 
 app.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyD-DXYdf6sQGFv2ctn2GTK5K92Ld3W-_Ws',
+    key: googleMapsApiKey,
     autobindAllEvents: true,
   },
 });
