@@ -22,7 +22,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen justify-center">
-    <PageForm heading="Log in" formLabel="Login" @submit="submitLogin">
+    <PageForm heading="Log in" formLabel="Login" @submit="submitLogin" data-testid="login-form">
       <template #default>
         <FwbInput
           placeholder="Email"

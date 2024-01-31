@@ -5,7 +5,7 @@ import { FwbButton } from 'flowbite-vue';
 <template>
   <div class="bg-white dark:bg-gray-800">
     <div class="container mx-auto px-6 py-8">
-      <div class="items-center lg:flex">
+      <div class="items-center lg:flex" data-testid="homepage-hero-section">
         <div class="lg:w-1/2">
           <h2
             class="flex items-center justify-center text-3xl font-bold text-gray-800 dark:text-gray-100 lg:justify-start"

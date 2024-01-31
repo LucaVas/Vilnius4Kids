@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { authenticate } from './guards';
+import { authenticate, hideForAuth } from './guards';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
 import HomeViewVue from '@/views/HomeView.vue';
@@ -57,16 +57,19 @@ const router = createRouter({
     {
       path: '/login',
       name: 'Login',
+      beforeEnter: [hideForAuth],
       component: () => import('../views/LoginView.vue'),
     },
     {
       path: '/signup',
       name: 'Signup',
+      beforeEnter: [hideForAuth],
       component: () => import('../views/SignupView.vue'),
     },
     {
       path: '',
       component: HomeLayout,
+      beforeEnter: [hideForAuth],
       children: [
         {
           path: '',
