@@ -203,6 +203,9 @@ jobs:
               "command": [],
               "ports": {
                 "80": "HTTP"
+              },
+              "environment": {
+                "API_PROXY_PASS": "${{ vars.API_ORIGIN }}${{ vars.API_PATH }}"
               }
             },
             "server": {
