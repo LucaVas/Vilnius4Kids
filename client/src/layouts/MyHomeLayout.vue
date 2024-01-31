@@ -4,6 +4,7 @@ import StackedLayout from './StackedLayout.vue';
 import { logout } from '@/stores/user';
 import { useRouter } from 'vue-router';
 
+
 const router = useRouter();
 
 const links = [
@@ -12,6 +13,8 @@ const links = [
   { label: 'Report an issue', name: 'NewReport' },
   { label: 'My reports', name: 'MyReports' },
 ];
+
+
 
 function logoutUser() {
   logout();

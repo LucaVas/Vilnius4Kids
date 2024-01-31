@@ -87,7 +87,7 @@ onMounted(async () => {
       <GMapMarker
         :key="index"
         v-for="(m, index) in mapInfo.markers"
-        :c + m.id'
+        :data-testid='"map-marker-" + m.id'
         :position="m.position"
         :clickable="true"
         :draggable="true"

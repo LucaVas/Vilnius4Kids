@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref, onMounted, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import {
   FwbAvatar,
@@ -11,7 +11,7 @@ import {
   FwbNavbarCollapse,
   FwbNavbarLink,
 } from 'flowbite-vue';
-import { isLoggedIn, username } from '@/stores/user';
+import { getUsername } from '../stores/user';
 
 const { links } = defineProps<{
   links: {
@@ -21,6 +21,7 @@ const { links } = defineProps<{
 }>();
 
 const route = useRoute();
+const tag = ref('');
 
 const navigation = computed(() =>
   links.map((item) => ({
@@ -28,6 +29,11 @@ const navigation = computed(() =>
     isActive: route.name === item.name,
   }))
 );
+
+onBeforeMount(async () => {
+  const username = await getUsername();
+  tag.value = username;
+});
 </script>
 
 <template>
@@ -48,8 +54,8 @@ const navigation = computed(() =>
         </FwbNavbarLink>
         <slot name="menu" />
       </FwbNavbar-collapse>
-      <div v-if="isLoggedIn" class="flex items-center justify-evenly gap-5">
-        <p class="max-w-24 overflow-auto"> {{ username }}</p>
+      <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
+        <p class="max-w-24 overflow-auto" data-testid="username-tag">{{ tag }}</p>
         <FwbAvatar
           img="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"
           status="online"
@@ -60,7 +66,7 @@ const navigation = computed(() =>
   </FwbNavbar>
 
   <main class="align-center flex justify-center">
-    <div class="container mx-auto py-4 px-4">
+    <div class="container mx-auto px-4 py-4">
       <RouterView />
     </div>
   </main>
