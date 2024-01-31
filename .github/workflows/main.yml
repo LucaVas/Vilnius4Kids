@@ -209,7 +209,7 @@ jobs:
             "server": {
               "image": "${{ env.LIGHTSAIL_SERVER_IMAGE }}",
               "ports": {
-                "3000": "HTTP"
+                "3000": "HTTPS"
               },
               "environment": {
                 "NODE_ENV": "production",
