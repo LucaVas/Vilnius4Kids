@@ -48,6 +48,6 @@ function getErrorMessage(error: unknown) {
   if (!(error instanceof TRPCClientError)) {
     return error.message ?? DEFAULT_TRPC_CLIENT_ERROR;
   }
-
+  console.error('ERROR DETECTED: ', error)
   return error.data.message || error.message
 }
