@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, onMounted, onBeforeMount } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import {
   FwbAvatar,
