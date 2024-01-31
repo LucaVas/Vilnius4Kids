@@ -131,10 +131,8 @@ jobs:
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
-      VITE_API_ORIGIN: http://localhost:3000
-      VITE_API_PATH: /api/v1/trpc
       API_ORIGIN: ${{ vars.API_ORIGIN }}
-      API_PATH: /api/v1/trpc
+      API_PATH: ${{ vars.API_PATH }}
       AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
@@ -205,7 +203,7 @@ jobs:
                 "80": "HTTP"
               },
               "environment": {
-                "API_PROXY_PASS": "$API_ORIGIN$API_PATH"
+                "API_PROXY_PASS": "${{ vars.API_ORIGIN }}${{ vars.API_PATH }}"
               }
             },
             "server": {
