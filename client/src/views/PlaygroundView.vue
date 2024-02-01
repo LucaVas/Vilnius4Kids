@@ -114,7 +114,7 @@ async function removePlaygroundFromFavorites(id: number) {
         </FwbP>
       </div>
     </div>
-    <div class="flex items-center gap-2" id="address">
+    <div class="flex items-center gap-2" id="address" data-testid="playground-address">
       <div>
         <svg
           class="h-6 w-6 text-gray-800 dark:text-white"

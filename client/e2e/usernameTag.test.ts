@@ -2,6 +2,11 @@ import { test, expect } from '@playwright/test';
 import { signupNewUser } from 'utils/api';
 import { fakeUser } from 'utils/fakeData';
 
+/**
+ * Created on: 2024-01-31
+ * Related issues: #24
+ */
+
 const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {
@@ -26,6 +31,5 @@ test.describe.serial('username tag in navbar', () => {
     await expect(usernameTag).not.toBeVisible();
     await page.reload();
     await expect(usernameTag).not.toBeVisible();
-
   });
 });

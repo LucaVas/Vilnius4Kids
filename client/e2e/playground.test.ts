@@ -3,8 +3,8 @@ import { signupNewUser } from './utils/api';
 import { fakeUser } from './utils/fakeData';
 
 /**
- * Created on: 2024-01-29
- * Related issues: #20
+ * Created on: 2024-02-01
+ * Related issues: #21
  */
 
 const { email, username, password, role } = fakeUser();
@@ -24,8 +24,8 @@ test.beforeEach(async ({ page }) => {
   await expect(myHomeLink).toBeVisible();
 });
 
-test.describe.serial('save, see and remove favorite playgrounds', () => {
-  test('user can add a playground to favorites and then remove it', async ({ page }) => {
+test.describe.serial('see playground page', () => {
+  test('user can see a playground page from map', async ({ page }) => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
@@ -35,22 +35,18 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 
-    const saveBtn = page.getByRole('button', { name: /Save/i });
-    await expect(saveBtn).not.toBeHidden();
-    await saveBtn.click({ timeout: 5000 });
-    const unsaveBtn = page.getByRole('button', { name: /Unsave/i });
-    await expect(unsaveBtn).not.toBeHidden({ timeout: 5000 });
+    const infoBoxAddressLocator = page.getByTestId('infobox-playground-address');
+    const infoBoxAddress = await infoBoxAddressLocator.innerText();
+    await expect(infoBoxAddressLocator).not.toBeHidden();
 
-    await page.getByRole('link', { name: 'My playgrounds' }).first().click();
+    const goToPlaygroundBtn = page.getByTestId('go-to-playground-button');
+    await expect(goToPlaygroundBtn).not.toBeHidden();
+    await goToPlaygroundBtn.click({ timeout: 5000 });
 
-    const playgroundCard = page.getByTestId('playground-card');
-    await expect(playgroundCard).not.toBeHidden({ timeout: 5000 });
-    await page.reload();
-    await expect(playgroundCard).not.toBeHidden({ timeout: 5000 });
+    const playgroundAddressLocator = page.getByTestId('playground-address');
+    const playgroundAddress = await playgroundAddressLocator.innerText();
+    await expect(playgroundAddressLocator).not.toBeHidden();
 
-    await page.getByTestId('delete-playground-button').click();
-    await expect(playgroundCard).toBeHidden({ timeout: 5000 });
-    await page.reload();
-    await expect(playgroundCard).toBeHidden({ timeout: 5000 });
+    expect(infoBoxAddress).toBe(playgroundAddress);
   });
 });

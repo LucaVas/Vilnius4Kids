@@ -2,6 +2,11 @@ import { test, expect } from '@playwright/test';
 import { signupNewUser } from 'utils/api';
 import { fakeUser } from 'utils/fakeData';
 
+/**
+ * Created on: 2024-01-31
+ * Related issues: #25
+ */
+
 const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {

@@ -2,13 +2,17 @@ import { test, expect } from '@playwright/test';
 import { signupNewUser } from './utils/api';
 import { fakeUser } from './utils/fakeData';
 
+/**
+ * Created on: 2024-01-25
+ * Related issues: #3
+ */
+
 const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {
   await signupNewUser({ email, username, password, role });
 });
 
-// login before each test
 test.beforeEach(async ({ page }) => {
   await page.goto('/login');
   const myHomeLink = page.getByRole('link', { name: 'My playgrounds' });
@@ -20,7 +24,6 @@ test.beforeEach(async ({ page }) => {
   await expect(myHomeLink).toBeVisible();
 });
 
-// Issue #20
 test.describe.serial('report playgrounds', () => {
   test('user can make a report from a playground and report it', async ({ page }) => {
     await page.goto('/playgrounds');

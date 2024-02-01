@@ -146,8 +146,11 @@ onMounted(async () => {
         >
           <FwbCard>
             <div class="flex flex-col bg-gray-200 p-4">
-              <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {{ m.address.street }} {{ m.address.number }} - {{ m.address.zipCode }},
+              <h5
+                class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+                data-testid="infobox-playground-address"
+              >
+                {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
                 {{ m.address.city }}
               </h5>
               <FwbButtonGroup class="flex w-full justify-end gap-1">
