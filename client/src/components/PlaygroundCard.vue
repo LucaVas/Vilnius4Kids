@@ -16,7 +16,7 @@ defineEmits<{
     img-src="https://flowbite.com/docs/images/blog/image-1.jpg"
     variant="image"
   >
-    <div class="flex flex-col items-center justify-around p-5">
+    <div class="flex flex-col items-center justify-around">
       <h5 class="mb-5 font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>

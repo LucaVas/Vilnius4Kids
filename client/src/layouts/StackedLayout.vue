@@ -89,7 +89,7 @@ const navigation = computed(() =>
 
 .collapsed {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  z-index: 10;
+  z-index: 100;
   position: absolute;
   top: 2.5rem;
   left: 0;
