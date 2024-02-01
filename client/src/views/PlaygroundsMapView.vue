@@ -40,18 +40,32 @@ const mapInfo = ref({
       },
       {
         featureType: 'poi.school',
-        stylers: [{ visibility: 'on' }]
+        stylers: [{ visibility: 'on' }],
       },
       {
         featureType: 'administrative',
         // deselects all administrative areas
         stylers: [{ visibility: 'off' }],
       },
-    ]},
+    ],
+  },
   markers: [] as Marker[],
 });
 
 const openedMarkerID = ref<number | null>();
+
+function getAppUrl(lat: number, lng: number) {
+  const isIOS =
+    /iPad|iPhone|iPod/.test(navigator.platform) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  const isMac = /Mac/.test(navigator.platform);
+
+  if (isIOS || isMac) {
+    return `maps://maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
+  }
+  return `https://maps.google.com/maps?daddr=${lat},${lng}&amp;ll=`;
+}
 
 function openMarker(id: number | null) {
   openedMarkerID.value = id;
@@ -87,6 +101,7 @@ onMounted(async () => {
     address: p.address,
     saved: p.users.some((user) => user.id === authUserId.value),
   }));
+
   pageLoaded.value = true;
 });
 </script>
@@ -130,18 +145,21 @@ onMounted(async () => {
           }"
         >
           <FwbCard>
-            <div class="flex flex-col bg-gray-200 p-5">
+            <div class="flex flex-col bg-gray-200 p-4">
               <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 {{ m.address.street }} {{ m.address.number }} - {{ m.address.zipCode }},
                 {{ m.address.city }}
               </h5>
               <FwbButtonGroup class="flex w-full justify-end gap-1">
+                <FwbButton color="purple" outline square>
+                  <a :href="getAppUrl(m.position.lat, m.position.lng)">Open in Maps</a>
+                </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
                   :loading="loadingSave"
-                  color="dark"
-                  outline
+                  color="green"
                   square
+                  outline
                   @click="savePlayground(m.id)"
                   >Save
                 </FwbButton>
@@ -150,8 +168,6 @@ onMounted(async () => {
                   :loading="loadingSave"
                   data-testid="save-playground-button"
                   color="green"
-                  outline
-                  square
                   @click="unsavePlayground(m.id)"
                   >Unsave
                 </FwbButton>
@@ -192,7 +208,7 @@ onMounted(async () => {
 <style scoped>
 .map {
   margin: -1rem 0rem;
-  width: 100svh;
+  width: 100svw;
   height: 75svh;
 }
 </style>
