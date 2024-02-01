@@ -71,6 +71,8 @@ const schema = z
             ),
             ssl: z.preprocess(coerceBoolean, z.boolean().default(false)),
         }),
+
+        clientPath: z.string(),
     })
     .readonly();
 
@@ -108,6 +110,8 @@ const config = schema.parse({
             pass: env.SMTP_PASSWORD,
         },
     },
+
+    clientPath: env.CLIENT_PATH,
 });
 
 export default config;
