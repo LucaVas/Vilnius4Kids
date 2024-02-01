@@ -28,7 +28,7 @@ onBeforeMount(async () => {
   <div v-else class="px-2">
     <div
       v-if="favoritePlaygrounds.length > 0"
-      class="grid grid-flow-row grid-cols-1 justify-items-center gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      class="grid grid-flow-row justify-items-center gap-4 overflow-y-auto p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <PlaygroundCard
         v-for="playground in favoritePlaygrounds"

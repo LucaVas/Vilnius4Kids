@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbCard, FwbButton, FwbButtonGroup } from 'flowbite-vue';
+import { FwbButton, FwbButtonGroup } from 'flowbite-vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 
 defineProps<{
@@ -11,24 +11,21 @@ defineEmits<{
 </script>
 
 <template>
-  <FwbCard
-    img-alt="Desk"
-    img-src="https://flowbite.com/docs/images/blog/image-1.jpg"
-    variant="image"
+  <div
+    class="flex flex-col rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800"
   >
-    <div class="flex flex-col items-center justify-around">
-      <h5 class="mb-5 font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
+    <img class="rounded-t-lg p-10 " src="../assets/family.svg" alt="image of family" />
+    <div class="flex flex-col items-center justify-center gap-4 px-2 pb-4">
+      <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
         {{ playground.address.street }} {{ playground.address.number }}
       </h5>
-
       <FwbButtonGroup class="align-center flex w-full justify-around">
         <FwbButton
           component="RouterLink"
           tag="router-link"
           :href="{ name: 'Playground', params: { id: playground.id } } as any"
           class="min-w-min"
-          color="blue"
-          outline
+          color="purple"
           >View
           <template #suffix>
             <svg
@@ -56,5 +53,5 @@ defineEmits<{
         </FwbButton>
       </FwbButtonGroup>
     </div>
-  </FwbCard>
+  </div>
 </template>
