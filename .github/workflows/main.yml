@@ -216,12 +216,11 @@ jobs:
           echo '{
             "client": {
               "image": "${{ env.LIGHTSAIL_CLIENT_IMAGE }}",
-              "command": [],
               "ports": {
                 "80": "HTTP"
               },
               "environment": {
-                "API_PROXY_PASS": "${{ vars.API_ORIGIN }}",
+                "API_PROXY_PASS": "${{ vars.API_ORIGIN }}"
               }
             },
             "server": {
@@ -246,7 +245,7 @@ jobs:
                 "SMTP_USERNAME": "${{ secrets.SMTP_USERNAME }}",
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
-                "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
+                "CLIENT_PATH": "${{ vars.CLIENT_PATH }}"
               }
             }
           }' > containers.json
