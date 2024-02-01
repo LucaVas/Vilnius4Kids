@@ -145,7 +145,7 @@ jobs:
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      CLIENT_PATH: "{{ vars.CLIENT_PATH }}"
+      CLIENT_PATH: ${{ vars.CLIENT_PATH }}
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: ${{ vars.API_PATH }}
       AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
@@ -246,7 +246,7 @@ jobs:
                 "SMTP_USERNAME": "${{ secrets.SMTP_USERNAME }}",
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
-                "CLIENT_PATH": "{{ vars.CLIENT_PATH }}",
+                "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
               }
             }
           }' > containers.json
