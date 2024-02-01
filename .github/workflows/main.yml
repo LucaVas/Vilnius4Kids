@@ -26,6 +26,7 @@ jobs:
       SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
+      CLIENT_PATH: http://localhost:5173
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.1.1
