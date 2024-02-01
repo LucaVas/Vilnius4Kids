@@ -82,7 +82,7 @@ onMounted(async () => {
       :center="mapInfo.center"
       :zoom="11"
       map-type-id="terrain"
-      class="h-96 w-full"
+      class="map"
     >
       <GMapMarker
         :key="index"
@@ -166,3 +166,11 @@ onMounted(async () => {
     <FwbSpinner v-else size="12" />
   </div>
 </template>
+
+<style scoped>
+.map {
+  margin: -1rem;
+  width: 100svh;
+  height: 75svh;
+}
+</style>

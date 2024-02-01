@@ -9,5 +9,5 @@ const links = [
 </script>
 
 <template>
-  <StackedLayout :links="links" />
+  <StackedLayout :links="links" :tag="''" />
 </template>

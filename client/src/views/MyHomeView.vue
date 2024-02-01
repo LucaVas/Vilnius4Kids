@@ -25,7 +25,7 @@ onBeforeMount(async () => {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div v-else>
+  <div v-else class="px-2 py-4">
     <div
       v-if="favoritePlaygrounds.length > 0"
       class="grid grid-flow-row grid-cols-1 justify-items-center gap-4 overflow-y-auto p-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
