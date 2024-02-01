@@ -38,7 +38,7 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     const unsaveBtn = page.getByRole('button', { name: /Unsave/i });
     await expect(unsaveBtn).not.toBeHidden({ timeout: 5000 });
 
-    await page.locator('a[href="/myHome"]').click();
+    await page.getByRole('link', { name: 'My playgrounds' }).first().click();
 
     const playgroundCard = page.getByTestId('playground-card');
     await expect(playgroundCard).not.toBeHidden({ timeout: 5000 });

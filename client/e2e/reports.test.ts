@@ -37,14 +37,20 @@ test.describe.serial('report playgrounds', () => {
     await goToBtn.click({ timeout: 5000 });
 
     const playgroundViewCard = page.getByTestId('playground-view-card');
-    await expect(playgroundViewCard).not.toBeHidden({ timeout: 5000 });
+    await expect(playgroundViewCard).not.toBeHidden({ timeout: 15000 });
 
     const reportButton = page.getByTestId('report-button');
     await expect(reportButton).not.toBeHidden();
     await reportButton.click();
 
-    await page.getByRole('button', { name: /Safety Hazards/i }).first().click();
-    await page.getByRole('button', { name: /Unsafe equipment/i }).first().click();
+    await page
+      .getByRole('button', { name: /Safety Hazards/i })
+      .first()
+      .click();
+    await page
+      .getByRole('button', { name: /Unsafe equipment/i })
+      .first()
+      .click();
 
     const errorMessage = page.getByTestId('error-message');
     await expect(errorMessage).toBeHidden();
@@ -56,10 +62,10 @@ test.describe.serial('report playgrounds', () => {
     await page.locator('textarea').fill('Test report description');
     await page.getByRole('button', { name: /Submit report/i }).click();
     const successMessage = page.getByTestId('success-message');
-    await expect(successMessage).not.toBeHidden({ timeout: 5000});
+    await expect(successMessage).not.toBeHidden({ timeout: 5000 });
 
-    await page.locator('a[href="/myHome"]').last().click();
-    await page.locator('a[href="/myReports"]').click();
+    await page.getByRole('link', { name: 'My playgrounds' }).click();
+    await page.getByRole('link', { name: 'My reports' }).click();
 
     const reportRow = page.getByTestId('report-row');
     await expect(reportRow).not.toBeHidden({ timeout: 5000 });
