@@ -43,7 +43,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
           class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
-        <FwbAlert v-if="errorMessage" data-testid="errorMessage" type="danger">
+        <FwbAlert icon type="danger" v-if="errorMessage" data-testid="errorMessage">
           {{ errorMessage }}
         </FwbAlert>
 

@@ -11,13 +11,14 @@ const userForm = ref({
   email: '',
   password: '',
 });
-const hasSucceeded = ref(false)
+
+const hasSucceeded = ref(false);
 
 const [submitSignup, errorMessage] = useErrorMessage(async () => {
-  await signup(userForm.value)
+  await signup(userForm.value);
 
-  hasSucceeded.value = true
-})
+  hasSucceeded.value = true;
+});
 </script>
 
 <template>
@@ -28,6 +29,8 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           type="text"
           placeholder="Username"
           id="username"
+          :minlength="3"
+          :maxlength="60"
           v-model="userForm.username"
           :required="true"
           class="text-sm font-medium text-gray-900 dark:text-white"
@@ -46,6 +49,8 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           id="password"
           name="password"
           type="password"
+          :minlength="8"
+          :maxlength="64"
           autocomplete="current-password"
           v-model="userForm.password"
           :required="true"
@@ -60,7 +65,8 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             >Go to the login page</RouterLink
           >
         </FwbAlert>
-        <AlertError :message="errorMessage">
+
+        <AlertError icon type="danger" v-if="errorMessage" :message="errorMessage">
           {{ errorMessage }}
         </AlertError>
 
