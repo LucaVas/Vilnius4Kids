@@ -24,13 +24,30 @@ const mapInfo = ref({
     lng: 25.2797,
   },
   options: {
-    zoomControl: true,
-    mapTypeControl: true,
-    scaleControl: true,
+    mapTypeId: 'roadmap',
+    mapTypeControl: false,
+    zoomControl: false,
+    scaleControl: false,
     streetViewControl: true,
     rotateControl: true,
     fullscreenControl: true,
-  },
+    gestureHandling: 'greedy',
+    styles: [
+      {
+        featureType: 'poi',
+        // deselects all point of interest areas
+        stylers: [{ visibility: 'off' }],
+      },
+      {
+        featureType: 'poi.school',
+        stylers: [{ visibility: 'on' }]
+      },
+      {
+        featureType: 'administrative',
+        // deselects all administrative areas
+        stylers: [{ visibility: 'off' }],
+      },
+    ]},
   markers: [] as Marker[],
 });
 
@@ -81,16 +98,21 @@ onMounted(async () => {
       v-if="pageLoaded"
       :center="mapInfo.center"
       :zoom="11"
-      map-type-id="terrain"
+      :options="mapInfo.options"
       class="map"
     >
       <GMapMarker
         :key="index"
         v-for="(m, index) in mapInfo.markers"
-        :data-testid='"map-marker-" + m.id'
+        :data-testid="'map-marker-' + m.id"
         :position="m.position"
         :clickable="true"
-        :draggable="true"
+        :draggable="false"
+        :icon="{
+          url: 'https://img.icons8.com/color/48/marker--v1.png',
+          scaledSize: { width: 25, height: 25 },
+          labelOrigin: { x: 16, y: -10 },
+        }"
         @click="openMarker(m.id)"
       >
         <GMapInfoWindow
@@ -169,7 +191,7 @@ onMounted(async () => {
 
 <style scoped>
 .map {
-  margin: -1rem;
+  margin: -1rem 0rem;
   width: 100svh;
   height: 75svh;
 }
