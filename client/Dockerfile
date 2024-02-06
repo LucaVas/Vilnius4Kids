@@ -32,6 +32,7 @@ COPY . .
 # Here we are specifying that we expect two arguments to be passed in at build time.
 ARG VITE_API_ORIGIN
 ARG VITE_API_PATH
+ARG VITE_GOOGLE_MAPS_API_KEY
 
 # Switch to the client folder
 WORKDIR /app/client
