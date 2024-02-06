@@ -50,6 +50,13 @@ const router = createRouter({
       ],
     },
     {
+      path: '/verify',
+      name: 'Verify',
+      beforeEnter: [hideForAuth],
+      component: () => import('../views/VerifyTokenView.vue'),
+      props: (route) => ({ email: route.query.email, token: route.query.token }),
+    },
+    {
       path: '/login',
       name: 'Login',
       beforeEnter: [hideForAuth],
