@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { Report, ReportStatusChangeLog, User } from '@server/entities';
-import mailSender from '@server/modules/report/service/index';
+import mailSender from '@server/modules/emailService';
 import { reportUpdateSchema } from '../../../entities/report/schema';
 
 export default authenticatedProcedure
@@ -44,12 +44,8 @@ export default authenticatedProcedure
                 changeStatusMessage: description,
             });
 
-            const sender = mailSender(
-                user.username,
-                user.email,
-                raw[0].id
-            );
-            sender.send();
+            const sender = mailSender(user.username, user.email);
+            sender.sendReport(raw[0].id);
 
             return {
                 message: `Report with ID [${id}] updated successfully.`,

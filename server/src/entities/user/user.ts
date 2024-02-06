@@ -1,15 +1,18 @@
 import {
     Column,
     Entity,
+    JoinColumn,
     ManyToMany,
     ManyToOne,
     OneToMany,
+    OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Address } from '../address/address';
 import { Playground } from '../playground/playground';
 import { Report } from '../report/report';
 import { Rating } from '..';
+import { VerificationToken } from '../verification_token/verificationToken';
 import { Role } from './Role';
 
 @Entity('users')
@@ -54,4 +57,14 @@ export class User {
 
     @OneToMany(() => Rating, (rating) => rating.user, { onDelete: 'SET NULL' })
     ratings: Rating[];
+
+    @OneToOne(
+        () => VerificationToken,
+        (verificationToken) => verificationToken.user,
+        {
+            onDelete: 'CASCADE',
+        }
+    )
+    @JoinColumn()
+    verificationToken: VerificationToken;
 }

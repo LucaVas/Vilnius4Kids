@@ -8,7 +8,7 @@ import {
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
-import mailSender from '@server/modules/report/service/index';
+import mailSender from '@server/modules/emailService';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
 export default authenticatedProcedure
@@ -59,8 +59,8 @@ export default authenticatedProcedure
                 changeStatusMessage: description,
             });
 
-            const sender = mailSender(user.username, user.email, newReport.id);
-            sender.send();
+            const sender = mailSender(user.username, user.email);
+            sender.sendReport(newReport.id);
 
             return {
                 newReport,

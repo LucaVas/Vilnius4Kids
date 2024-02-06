@@ -5,7 +5,6 @@ import userRouter from '..';
 const db = await createTestDatabase();
 const { signup } = userRouter.createCaller({ db } as any);
 
-
 describe('Signup', async () => {
     it('Signs user up with valid credentials', async () => {
         const user = await signup({
@@ -33,29 +32,32 @@ describe('Signup', async () => {
     });
 
     it('Throws error if email already exists', async () => {
-
         await db
             .getRepository(User)
-            .save({ username: 'some-username-2', email: 'newtest@test.com', password: 'test123456' });
+            .save({
+                username: 'some-username-2',
+                email: 'newtest@test.com',
+                password: 'test123456',
+            });
 
         await expect(
-          signup({
-            username: 'some-username-2',
-            email: 'newtest@test.com',
-            password: 'Password123.',
-          })
+            signup({
+                username: 'some-username-2',
+                email: 'newtest@test.com',
+                password: 'Password123.',
+            })
         ).rejects.toThrow(
-          /Email or username are already taken, please try different ones./
+            /Email or username are already taken, please try different ones./
         );
     });
 
     it('Throws error with invalid password', async () => {
         await expect(
-          signup({
-            username: 'some-username',
-            email: 'test@test.com',
-            password: 'some',
-          })
+            signup({
+                username: 'some-username',
+                email: 'test@test.com',
+                password: 'some',
+            })
         ).rejects.toThrow(/password/);
     });
 
@@ -77,5 +79,21 @@ describe('Signup', async () => {
         });
 
         expect(user).toHaveProperty('id');
+    });
+
+    it('Verification token is created at signup and user is unregistered', async () => {
+        const user = await signup({
+            username: 'some-username-5',
+            email: 'TEST@TESTINGMAIL1.COM',
+            password: 'Password123.',
+        });
+
+        const signedUpUser = await db.getRepository(User).findOne({
+            where: { id: user.id },
+            relations: ['verificationToken'],
+        });
+
+        expect(signedUpUser?.verificationToken.token).not.toBe(null);
+        expect(signedUpUser?.isRegistered).toBe(false);
     });
 });
