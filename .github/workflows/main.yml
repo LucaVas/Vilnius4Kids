@@ -187,7 +187,6 @@ jobs:
           -t $CLIENT_IMAGE_TAG
           --build-arg VITE_API_ORIGIN=$API_ORIGIN
           --build-arg VITE_API_PATH=$API_PATH
-          --build-arg VITE_GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
           -f ./client/Dockerfile .
 
       - name: Push server image
@@ -221,13 +220,13 @@ jobs:
                 "80": "HTTP"
               },
               "environment": {
-                "API_PROXY_PASS": "${{ vars.API_PROXY_PASS }}"
+                "API_PROXY_PASS": "http://localhost:3000"
               }
             },
             "server": {
               "image": "${{ env.LIGHTSAIL_SERVER_IMAGE }}",
               "ports": {
-                "3000": "HTTPS"
+                "3000": "HTTP"
               },
               "environment": {
                 "NODE_ENV": "production",
