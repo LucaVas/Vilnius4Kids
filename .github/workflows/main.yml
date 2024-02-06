@@ -148,6 +148,7 @@ jobs:
       CLIENT_PATH: ${{ vars.CLIENT_PATH }}
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: ${{ vars.API_PATH }}
+      API_PROXY_PASS: ${{ vars.API_PROXY_PASS }}
       AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
@@ -220,7 +221,7 @@ jobs:
                 "80": "HTTP"
               },
               "environment": {
-                "API_PROXY_PASS": "${{ vars.API_ORIGIN }}"
+                "API_PROXY_PASS": "${{ vars.API_PROXY_PASS }}"
               }
             },
             "server": {
