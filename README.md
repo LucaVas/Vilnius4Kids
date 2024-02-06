@@ -1,7 +1,6 @@
+# Vilnius4Kids
 
-# Project Title
-
-Explore the city with Vilnius4Kids, the must-have app for parents, caregivers, and anyone looking to make the most of outdoor playtime for kids. 
+Explore the city with Vilnius4Kids, the must-have app for parents, caregivers, and anyone looking to make the most of outdoor playtime for kids.
 Whether you're a local or just passing through, Vilnius4Kids is your go-to guide for finding, enjoying, and contributing to safe and enjoyable playground experiences.
 
 Vilnius4Kids goes beyond being a playground locator. It's a community-driven platform that empowers users to actively contribute to the well-being of local play areas. By reporting issues and sharing experiences, you become an essential part of creating safer and more enjoyable spaces for children to play and grow.
@@ -18,74 +17,82 @@ Vilnius4Kids goes beyond being a playground locator. It's a community-driven pla
 
 5. Personalized Playlists: Save and create personalized playlists of your favorite playgrounds for quick access. Plan your playdates and weekend adventures with ease.
 
+## Application URL
 
-## User stories
+To start using Vilnius4kids, visit [our page](https://vilniusforkids.mjjduaus31rmk.eu-central-1.cs.amazonlightsail.com/).
 
-Both users and administrators will find the following features available:
+## Development
 
-### Users
+Users will find the following features available:
+
+### Users without account
 
 ```http
 GET /signup
 ```
-- Sign up for a new account.
+
+Sign up for a new account.
+
 ```http
 GET /login
 ```
-- Log into their account.
+
+Log into their account.
+
 ```http
 GET /
 ```
-See latest updates in Homepage.
+
+See Homepage.
+
+### Users with account
+
 ```http
-GET /MyPlaygrounds
+GET /myHome
 ```
+
 See favorite playgrounds saved.
+
 ```http
 GET /playgrounds
 ```
+
 See all playgrounds available.
+
 ```http
 GET /playgrounds/:id
 ```
+
 View a specific playground information.
+
 ```http
 GET /playgrounds/:id/report
 ```
+
 Make a report on a specific playground.
+
 ```http
 GET /report
 ```
+
 Make a new report. Playground can be chosen by the list.
+
 ```http
-GET /reports
+GET /myReports
 ```
+
 View all reports for a logged-in user.
+
 ```http
 GET /reports/:id
 ```
+
 View a specific report for logged-in user.
-```http
-GET /addresses/add
-```
-Add a new address.
-```http
-GET /profile
-```
-Make changes in profile, such as address, etc.
 
-### Administrators
+## API test
 
-```http
-GET /playgrounds/add
-```
-Add a new playground to the list.
-
-
-
-## Test & Run
-
-To run either server or client (or both), follow the instructions within the workspaces.
+If you want to explore and test our API, feel free to use the panel interface. To run it, go to [panel's url](https://vilniusforkids.mjjduaus31rmk.eu-central-1.cs.amazonlightsail.com/api/panel).
+The panel will offer more possible endpoints solutions, such as performing CRUD operations on playgrounds, addresses, report categories and reports.
 
 ## Authors
 
@@ -93,4 +100,4 @@ To run either server or client (or both), follow the instructions within the wor
 
 ## Acknowledgements
 
-The project is created as sprint's project for Turing College, module 3, sprint 3.
+The project is created as sprint's project for Turing College, module 3, sprint 4.
