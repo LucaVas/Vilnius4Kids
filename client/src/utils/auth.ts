@@ -24,4 +24,12 @@ export function getUserIdFromToken(token: string) {
   return getUserFromToken(token).id;
 }
 
+export function getUserRoleFromToken(token: string) {
+  return getUserFromToken(token).role;
+}
+
+export function getUserVerificationFromToken(token: string) {
+  return getUserFromToken(token).isRegistered;
+}
+
 

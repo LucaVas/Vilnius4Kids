@@ -27,67 +27,34 @@ Users will find the following features available:
 
 ### Users without account
 
-```http
-GET /signup
-```
-
-Sign up for a new account.
-
-```http
-GET /login
-```
-
-Log into their account.
-
-```http
-GET /
-```
-
-See Homepage.
+1. Sign up for a new account.
+1. Log into their account.
+1. See homepage
 
 ### Users with account
 
-```http
-GET /myHome
-```
+1. See favorite playgrounds saved.
+2. See all playgrounds available.
+3. View a specific playground information.
+4. View all reports for a logged-in user.
+5. Add an address.
+6. Update an address.
 
-See favorite playgrounds saved.
+### Users with verified email
 
-```http
-GET /playgrounds
-```
+1. Make a report on a specific playground.
+2. Make a new report where playground can be chosen from a list.
+3. View a specific report for logged-in user.
+4. Rate a playground.
 
-See all playgrounds available.
+### Administrators
 
-```http
-GET /playgrounds/:id
-```
-
-View a specific playground information.
-
-```http
-GET /playgrounds/:id/report
-```
-
-Make a report on a specific playground.
-
-```http
-GET /report
-```
-
-Make a new report. Playground can be chosen by the list.
-
-```http
-GET /myReports
-```
-
-View all reports for a logged-in user.
-
-```http
-GET /reports/:id
-```
-
-View a specific report for logged-in user.
+1. Delete an address.
+2. Add a playground.
+3. Update a playground.
+4. Delete a playground.
+5. Add a report category.
+6. Delete report categories.
 
 ## API test
 

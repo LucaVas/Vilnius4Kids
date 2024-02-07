@@ -2,6 +2,8 @@ import {
   clearStoredAccessToken,
   getStoredAccessToken,
   getUserIdFromToken,
+  getUserRoleFromToken,
+  getUserVerificationFromToken,
   storeAccessToken,
 } from '@/utils/auth';
 import { trpc } from '@/trpc';
@@ -17,6 +19,12 @@ export const authUserId = computed(() =>
 
 // This could be a function that we call instead of a computed property.
 export const isLoggedIn = computed(() => !!authToken.value);
+export const isAdmin = computed(() =>
+  authToken.value ? getUserRoleFromToken(authToken.value) === 'admin' : false
+);
+export const isVerified = computed(() =>
+  authToken.value ? getUserVerificationFromToken(authToken.value) : false
+);
 
 // Exported API procedures.
 /**

@@ -23,6 +23,7 @@ import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
+import { isVerified } from '../stores/user';
 
 const router = useRouter();
 const route = useRoute();
@@ -125,7 +126,13 @@ async function submitReport() {
   }
 }
 
+const isUserVerified = ref(false);
+
 onBeforeMount(async () => {
+  if (!isVerified.value) {
+    isUserVerified.value = false;
+  }
+
   if (playgroundId) {
     const playground = await trpc.playground.getPlayground.query({ id: playgroundId });
     reportInfo.value.playgroundId = playground.id;
@@ -137,6 +144,7 @@ onBeforeMount(async () => {
 
   const { categories } = await trpc.reportCategory.getReportCategories.query();
   availableCategories.value = categories;
+
   pageLoaded.value = true;
 });
 </script>
@@ -150,11 +158,20 @@ onBeforeMount(async () => {
       to address them to ensure the safety and well-being of the children.</FwbP
     >
     <FwbButton
-      v-if="!showTopics && !showCategories && !showForm && !showPlaygroundSearch"
+      v-if="!showTopics && !showCategories && !showForm && !showPlaygroundSearch && isUserVerified"
       @click="showPlaygroundSearch = true"
       >Report an issue</FwbButton
     >
-    <div class="mb-4">
+    <FwbAlert
+      v-if="!isUserVerified"
+      icon
+      type="danger"
+      data-testid="notVerifiedMessage"
+      class="mt-4 flex"
+    >
+      Only verified users can report on playgrounds. Make sure to confirm your email first.
+    </FwbAlert>
+    <div class="mb-4" v-if="isUserVerified">
       <Transition>
         <div v-if="showPlaygroundSearch">
           <FwbInput
@@ -322,7 +339,7 @@ onBeforeMount(async () => {
         </div>
       </Transition>
     </div>
-    <div class="mb-4">
+    <div class="mb-4" v-if="isUserVerified">
       <FwbAlert v-if="reportSent" type="success" data-testid="success-message">
         Report sent successfully! Thank you for your contribution.
       </FwbAlert>
@@ -330,7 +347,7 @@ onBeforeMount(async () => {
         {{ errorMessage }}
       </AlertError>
     </div>
-    <FwbButtonGroup class="flex w-full justify-between">
+    <FwbButtonGroup class="flex w-full justify-between" v-if="isUserVerified">
       <FwbButton v-if="!reportSent" color="dark" outline square @click="goBack"> Back </FwbButton>
       <FwbButton v-if="showForm && !reportSent" :disabled="reportSent" square @click="submitReport">
         Submit report

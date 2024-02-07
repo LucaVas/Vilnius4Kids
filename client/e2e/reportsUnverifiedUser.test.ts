@@ -25,7 +25,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe.serial('report playgrounds', () => {
-  test('unverified user cannot make a report can make a report from a playground', async ({ page }) => {
+  test('unverified user cannot make a report can make a report from a playground', async ({
+    page,
+  }) => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
@@ -46,19 +48,10 @@ test.describe.serial('report playgrounds', () => {
     await expect(reportButton).not.toBeHidden();
     await reportButton.click();
 
-    await page
-      .getByRole('button', { name: /Safety Hazards/i })
-      .first()
-      .click();
-    await page
-      .getByRole('button', { name: /Unsafe equipment/i })
-      .first()
-      .click();
-
-    const errorMessage = page.getByTestId('error-message');
-    await page.locator('textarea').fill('Test report description');
-    await page.getByRole('button', { name: /Submit report/i }).click();
-    await expect(errorMessage).not.toBeHidden({ timeout: 5000 });
-    await expect(errorMessage).toHaveText('You need to verify your email to report on a playground');
+    const notVerifiedMessage = page.getByTestId('notVerifiedMessage');
+    await expect(notVerifiedMessage).not.toBeHidden({ timeout: 5000 });
+    await expect(notVerifiedMessage).toHaveText(
+      'Only verified users can report on playgrounds. Make sure to confirm your email first.'
+    );
   });
 });
