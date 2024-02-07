@@ -20,7 +20,7 @@ const errorMessage = ref('');
 onMounted(async () => {
   await router.isReady();
   try {
-    await trpc.verify.mutate({ email: props.email, token: props.token });
+    await trpc.verificationToken.verify.mutate({ email: props.email, token: props.token });
     hasSucceeded.value = true;
     isVerifying.value = false;
   } catch (error) {
