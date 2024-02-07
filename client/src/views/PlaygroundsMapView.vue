@@ -153,16 +153,19 @@ onMounted(async () => {
                 {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
                 {{ m.address.city }}
               </h5>
-              <FwbButtonGroup class="flex w-full justify-end gap-1">
-                <FwbButton color="purple" outline square>
+              <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
+                <FwbButton color="purple" size="xs" outline square>
                   <a :href="getAppUrl(m.position.lat, m.position.lng)">Open in Maps</a>
                 </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
+                  :disabled="loadingSave"
                   :loading="loadingSave"
+                  size="xs"
                   color="green"
                   square
                   outline
+                  class="min-w-min"
                   @click="savePlayground(m.id)"
                   >Save
                 </FwbButton>
@@ -171,6 +174,7 @@ onMounted(async () => {
                   :loading="loadingSave"
                   data-testid="save-playground-button"
                   color="green"
+                  size="xs"
                   @click="unsavePlayground(m.id)"
                   >Unsave
                 </FwbButton>
@@ -179,6 +183,7 @@ onMounted(async () => {
                   color="yellow"
                   outline
                   square
+                  size="xs"
                   data-testid="go-to-playground-button"
                   component="RouterLink"
                   tag="router-link"
