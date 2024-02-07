@@ -2,13 +2,16 @@ import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
 import { fakePlayground, fakeUser } from '@server/entities/tests/fakes';
 import { Playground, Rating, User } from '@server/entities';
+import { Role } from '@server/entities/user/Role';
 import router from '..';
 
 const db = await createTestDatabase();
 
 describe('Rate playgrounds', async () => {
     it('User can rate an existing playground', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { rate } = router.createCaller(authContext({ db }, user));
 
         const playground = await db
@@ -32,7 +35,9 @@ describe('Rate playgrounds', async () => {
     });
 
     it('User can rate again an existing playground, and rate is one', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { rate } = router.createCaller(authContext({ db }, user));
 
         const playground = await db
@@ -64,7 +69,9 @@ describe('Rate playgrounds', async () => {
     });
 
     it('Rating cannot be negative', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { rate } = router.createCaller(authContext({ db }, user));
 
         const playground = await db
@@ -79,7 +86,9 @@ describe('Rate playgrounds', async () => {
     });
 
     it('User cannot rate a non existing playground', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { rate } = router.createCaller(authContext({ db }, user));
 
         await expect(
@@ -90,12 +99,30 @@ describe('Rate playgrounds', async () => {
         ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
 
-    it('Playground cannot be rated if user does not exists', async () => {
-        const user = db.getRepository(User).create(fakeUser());
+    it('Unverified user cannot rate an existing playground', async () => {
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: false }));
         const { rate } = router.createCaller(authContext({ db }, user));
 
         await expect(
-            rate({ playgroundId: 1, rating: 1.5 })
-        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+            rate({
+                playgroundId: 100,
+                rating: 1.5,
+            })
+        ).rejects.toThrow(
+            'Only verified users have permission to access this resource.'
+        );
+    });
+
+    it('Playground cannot be rated if user does not exists', async () => {
+        const user = db
+            .getRepository(User)
+            .create(fakeUser({ role: Role.USER, isRegistered: true }));
+        const { rate } = router.createCaller(authContext({ db }, user));
+
+        await expect(rate({ playgroundId: 1, rating: 1.5 })).rejects.toThrow(
+            `User with ID [${user.id}] does not exist.`
+        );
     });
 });

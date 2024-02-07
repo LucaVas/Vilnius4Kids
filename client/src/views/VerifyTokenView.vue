@@ -29,9 +29,6 @@ onMounted(async () => {
     } else {
       errorMessage.value = DEFAULT_SERVER_ERROR;
     }
-
-    console.log(error);
-
     isVerifying.value = false;
   }
 });

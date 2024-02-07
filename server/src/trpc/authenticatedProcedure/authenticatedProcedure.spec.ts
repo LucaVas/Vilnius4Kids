@@ -13,7 +13,7 @@ vi.mock('jsonwebtoken', () => ({
     verify: (token: string) => {
       if (token !== VALID_TOKEN) throw new Error('Invalid token')
 
-      return { user: { id: 2, username: 'username-test', role: 'user' } }
+      return { user: { id: 2, username: 'username-test', role: 'user', isRegistered: false } }
     },
   },
 }))
@@ -24,7 +24,7 @@ const authenticated = routes.createCaller(authContext({ db }))
 it('should pass if user is already authenticated', async () => {
   const response = await authenticated.testCall()
 
-  expect(response).toEqual('passed')
+  expect(response).toEqual('passed') 
 })
 
 it('should pass if user provides a valid token', async () => {
@@ -33,7 +33,7 @@ it('should pass if user provides a valid token', async () => {
     req: {
       header: () => `Bearer ${VALID_TOKEN}`,
     } as any,
-  })
+  }) 
 
   const response = await usingValidToken.testCall()
 

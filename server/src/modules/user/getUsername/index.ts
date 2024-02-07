@@ -13,7 +13,7 @@ export default authenticatedProcedure
         if (!user) {
             throw new TRPCError({
                 message: `User with ID ${authUser.id} does not exist.`,
-                code: 'UNAUTHORIZED',
+                code: 'NOT_FOUND',
             });
         }
 

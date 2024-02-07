@@ -9,6 +9,13 @@ export const fakeUser = () => ({
   role: 'tester'
 });
 
+export const unverifiedFakeUser = () => ({
+  email: random.email(),
+  username: random.string(),
+  password: 'Password123.',
+  role: 'user',
+});
+
 export const fakeAddress = () => ({
   street: random.string(),
   city: random.string(),

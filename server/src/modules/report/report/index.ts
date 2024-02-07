@@ -5,13 +5,13 @@ import {
     ReportStatusChangeLog,
     User,
 } from '@server/entities';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
 import mailSender from '@server/modules/emailService';
+import { verifiedProcedure } from '@server/trpc/verifiedProcedure';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
-export default authenticatedProcedure
+export default verifiedProcedure
     .input(reportInsertSchema)
     .mutation(
         async ({

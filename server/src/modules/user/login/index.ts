@@ -14,7 +14,7 @@ export default publicProcedure
     .input(loginSchema)
     .query(async ({ input: { email, password }, ctx: { db } }) => {
         const user = (await db.getRepository(User).findOne({
-            select: { id: true, username: true, role: true, password: true },
+            select: { id: true, username: true, role: true, isRegistered: true, password: true },
             where: { email },
         })) as Omit<User, 'email'> | undefined;
 

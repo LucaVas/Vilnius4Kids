@@ -8,6 +8,7 @@ export const fakeUser = <T extends Partial<User>>(overrides: T = {} as T) => ({
     username: random.string(),
     email: random.email(),
     password: 'Password.123!',
+    isRegistered: false,
     role: 'user',
     ...overrides,
 });

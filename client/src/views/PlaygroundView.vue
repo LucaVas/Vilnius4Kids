@@ -12,6 +12,8 @@ import { trpc } from '../trpc';
 import { ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import RatingStars from '@/components/RatingStars.vue';
+import { TRPCClientError } from '@trpc/client';
+import { DEFAULT_SERVER_ERROR } from '../consts';
 
 const route = useRoute();
 const playgroundId = Number(route.params.id);
@@ -55,11 +57,26 @@ const pictures = [
   },
 ];
 
+const ratingErrorMessage = ref('');
+
 async function ratePlayground(starRating: number) {
-  await trpc.rating.rate.mutate({
-    playgroundId: playgroundId,
-    rating: starRating,
-  });
+  try {
+    await trpc.rating.rate.mutate({
+      playgroundId: playgroundId,
+      rating: starRating,
+    });
+  } catch (error) {
+    if (error instanceof TRPCClientError) {
+      console.log(error.data.httpStatus);
+      if (error.data.httpStatus === 403) {
+        ratingErrorMessage.value = 'You need to verify your email to rate playgrounds';
+        return;
+      }
+      ratingErrorMessage.value = error.data.message || error.message;
+    } else {
+      ratingErrorMessage.value = DEFAULT_SERVER_ERROR;
+    }
+  }
 }
 
 async function savePlayground(id: number) {
@@ -85,11 +102,7 @@ async function removePlaygroundFromFavorites(id: number) {
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
     <FwbSpinner size="12" />
   </div>
-  <div
-    v-else
-    class="flex h-full w-full flex-col gap-2 p-4"
-    data-testid="playground-view-card"
-  >
+  <div v-else class="flex h-full w-full flex-col gap-2 p-4" data-testid="playground-view-card">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
     <div class="mt-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center" id="badges">
       <div class="flex flex-row justify-evenly">
@@ -137,6 +150,9 @@ async function removePlaygroundFromFavorites(id: number) {
       </FwbP>
     </div>
     <div id="warning_messages">
+      <FwbAlert icon type="danger" v-if="ratingErrorMessage" data-testid="ratingErrorMessage">
+        {{ ratingErrorMessage }}
+      </FwbAlert>
       <FwbAlert
         v-if="ratingScheme.count !== 0 && ratingScheme.rating <= 3.5 && ratingScheme.rating > 2.5"
         closable

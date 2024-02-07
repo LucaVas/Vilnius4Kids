@@ -4,10 +4,10 @@ import { fakeUser } from '@server/entities/tests/fakes';
 import { createTestDatabase } from '@tests/utils/database';
 import { Role } from '@server/entities/user/Role';
 import { router } from '..';
-import { adminProcedure } from '.';
+import { verifiedProcedure } from '.';
 
 const routes = router({
-    testCall: adminProcedure.query(() => 'passed'),
+    testCall: verifiedProcedure.query(() => 'passed'),
 });
 
 const VALID_TOKEN = 'valid-token';
@@ -17,18 +17,45 @@ vi.mock('jsonwebtoken', () => ({
         verify: (token: string) => {
             if (token !== VALID_TOKEN) throw new Error('Invalid token');
 
-            return { user: { id: 2, username: 'username-test', role: 'admin' } };
+            return { user: { id: 2, username: 'username-test', role: 'user' } };
         },
     },
 }));
 
 const db = await createTestDatabase();
+const verifiedUser = await db
+    .getRepository(User)
+    .save(fakeUser({ role: Role.USER, isRegistered: true }));
+
 const adminUser = await db
     .getRepository(User)
-    .save(fakeUser({ role: Role.ADMIN }));
-const user = await db.getRepository(User).save(fakeUser({ role: Role.USER }));
+    .save(fakeUser({ role: Role.ADMIN, isRegistered: false }));
+const testerUser = await db
+    .getRepository(User)
+    .save(fakeUser({ role: Role.TESTER, isRegistered: false }));
 
-it('should pass if user is an administrator', async () => {
+const unverifiedUser = await db
+    .getRepository(User)
+    .save(fakeUser({ role: Role.USER, isRegistered: false }));
+
+it('should pass if user is verified', async () => {
+    const authenticated = routes.createCaller(
+        authContext(
+            {
+                db,
+                req: {
+                    header: () => `Bearer ${VALID_TOKEN}`,
+                } as any,
+            },
+            verifiedUser
+        )
+    );
+
+    const response = await authenticated.testCall();
+    expect(response).toBe('passed');
+});
+
+it('should pass if user is admin and not verified', async () => {
     const authenticated = routes.createCaller(
         authContext(
             {
@@ -45,7 +72,24 @@ it('should pass if user is an administrator', async () => {
     expect(response).toBe('passed');
 });
 
-it('should not pass if user is not an administrator', async () => {
+it('should pass if user is tester and not verified', async () => {
+    const authenticated = routes.createCaller(
+        authContext(
+            {
+                db,
+                req: {
+                    header: () => `Bearer ${VALID_TOKEN}`,
+                } as any,
+            },
+            testerUser
+        )
+    );
+
+    const response = await authenticated.testCall();
+    expect(response).toBe('passed');
+});
+
+it('should not pass if user is not verified', async () => {
     const unauthenticated = routes.createCaller(
         authContext(
             {
@@ -54,12 +98,12 @@ it('should not pass if user is not an administrator', async () => {
                     header: () => `Bearer ${VALID_TOKEN}`,
                 } as any,
             },
-            user
+            unverifiedUser
         )
     );
 
     await expect(unauthenticated.testCall()).rejects.toThrow(
-        /Only administrators have permission to access this resource/i
+        /Only verified users have permission to access this resource/i
     );
 });
 

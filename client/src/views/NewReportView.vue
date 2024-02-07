@@ -19,9 +19,10 @@ import { ref, onBeforeMount } from 'vue';
 import { type ReportCategorySelect } from '../../../server/src/entities/report_category/schema';
 import { useRouter, useRoute } from 'vue-router';
 import { Playground } from '../../../server/src/entities/playground/playground';
-import useErrorMessage from '../composables/useErrorMessage/index';
 import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
+import { TRPCClientError } from '@trpc/client';
+import { DEFAULT_SERVER_ERROR } from '../consts';
 
 const router = useRouter();
 const route = useRoute();
@@ -100,14 +101,29 @@ function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
 }
 
-const [submitReport, errorMessage] = useErrorMessage(async () => {
-  await trpc.report.report.mutate({
-    description: reportInfo.value.message,
-    reportCategoryId: reportInfo.value.categoryId,
-    playgroundId: reportInfo.value.playgroundId,
-  });
-  reportSent.value = true;
-});
+const errorMessage = ref('');
+
+async function submitReport() {
+  try {
+    await trpc.report.report.mutate({
+      description: reportInfo.value.message,
+      reportCategoryId: reportInfo.value.categoryId,
+      playgroundId: reportInfo.value.playgroundId,
+    });
+    reportSent.value = true;
+  } catch (error) {
+    if (error instanceof TRPCClientError) {
+      console.log(error.data.httpStatus);
+      if (error.data.httpStatus === 403) {
+        errorMessage.value = 'You need to verify your email to report on a playground';
+        return;
+      }
+      errorMessage.value = error.data.message || error.message;
+    } else {
+      errorMessage.value = DEFAULT_SERVER_ERROR;
+    }
+  }
+}
 
 onBeforeMount(async () => {
   if (playgroundId) {
@@ -316,12 +332,7 @@ onBeforeMount(async () => {
     </div>
     <FwbButtonGroup class="flex w-full justify-between">
       <FwbButton v-if="!reportSent" color="dark" outline square @click="goBack"> Back </FwbButton>
-      <FwbButton
-        v-if="showForm && !reportSent"
-        :disabled="reportSent"
-        square
-        @click="submitReport"
-      >
+      <FwbButton v-if="showForm && !reportSent" :disabled="reportSent" square @click="submitReport">
         Submit report
       </FwbButton>
       <FwbButton

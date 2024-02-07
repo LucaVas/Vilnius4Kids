@@ -1,10 +1,10 @@
 import { TRPCError } from '@trpc/server';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { Report, ReportStatusChangeLog, User } from '@server/entities';
 import mailSender from '@server/modules/emailService';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 import { reportUpdateSchema } from '../../../entities/report/schema';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(reportUpdateSchema)
     .mutation(
         async ({

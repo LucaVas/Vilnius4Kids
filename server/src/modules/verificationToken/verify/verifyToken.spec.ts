@@ -72,6 +72,25 @@ describe('Verify token', async () => {
         ).rejects.toThrow(/Invalid token/);
     });
 
+    it('Throws error if user does not exist', async () => {
+        const token = crypto.randomBytes(32).toString('hex');
+
+        const user = db.getRepository(User).create(fakeUser());
+        await db.getRepository(VerificationToken).save({
+            user,
+            token: await bcrypt.hash(token, 10),
+        });
+
+        await expect(
+            verify({
+                email: user.email,
+                token: 'invalid-token',
+            })
+        ).rejects.toThrow(
+            `User with email ${user.email} does not exist.`
+        );
+    });
+
     it('Throws errors if user tries to be verified more than once', async () => {
         const token = crypto.randomBytes(32).toString('hex');
 

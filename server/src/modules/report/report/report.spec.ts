@@ -11,13 +11,16 @@ import {
     ReportStatusChangeLog,
     User,
 } from '@server/entities';
+import { Role } from '@server/entities/user/Role';
 import router from '..';
 
 const db = await createTestDatabase();
 
 describe('Report a new issue', async () => {
     it('User can report an issue', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { report } = router.createCaller(authContext({ db }, user));
 
         const playground = await db
@@ -43,20 +46,24 @@ describe('Report a new issue', async () => {
     });
 
     it('User cannot report if playground does not exist', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { report } = router.createCaller(authContext({ db }, user));
 
         await expect(
             report({
                 playgroundId: 100,
                 description: 'Test report description',
-                reportCategoryId: 1
+                reportCategoryId: 1,
             })
         ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
 
     it('User cannot report if category does not exist', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { report } = router.createCaller(authContext({ db }, user));
 
         await expect(
@@ -69,7 +76,9 @@ describe('Report a new issue', async () => {
     });
 
     it('Report cannot be created if user does not exist', async () => {
-        const user = await db.getRepository(User).create(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .create(fakeUser({ role: Role.USER, isRegistered: true }));
         const { report } = router.createCaller(authContext({ db }, user));
 
         await expect(
@@ -82,7 +91,9 @@ describe('Report a new issue', async () => {
     });
 
     it('User cannot report with a too short description', async () => {
-        const user = await db.getRepository(User).save(fakeUser());
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
         const { report } = router.createCaller(authContext({ db }, user));
 
         const playground = await db
@@ -93,10 +104,31 @@ describe('Report a new issue', async () => {
             report({
                 playgroundId: playground.id,
                 description: '',
-                reportCategoryId: 1
+                reportCategoryId: 1,
             })
         ).rejects.toThrow(
             /Report description should be at least 5 characters long./
+        );
+    });
+
+    it('Unverified user cannot report', async () => {
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: false }));
+        const { report } = router.createCaller(authContext({ db }, user));
+
+        const playground = await db
+            .getRepository(Playground)
+            .save(fakePlayground());
+
+        await expect(
+            report({
+                playgroundId: playground.id,
+                description: '',
+                reportCategoryId: 1,
+            })
+        ).rejects.toThrow(
+            /Only verified users have permission to access this resource./
         );
     });
 });

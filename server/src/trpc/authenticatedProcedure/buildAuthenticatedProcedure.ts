@@ -12,6 +12,7 @@ const tokenSchema = z.object({
 
 export function buildAuthenticatedProcedure(verify: VerifyToken) {
   function getUserFromToken(token: string) {
+    
     try {
       const tokenVerified = verify(token)
       const tokenParsed = tokenSchema.parse(tokenVerified)
