@@ -26,30 +26,51 @@ onMounted(async () => {
   } catch (error) {
     if (error instanceof TRPCClientError) {
       errorMessage.value = error.data.message || error.message;
+    } else {
+      errorMessage.value = DEFAULT_SERVER_ERROR;
     }
 
-    errorMessage.value = DEFAULT_SERVER_ERROR;
+    console.log(error);
+
     isVerifying.value = false;
   }
 });
 </script>
 
 <template>
-  <div v-if="isVerifying" class="flex h-full items-center justify-center">
+  <div v-if="isVerifying" class="flex h-screen flex-col items-center gap-4 px-2 py-10">
+    We are verifying your account, please wait...
     <FwbSpinner size="12" />
   </div>
   <div v-else class="px-2 py-4">
-    <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">
-      Your account is now successfully verified. You can now log in.
+    <FwbAlert
+      v-if="hasSucceeded"
+      type="success"
+      icon
+      class="flex flex-col items-center justify-center"
+      data-testid="successVerificationMessage"
+    >
+      Hurray! Your account is successfully verified. 🎉
       <RouterLink
         :to="{ name: 'Login' }"
         class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >Go to the login page</RouterLink
-      >
+        >You can now log in</RouterLink
+      >.
     </FwbAlert>
 
-    <FwbAlert icon type="danger" v-if="errorMessage" data-testid="errorMessage">
-      {{ errorMessage }}
+    <FwbAlert
+      icon
+      type="danger"
+      class="flex flex-col items-center justify-center"
+      v-if="errorMessage"
+      data-testid="errorVerificationMessage"
+    >
+      Ooops! {{ errorMessage }}
+      <RouterLink
+        :to="{ name: 'Login' }"
+        class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        >Back to log in page</RouterLink
+      >.
     </FwbAlert>
   </div>
 </template>

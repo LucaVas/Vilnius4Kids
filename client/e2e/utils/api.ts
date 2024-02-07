@@ -38,6 +38,10 @@ export async function addTestPlayground() {
   }
 }
 
+export async function findVerificationToken(email: string) {
+  return trpc.getVerificationToken.query({ email }) !== null
+}
+
 /**
  * Logs in a new user by signing them up and logging them in with the provided
  * user login information.
@@ -55,10 +59,6 @@ export async function loginNewUser(page: Page, userLogin = fakeUser()) {
   });
   await page.goto('/');
 
-  // unfortunate that we are dealing with page internals and
-  // implementation details here, but as long as we make sure that
-  // this logic is in one place and it does not spill into tests,
-  // we should be fine.
   await page.evaluate(
     ({ accessToken }) => {
       localStorage.setItem('token', accessToken);
@@ -66,9 +66,5 @@ export async function loginNewUser(page: Page, userLogin = fakeUser()) {
     { accessToken }
   );
 
-  // returning the only thing that was generated inside (fakeUser)
-  // in case we want to make assertions based on generated user data
   return userLogin;
 }
-
-// export const reportBug = trpc.bug.report.mutate

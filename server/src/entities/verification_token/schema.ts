@@ -10,7 +10,14 @@ export const verificationTokenSchema = validates<BareVerificationToken>().with({
     createdAt: z.date(),
 });
 
-export const verificationTokenValidationSchema = verificationTokenSchema.omit({
-    id: true,
-    createdAt: true,
-}).extend({ email: z.string().email() });
+export const verificationTokenValidationSchema = verificationTokenSchema
+    .omit({
+        id: true,
+        createdAt: true,
+    })
+    .extend({ email: z.string().email() });
+
+export const verificationTokenSelectSchema =
+    verificationTokenValidationSchema.omit({
+        token: true,
+    });

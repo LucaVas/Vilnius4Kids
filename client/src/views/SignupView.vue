@@ -57,6 +57,11 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           class="text-sm font-medium text-gray-900 dark:text-white"
         />
 
+        <FwbAlert v-if="hasSucceeded" type="info" data-testid="tokenMessage">
+          A confirmation email has been sent to {{ userForm.email }}. Please confirm it to activate
+          your account.
+        </FwbAlert>
+
         <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">
           You have successfully signed up! You can now log in.
           <RouterLink

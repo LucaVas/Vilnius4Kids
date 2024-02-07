@@ -6,6 +6,7 @@ import rating from './rating';
 import report from './report';
 import reportCategory from './reportCategory';
 import verify from './verificationToken/verify';
+import getVerificationToken from './verificationToken/getVerificationToken';
 
 export const appRouter = router({
     user,
@@ -14,7 +15,8 @@ export const appRouter = router({
     rating,
     report,
     reportCategory,
-    verify
+    verify,
+    getVerificationToken
 });
 
 export type AppRouter = typeof appRouter;

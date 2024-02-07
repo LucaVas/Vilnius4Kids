@@ -62,7 +62,7 @@ export class User {
         () => VerificationToken,
         (verificationToken) => verificationToken.user,
         {
-            onDelete: 'CASCADE',
+            onDelete: 'SET NULL',
         }
     )
     @JoinColumn()
