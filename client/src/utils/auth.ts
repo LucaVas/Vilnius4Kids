@@ -29,7 +29,7 @@ export function getUserRoleFromToken(token: string) {
 }
 
 export function getUserVerificationFromToken(token: string) {
-  return getUserFromToken(token).isRegistered;
+  return (getUserFromToken(token).role === 'admin' || getUserFromToken(token).role === 'tester') || getUserFromToken(token).isRegistered;
 }
 
 
