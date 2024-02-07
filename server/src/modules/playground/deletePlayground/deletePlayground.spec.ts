@@ -2,11 +2,12 @@ import { createTestDatabase } from '@tests/utils/database';
 import { Address, Playground, User } from '@server/entities';
 import { fakeAddress, fakeUser } from '@server/entities/tests/fakes';
 import { authContext } from '@tests/utils/context';
+import { Role } from '@server/entities/user/Role';
 import router from '..';
 import { fakePlayground } from '../../../entities/tests/fakes';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
+const user = await db.getRepository(User).save(fakeUser({ role: Role.ADMIN }));
 const { deletePlayground } = router.createCaller(authContext({ db }, user));
 
 describe('Delete a playground', async () => {

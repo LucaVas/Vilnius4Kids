@@ -1,9 +1,9 @@
 import { TRPCError } from '@trpc/server';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { Playground } from '@server/entities';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 import { playgroundDeleteSchema } from '../../../entities/playground/schema';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(playgroundDeleteSchema)
     .mutation(async ({ input: { id }, ctx: { db } }) => {
         const raw = await db.getRepository(Playground).delete({ id });

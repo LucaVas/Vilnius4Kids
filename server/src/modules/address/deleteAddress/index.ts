@@ -1,9 +1,9 @@
 import { TRPCError } from '@trpc/server';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { Address } from '@server/entities';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 import { addressDeleteSchema } from '../../../entities/address/schema';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(addressDeleteSchema)
     .mutation(async ({ input: { id }, ctx: { db } }) => {
         const raw = await db.getRepository(Address).delete({ id });

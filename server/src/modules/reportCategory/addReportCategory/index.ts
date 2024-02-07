@@ -1,12 +1,14 @@
 import { ReportCategory } from '@server/entities';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { reportCategoryInsertSchema } from '@server/entities/report_category/schema';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(reportCategoryInsertSchema)
     .mutation(async ({ input: { name, topic, description }, ctx: { db } }) => {
         const category = await db.getRepository(ReportCategory).save({
-            name, topic, description
+            name,
+            topic,
+            description,
         });
 
         return {

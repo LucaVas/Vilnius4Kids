@@ -2,10 +2,11 @@ import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
 import { fakeAddress, fakeUser } from '@server/entities/tests/fakes';
 import { User } from '@server/entities';
+import { Role } from '@server/entities/user/Role';
 import addressRouter from '..';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
+const user = await db.getRepository(User).save(fakeUser({ role: Role.USER }));
 const { addAddress } = addressRouter.createCaller(authContext({ db }, user));
 
 describe('Add a new address', async () => {

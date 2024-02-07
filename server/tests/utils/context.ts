@@ -1,4 +1,5 @@
 import { fakeUser } from '@server/entities/tests/fakes';
+import { Role } from '@server/entities/user/Role';
 import { authUserSchema, type AuthUser } from '@server/entities/user/schema';
 import type { Context, ContextMinimal } from '@server/trpc';
 
@@ -18,6 +19,14 @@ export const requestContext = (
 export const authContext = (
     context: Partial<Context> & ContextMinimal,
     user: AuthUser = fakeUser()
+): Context => ({
+    authUser: authUserSchema.parse(user),
+    ...context,
+});
+
+export const adminContext = (
+    context: Partial<Context> & ContextMinimal,
+    user: AuthUser = fakeUser({ role: Role.ADMIN })
 ): Context => ({
     authUser: authUserSchema.parse(user),
     ...context,

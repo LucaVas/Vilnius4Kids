@@ -6,10 +6,11 @@ import {
     fakeUser,
 } from '@server/entities/tests/fakes';
 import { Address, User } from '@server/entities';
+import { Role } from '@server/entities/user/Role';
 import playgroundRouter from '..';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
+const user = await db.getRepository(User).save(fakeUser({ role: Role.ADMIN }));
 const { addPlayground } = playgroundRouter.createCaller(
     authContext({ db }, user)
 );
@@ -36,6 +37,6 @@ describe('Add a new playground', async () => {
     it('User cannot add a new playground if address does not exist', async () => {
         await expect(
             addPlayground({ ...fakePlayground(), addressId: 100 })
-        ).rejects.toThrow("Address with ID [100] does not exist.");
+        ).rejects.toThrow('Address with ID [100] does not exist.');
     });
 });

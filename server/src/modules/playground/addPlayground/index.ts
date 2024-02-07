@@ -1,12 +1,15 @@
 import { Address, Playground } from '@server/entities';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 import { playgroundInsertSchema } from '../../../entities/playground/schema';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(playgroundInsertSchema)
     .mutation(
-        async ({ input: { isPrivate, isOpen, addressId, longitude, latitude }, ctx: { db } }) => {
+        async ({
+            input: { isPrivate, isOpen, addressId, longitude, latitude },
+            ctx: { db },
+        }) => {
             const address = await db
                 .getRepository(Address)
                 .findOneBy({ id: addressId });

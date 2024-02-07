@@ -6,10 +6,11 @@ import {
     fakeUser,
 } from '@server/entities/tests/fakes';
 import { Address, Playground, User } from '@server/entities';
+import { Role } from '@server/entities/user/Role';
 import router from '..';
 
 const db = await createTestDatabase();
-const user = await db.getRepository(User).save(fakeUser());
+const user = await db.getRepository(User).save(fakeUser({ role: Role.ADMIN }));
 const { updatePlayground } = router.createCaller(authContext({ db }, user));
 
 describe('Update an existing playground', async () => {
@@ -49,7 +50,6 @@ describe('Update an existing playground', async () => {
             id: existing.id,
             isOpen: false,
         });
-
 
         expect(playground.is_open).not.toBe(existing.isOpen);
         expect(playground.is_private).toEqual(existing.isPrivate);

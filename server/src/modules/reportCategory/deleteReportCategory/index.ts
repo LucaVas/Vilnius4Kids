@@ -1,9 +1,9 @@
 import { ReportCategory } from '@server/entities';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { reportCategoryIdSchema } from '@server/entities/report_category/schema';
 import { TRPCError } from '@trpc/server';
+import { adminProcedure } from '@server/trpc/adminProcedure';
 
-export default authenticatedProcedure
+export default adminProcedure
     .input(reportCategoryIdSchema)
     .mutation(async ({ input: { id }, ctx: { db } }) => {
         const { affected } = await db.getRepository(ReportCategory).delete({
