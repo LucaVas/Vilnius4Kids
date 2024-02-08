@@ -1,5 +1,6 @@
 import config from '@server/config';
 import logger from '@server/logger';
+import { TRPCError } from '@trpc/server';
 import transporter from './transporter';
 import buildMessage from './message';
 
@@ -16,7 +17,10 @@ export default (username: string, recipient: string) => ({
             transporter.sendMail(message, (error, info) => {
                 if (error) {
                     logger.error('Error while sending email: ', error);
-                    throw new Error('Error while sending email: ', error);
+                    throw new TRPCError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Error while sending email.',
+                    });
                 } else {
                     logger.info(
                         'Email sent successfully with ID ',
@@ -37,7 +41,10 @@ export default (username: string, recipient: string) => ({
             transporter.sendMail(message, (error, info) => {
                 if (error) {
                     logger.error('Error while sending email: ', error);
-                    throw new Error('Error while sending email: ', error);
+                    throw new TRPCError({
+                        code: 'INTERNAL_SERVER_ERROR',
+                        message: 'Error while sending email.',
+                    });
                 } else {
                     logger.info(
                         'Email sent successfully with ID ',
