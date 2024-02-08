@@ -99,22 +99,6 @@ describe('Rate playgrounds', async () => {
         ).rejects.toThrow('Playground with ID [100] does not exist.');
     });
 
-    it('Unverified user cannot rate an existing playground', async () => {
-        const user = await db
-            .getRepository(User)
-            .save(fakeUser({ role: Role.USER, isRegistered: false }));
-        const { rate } = router.createCaller(authContext({ db }, user));
-
-        await expect(
-            rate({
-                playgroundId: 100,
-                rating: 1.5,
-            })
-        ).rejects.toThrow(
-            'Only verified users have permission to access this resource.'
-        );
-    });
-
     it('Playground cannot be rated if user does not exists', async () => {
         const user = db
             .getRepository(User)

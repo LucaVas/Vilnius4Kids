@@ -1,8 +1,9 @@
 import config from '@server/config';
+import logger from '@server/logger';
 import transporter from './transporter';
 import buildMessage from './message';
 
-const { smtp, clientPath } = config;
+const { smtp, clientPath, env } = config;
 
 export default (username: string, recipient: string) => ({
     sendReport: (reportId: number) => {
@@ -11,13 +12,19 @@ export default (username: string, recipient: string) => ({
 
         const message = buildMessage(smtp.sender, recipient, subject, html);
 
-        transporter.sendMail(message, (error, info) => {
-            if (error) {
-                console.error('Error sending email: ', error);
-            } else {
-                console.log('Email sent: ', info.response);
-            }
-        });
+        if (env !== 'test') {
+            transporter.sendMail(message, (error, info) => {
+                if (error) {
+                    logger.error('Error while sending email: ', error);
+                    throw new Error('Error while sending email: ', error);
+                } else {
+                    logger.info(
+                        'Email sent successfully with ID ',
+                        info.messageId
+                    );
+                }
+            });
+        }
     },
     sendToken: (token: string) => {
         const url = `${clientPath}/verify?email=${recipient}&token=${token}`;
@@ -26,12 +33,18 @@ export default (username: string, recipient: string) => ({
 
         const message = buildMessage(smtp.sender, recipient, subject, html);
 
-        transporter.sendMail(message, (error, info) => {
-            if (error) {
-                console.error('Error sending email: ', error);
-            } else {
-                console.log('Email sent: ', info.response);
-            }
-        });
+        if (env !== 'test') {
+            transporter.sendMail(message, (error, info) => {
+                if (error) {
+                    logger.error('Error while sending email: ', error);
+                    throw new Error('Error while sending email: ', error);
+                } else {
+                    logger.info(
+                        'Email sent successfully with ID ',
+                        info.messageId
+                    );
+                }
+            });
+        }
     },
 });

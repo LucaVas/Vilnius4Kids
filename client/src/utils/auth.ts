@@ -28,8 +28,3 @@ export function getUserRoleFromToken(token: string) {
   return getUserFromToken(token).role;
 }
 
-export function getUserVerificationFromToken(token: string) {
-  return (getUserFromToken(token).role === 'admin' || getUserFromToken(token).role === 'tester') || getUserFromToken(token).isRegistered;
-}
-
-

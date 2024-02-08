@@ -1,9 +1,9 @@
 import { Playground, Rating, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
-import { verifiedProcedure } from '@server/trpc/verifiedProcedure';
+import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { ratingInsertSchema } from '../../../entities/rating/schema';
 
-export default verifiedProcedure
+export default authenticatedProcedure
     .input(ratingInsertSchema)
     .mutation(
         async ({ input: { playgroundId, rating }, ctx: { db, authUser } }) => {

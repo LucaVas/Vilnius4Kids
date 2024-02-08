@@ -3,7 +3,6 @@ import {
   getStoredAccessToken,
   getUserIdFromToken,
   getUserRoleFromToken,
-  getUserVerificationFromToken,
   storeAccessToken,
 } from '@/utils/auth';
 import { trpc } from '@/trpc';
@@ -22,18 +21,8 @@ export const isLoggedIn = computed(() => !!authToken.value);
 export const isAdmin = computed(() =>
   authToken.value ? getUserRoleFromToken(authToken.value) === 'admin' : false
 );
-export const isVerified = computed(() =>
-  authToken.value ? getUserVerificationFromToken(authToken.value) : false
-);
 
-// Exported API procedures.
-/**
- * Log in a user and store the access token in the store and in the local storage.
- */
 export async function login(userLogin: { email: string; password: string }) {
-  // login might not be considered a mutation, but we are considering it as such
-  // given that it creates a new "thing" - an access token.
-
   const { token } = await trpc.user.login.query(userLogin);
 
   authToken.value = token;

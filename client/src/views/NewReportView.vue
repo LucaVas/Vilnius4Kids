@@ -23,7 +23,6 @@ import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
-import { isVerified } from '../stores/user';
 
 const router = useRouter();
 const route = useRoute();
@@ -129,10 +128,13 @@ async function submitReport() {
 const isUserVerified = ref(true);
 
 onBeforeMount(async () => {
-  if (!isVerified.value) {
-    isUserVerified.value = false;
+  const { isVerified } = await trpc.user.isUserVerified.query()
+  if (!isVerified) {
+    isUserVerified.value = isVerified;
     pageLoaded.value = true;
     return;
+  } else {
+    isUserVerified.value = true;
   }
 
   if (playgroundId) {
@@ -363,7 +365,7 @@ onBeforeMount(async () => {
       </FwbButtonGroup>
     </div>
     <div v-else>
-      <FwbAlert icon type="danger" data-testid="notVerifiedMessage" class="mt-4 flex">
+      <FwbAlert border icon type="danger" data-testid="notVerifiedMessage" class="mt-4 flex">
         Only verified users can report on playgrounds. Make sure to confirm your email first.
       </FwbAlert>
     </div>

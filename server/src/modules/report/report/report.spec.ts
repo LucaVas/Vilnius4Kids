@@ -110,25 +110,4 @@ describe('Report a new issue', async () => {
             /Report description should be at least 5 characters long./
         );
     });
-
-    it('Unverified user cannot report', async () => {
-        const user = await db
-            .getRepository(User)
-            .save(fakeUser({ role: Role.USER, isRegistered: false }));
-        const { report } = router.createCaller(authContext({ db }, user));
-
-        const playground = await db
-            .getRepository(Playground)
-            .save(fakePlayground());
-
-        await expect(
-            report({
-                playgroundId: playground.id,
-                description: '',
-                reportCategoryId: 1,
-            })
-        ).rejects.toThrow(
-            /Only verified users have permission to access this resource./
-        );
-    });
 });

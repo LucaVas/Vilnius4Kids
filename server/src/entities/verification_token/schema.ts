@@ -20,4 +20,4 @@ export const verificationTokenValidationSchema = verificationTokenSchema
 export const verificationTokenSelectSchema =
     verificationTokenValidationSchema.omit({
         token: true,
-    });
+    }).partial();

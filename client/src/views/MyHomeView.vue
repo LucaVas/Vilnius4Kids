@@ -4,9 +4,10 @@ import { ref, onBeforeMount } from 'vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 import EmptyCard from '@/components/EmptyCard.vue';
 import PlaygroundCard from '@/components/PlaygroundCard.vue';
-import { FwbSpinner } from 'flowbite-vue';
+import { FwbSpinner, FwbAlert } from 'flowbite-vue';
 
 const favoritePlaygrounds = ref<PlaygroundSelectWithAddress[]>([]);
+const isUserVerified = ref(true);
 const pageLoaded = ref(false);
 
 async function removeFromPlaygrounds(id: number) {
@@ -15,7 +16,12 @@ async function removeFromPlaygrounds(id: number) {
 }
 
 onBeforeMount(async () => {
-  const { playgrounds } = await trpc.playground.getFavoritePlaygrounds.query();
+  const [{ playgrounds }, { isVerified }] = await Promise.all([
+    await trpc.playground.getFavoritePlaygrounds.query(),
+    await trpc.user.isUserVerified.query(),
+  ]);
+
+  isUserVerified.value = isVerified;
   favoritePlaygrounds.value = playgrounds;
   pageLoaded.value = true;
 });
@@ -26,6 +32,16 @@ onBeforeMount(async () => {
     <FwbSpinner size="12" />
   </div>
   <div v-else class="px-2">
+    <FwbAlert
+      icon
+      border
+      type="info"
+      class="mb-2 mt-2"
+      v-if="!isUserVerified"
+      data-testid="notVerifiedInfoMessage"
+    >
+      You have not verified your email address. Some features might be disabled.
+    </FwbAlert>
     <div
       v-if="favoritePlaygrounds.length > 0"
       class="grid grid-flow-row justify-items-center gap-4 overflow-y-auto p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"

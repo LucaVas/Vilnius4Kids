@@ -19,6 +19,7 @@ const route = useRoute();
 const playgroundId = Number(route.params.id);
 const pageLoaded = ref(false);
 const loadingSave = ref(false);
+const isUserVerified = ref(true);
 const saved = ref(false);
 const currentPlayground = ref();
 const ratingScheme = ref({
@@ -27,12 +28,14 @@ const ratingScheme = ref({
 });
 
 onBeforeMount(async () => {
-  const [playground, { count, rating }, { playgrounds }] = await Promise.all([
+  const [playground, { count, rating }, { playgrounds }, { isVerified }] = await Promise.all([
     trpc.playground.getPlayground.query({ id: playgroundId }),
     trpc.rating.getRating.query({ id: playgroundId }),
     trpc.playground.getFavoritePlaygrounds.query(),
+    trpc.user.isUserVerified.query(),
   ]);
 
+  isUserVerified.value = isVerified;
   currentPlayground.value = playground;
   ratingScheme.value = {
     rating,
@@ -60,6 +63,11 @@ const pictures = [
 const ratingErrorMessage = ref('');
 
 async function ratePlayground(starRating: number) {
+  if (!isUserVerified.value) {
+    ratingErrorMessage.value = 'You need to verify your email to rate playgrounds';
+    return;
+  }
+
   try {
     await trpc.rating.rate.mutate({
       playgroundId: playgroundId,
@@ -67,11 +75,6 @@ async function ratePlayground(starRating: number) {
     });
   } catch (error) {
     if (error instanceof TRPCClientError) {
-      console.log(error.data.httpStatus);
-      if (error.data.httpStatus === 403) {
-        ratingErrorMessage.value = 'You need to verify your email to rate playgrounds';
-        return;
-      }
       ratingErrorMessage.value = error.data.message || error.message;
     } else {
       ratingErrorMessage.value = DEFAULT_SERVER_ERROR;

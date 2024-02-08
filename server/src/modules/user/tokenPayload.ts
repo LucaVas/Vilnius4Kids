@@ -7,7 +7,6 @@ const tokenPayloadSchema = z.object({
         id: z.number(),
         username: z.string(),
         role: z.nativeEnum(Role),
-        isRegistered: z.boolean(),
     }),
 });
 

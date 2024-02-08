@@ -25,13 +25,15 @@ export default publicProcedure
                     role: role ?? Role.USER,
                 });
 
-                await db.getRepository(VerificationToken).save({
-                    user,
-                    token: await bcrypt.hash(token, 10),
-                });
+                if (user.role === Role.USER) {
+                    await db.getRepository(VerificationToken).save({
+                        user,
+                        token: await bcrypt.hash(token, 10),
+                    });
 
-                const sender = mailSender(user.username, user.email);
-                sender.sendToken(token);
+                    const sender = mailSender(user.username, user.email);
+                    sender.sendToken(token);
+                }
 
                 return {
                     id: user.id,

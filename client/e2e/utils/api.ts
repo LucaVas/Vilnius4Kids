@@ -38,8 +38,9 @@ export async function addTestPlayground() {
   }
 }
 
-export async function findVerificationToken(email: string) {
-  return trpc.verificationToken.getVerificationToken.query({ email }) !== null
+export async function findVerificationToken() {
+  const { token } = await trpc.verificationToken.getVerificationToken.query()
+  return token !== null
 }
 
 /**

@@ -8,10 +8,10 @@ import {
 import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
 import mailSender from '@server/modules/emailService';
-import { verifiedProcedure } from '@server/trpc/verifiedProcedure';
+import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
-export default verifiedProcedure
+export default authenticatedProcedure
     .input(reportInsertSchema)
     .mutation(
         async ({
