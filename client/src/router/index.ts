@@ -1,5 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { authenticate, hideForAuth } from './guards';
+import {
+  createRouter,
+  createWebHistory,
+} from 'vue-router';
+import { authenticate, hideForAuth, showForVerified } from './guards';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
 import HomeViewVue from '@/views/HomeView.vue';
@@ -45,6 +48,7 @@ const router = createRouter({
         {
           path: '/myReports',
           name: 'MyReports',
+          beforeEnter: [showForVerified],
           component: () => import('../views/MyReportsView.vue'),
         },
       ],
@@ -52,7 +56,6 @@ const router = createRouter({
     {
       path: '/verify',
       name: 'Verify',
-      beforeEnter: [hideForAuth],
       component: () => import('../views/VerifyTokenView.vue'),
       props: (route) => ({ email: route.query.email, token: route.query.token }),
     },
@@ -67,6 +70,14 @@ const router = createRouter({
       name: 'Signup',
       beforeEnter: [hideForAuth],
       component: () => import('../views/SignupView.vue'),
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'NotFound',
+      component: HomeLayout,
+      meta: {
+        requiresAuth: false,
+      },
     },
     {
       path: '',

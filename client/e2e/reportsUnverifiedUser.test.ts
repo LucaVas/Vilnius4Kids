@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe.serial('report playgrounds', () => {
-  test('unverified user cannot make a report can make a report from a playground', async ({
+  test('unverified user cannot make a report and cannot see his reports', async ({
     page,
   }) => {
     await page.goto('/playgrounds');
@@ -53,5 +53,12 @@ test.describe.serial('report playgrounds', () => {
     await expect(notVerifiedMessage).toHaveText(
       'Only verified users can report on playgrounds. Make sure to confirm your email first.'
     );
+
+    const myReportsLink = page.getByRole('link', { name: 'My reports' });
+    await expect(myReportsLink).toBeHidden();
+
+    await page.goto('/myReports');
+    await expect(page).toHaveURL(/myHome/);
+
   });
 });
