@@ -19,7 +19,6 @@ export function getStoredAccessToken(storage: Storage): string | null {
   return storage.getItem(TOKEN_KEY);
 }
 
-
 export function getUserIdFromToken(token: string) {
   return getUserFromToken(token).id;
 }
@@ -27,4 +26,3 @@ export function getUserIdFromToken(token: string) {
 export function getUserRoleFromToken(token: string) {
   return getUserFromToken(token).role;
 }
-
