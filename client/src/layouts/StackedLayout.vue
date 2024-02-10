@@ -29,6 +29,8 @@ const navigation = computed(() =>
     isActive: route.name === item.name,
   }))
 );
+
+
 </script>
 
 <template>
@@ -36,19 +38,19 @@ const navigation = computed(() =>
     <FwbNavbar>
       <template #default="{ isShowMenu }">
         <FwbNavbarCollapse :isShowMenu="isShowMenu" :class="isShowMenu ? 'collapsed' : null">
-            <!-- prettier-ignore -->
-            <FwbNavbarLink
+          <!-- prettier-ignore -->
+          <FwbNavbarLink
           v-for="link in navigation"
           :key="link.name"
           :is-active="route.name === link.name"
-          @click="router.push({ name: link.name })"
+          @click="router.push({ name: link.name });"
           link-attr="to"
           component="RouterLink"
           class="flex content-center items-center"
         >
           {{ link.label }}
         </FwbNavbarLink>
-            <slot name="menu" />
+          <slot name="menu" />
         </FwbNavbarCollapse>
         <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
           <p class="max-w-24 overflow-auto" data-testid="username-tag">{{ tag }}</p>
@@ -62,7 +64,7 @@ const navigation = computed(() =>
     </FwbNavbar>
   </div>
 
-  <main class="main flex flex-col h-full w-screen content-center items-center p-4">
+  <main class="main flex h-full w-screen flex-col content-center items-center p-4">
     <div class="container h-full w-screen">
       <RouterView />
     </div>
@@ -88,7 +90,9 @@ const navigation = computed(() =>
 }
 
 .collapsed {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   z-index: 100;
   position: absolute;
   top: 2.5rem;

@@ -30,7 +30,7 @@ export class Playground {
     @Column('decimal', { nullable: false, precision: 9, scale: 6 })
     longitude: number;
 
-    @Column('varchar', { length: 500, nullable: true})
+    @Column('varchar', { length: 500, nullable: true })
     description: string;
 
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
@@ -46,7 +46,9 @@ export class Playground {
     @JoinColumn()
     address: Address;
 
-    @ManyToMany(() => User, (user) => user.playgrounds)
+    @ManyToMany(() => User, (user) => user.playgrounds, {
+        onDelete: 'SET NULL',
+    })
     @JoinTable()
     users: User[];
 

@@ -3,16 +3,16 @@ import { FwbNavbarLink } from 'flowbite-vue';
 import StackedLayout from './StackedLayout.vue';
 import { getUsername, logout } from '@/stores/user';
 import { useRouter } from 'vue-router';
-import { ref, onBeforeMount} from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { trpc } from '../trpc';
 
 const router = useRouter();
 
-const links = [
+const links = ref([
   { label: 'My playgrounds', name: 'MyHome' },
   { label: 'Find a playground', name: 'Playgrounds' },
   { label: 'Report an issue', name: 'NewReport' },
-];
+]);
 
 function logoutUser() {
   logout();
@@ -24,9 +24,8 @@ const tag = ref('');
 onBeforeMount(async () => {
   const { isVerified } = await trpc.user.isUserVerified.query();
   if (isVerified) {
-    links.push({ label: 'My reports', name: 'MyReports' });
+    links.value.push({ label: 'My reports', name: 'MyReports' });
   }
-  console.log(isVerified);
   const username = await getUsername();
   tag.value = username;
 });

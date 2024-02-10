@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router';
 import useErrorMessage from '@/composables/useErrorMessage';
 
 const router = useRouter();
+const loading = ref(false);
 
 const userForm = ref({
   email: '',
@@ -14,6 +15,7 @@ const userForm = ref({
 });
 
 const [submitLogin, errorMessage] = useErrorMessage(async () => {
+  loading.value = true;
   await login(userForm.value);
 
   router.push({ name: 'MyHome' });
@@ -48,7 +50,16 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
         </FwbAlert>
 
         <div class="grid">
-          <FwbButton color="default" type="submit" size="xl">Log in</FwbButton>
+          <FwbButton
+            class="flex items-center justify-center"
+            color="default"
+            loading-position="suffix"
+            type="submit"
+            :loading="loading && !errorMessage"
+            size="xl"
+            >Sign up
+            <template #suffix> </template>
+          </FwbButton>
         </div>
       </template>
 

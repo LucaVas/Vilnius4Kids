@@ -1,12 +1,10 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { FwbAlert, FwbSpinner } from 'flowbite-vue';
-import { useRouter } from 'vue-router';
 import { trpc } from '../trpc';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
-
-const router = useRouter();
+import { logout } from '@/stores/user';
 
 const props = defineProps<{
   email: string;
@@ -22,6 +20,7 @@ onMounted(async () => {
     await trpc.verificationToken.verify.mutate({ email: props.email, token: props.token });
     hasSucceeded.value = true;
     isVerifying.value = false;
+    logout();
   } catch (error) {
     if (error instanceof TRPCClientError) {
       errorMessage.value = error.data.message || error.message;

@@ -49,7 +49,9 @@ export class User {
     })
     address: Address;
 
-    @ManyToMany(() => Playground, (playground) => playground.users)
+    @ManyToMany(() => Playground, (playground) => playground.users, {
+        onDelete: 'SET NULL',
+    })
     playgrounds: Playground[];
 
     @OneToMany(() => Report, (report) => report.user, { onDelete: 'SET NULL' })

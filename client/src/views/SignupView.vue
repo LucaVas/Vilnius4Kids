@@ -13,10 +13,12 @@ const userForm = ref({
 });
 
 const hasSucceeded = ref(false);
+const loading = ref(false);
 
 const [submitSignup, errorMessage] = useErrorMessage(async () => {
+  loading.value = true;
   await signup(userForm.value);
-
+  loading.value = false;
   hasSucceeded.value = true;
 });
 </script>
@@ -76,7 +78,17 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
         </AlertError>
 
         <div class="grid">
-          <FwbButton color="default" type="submit" size="xl">Sign up</FwbButton>
+          <FwbButton
+            class="flex items-center justify-center"
+            color="default"
+            loading-position="suffix"
+            type="submit"
+            :loading="loading && !errorMessage"
+            size="xl"
+            >Sign up
+            <template #suffix>
+            </template>
+          </FwbButton>
         </div>
       </template>
 

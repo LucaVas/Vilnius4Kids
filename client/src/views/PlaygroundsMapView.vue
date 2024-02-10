@@ -155,7 +155,7 @@ onMounted(async () => {
               </h5>
               <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
                 <FwbButton color="purple" size="xs" outline square>
-                  <a :href="getAppUrl(m.position.lat, m.position.lng)">Open in Maps</a>
+                  <a :href="getAppUrl(m.position.lat, m.position.lng)">Directions</a>
                 </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
@@ -165,9 +165,11 @@ onMounted(async () => {
                   color="green"
                   square
                   outline
-                  class="min-w-min"
+                  class="pl-3"
+                  loading-position="suffix"
                   @click="savePlayground(m.id)"
                   >Save
+                  <template #suffix> </template>
                 </FwbButton>
                 <FwbButton
                   v-else
@@ -175,8 +177,11 @@ onMounted(async () => {
                   data-testid="save-playground-button"
                   color="green"
                   size="xs"
+                  class="pl-2"
+                  loading-position="suffix"
                   @click="unsavePlayground(m.id)"
                   >Unsave
+                  <template #suffix> </template>
                 </FwbButton>
 
                 <FwbButton
