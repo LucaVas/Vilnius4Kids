@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { trpc } from '@/trpc';
-import { ref, onBeforeMount, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 import EmptyCard from '@/components/EmptyCard.vue';
 import PlaygroundCard from '@/components/PlaygroundCard.vue';
@@ -15,7 +15,7 @@ async function removeFromPlaygrounds(id: number) {
   favoritePlaygrounds.value = favoritePlaygrounds.value.filter((p) => p.id !== id);
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   const [{ playgrounds }, { isVerified }] = await Promise.all([
     await trpc.playground.getFavoritePlaygrounds.query(),
     await trpc.user.isUserVerified.query(),
