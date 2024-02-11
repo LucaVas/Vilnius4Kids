@@ -57,7 +57,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
             type="submit"
             :loading="loading && !errorMessage"
             size="xl"
-            >Sign up
+            >Login
             <template #suffix> </template>
           </FwbButton>
         </div>
