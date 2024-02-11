@@ -14,7 +14,7 @@ import { FwbButton } from 'flowbite-vue';
           </h2>
 
           <p
-            class="mt-4 flex items-center text-center justify-center text-gray-500 dark:text-gray-400 lg:max-w-md lg:justify-start"
+            class="mt-4 flex items-center justify-center text-center text-gray-500 dark:text-gray-400 lg:max-w-md lg:justify-start"
           >
             The best playgrounds in Vilnius, at your fingertips.
           </p>
@@ -22,6 +22,7 @@ import { FwbButton } from 'flowbite-vue';
           <div class="mt-6 flex items-center justify-center gap-2 lg:justify-start">
             <FwbButton
               size="lg"
+              color="purple"
               component="RouterLink"
               tag="router-link"
               :href="{ name: 'Signup' } as any"

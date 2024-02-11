@@ -35,7 +35,7 @@ onMounted(async () => {
 <template>
   <div v-if="isVerifying" class="flex h-screen flex-col items-center gap-4 px-2 py-10">
     We are verifying your account, please wait...
-    <FwbSpinner size="12" />
+    <FwbSpinner size="12" color="purple" />
   </div>
   <div v-else class="px-2 py-4">
     <FwbAlert

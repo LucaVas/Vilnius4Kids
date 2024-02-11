@@ -29,8 +29,6 @@ const navigation = computed(() =>
     isActive: route.name === item.name,
   }))
 );
-
-
 </script>
 
 <template>

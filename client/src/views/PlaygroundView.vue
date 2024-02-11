@@ -103,7 +103,7 @@ async function removePlaygroundFromFavorites(id: number) {
 
 <template>
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
-    <FwbSpinner size="12" />
+    <FwbSpinner size="12" color="purple" />
   </div>
   <div v-else class="flex h-full w-full flex-col gap-2 p-4" data-testid="playground-view-card">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />

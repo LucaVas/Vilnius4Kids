@@ -29,7 +29,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
-    <FwbSpinner size="12" />
+    <FwbSpinner size="12" color="purple" />
   </div>
   <div v-else class="px-2">
     <FwbAlert

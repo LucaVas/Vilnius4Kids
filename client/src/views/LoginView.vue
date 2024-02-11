@@ -52,9 +52,10 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
         <div class="grid">
           <FwbButton
             class="flex items-center justify-center"
-            color="default"
+            color="purple"
             loading-position="suffix"
             type="submit"
+            :disabled="loading && !errorMessage"
             :loading="loading && !errorMessage"
             size="xl"
             >Login

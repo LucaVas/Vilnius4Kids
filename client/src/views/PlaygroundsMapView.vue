@@ -214,7 +214,7 @@ onMounted(async () => {
       </GMapMarker>
     </GMapMap>
 
-    <FwbSpinner v-else size="12" />
+    <FwbSpinner v-else size="12" color="purple" />
   </div>
 </template>
 
