@@ -31,6 +31,7 @@ const playgroundId = Number(route.params.id);
 const playgroundName = ref('');
 const availablePlaygrounds = ref<Playground[]>();
 const searchPlaygrounds = ref<Playground[]>();
+const limit = ref(5);
 const showPlaygroundSearch = ref(false);
 const showCategories = ref(false);
 const showTopics = ref(false);
@@ -45,6 +46,8 @@ const reportInfo = ref({
   message: '',
 });
 const reportSent = ref(false);
+const errorMessage = ref('');
+const isUserVerified = ref(true);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -66,6 +69,7 @@ function removeDiacritics(text: string) {
 function filterPlaygrounds() {
   if (availablePlaygrounds.value === undefined) return;
   if (playgroundName.value === '') return;
+  if (limit.value !== 5) limit.value = 5;
   searchPlaygrounds.value = availablePlaygrounds.value?.filter((playground) => {
     const normalizedDistrict = removeDiacritics(playground.address.district.toLowerCase());
     const normalizedStreet = removeDiacritics(playground.address.street.toLowerCase());
@@ -75,6 +79,18 @@ function filterPlaygrounds() {
       normalizedDistrict.includes(normalizedInput) || normalizedStreet.includes(normalizedInput)
     );
   });
+}
+
+function showMorePlaygrounds() {
+  if (searchPlaygrounds.value === undefined) return;
+  limit.value <= searchPlaygrounds.value.length - 5
+    ? (limit.value += 5)
+    : (limit.value = searchPlaygrounds.value?.length);
+}
+
+function showLessPlaygrounds() {
+  if (searchPlaygrounds.value === undefined) return;
+  limit.value >= 10 && searchPlaygrounds.value.length >= 5 ? (limit.value -= 5) : limit.value;
 }
 
 function goBack() {
@@ -101,8 +117,6 @@ function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
 }
 
-const errorMessage = ref('');
-
 async function submitReport() {
   try {
     await trpc.report.report.mutate({
@@ -125,10 +139,8 @@ async function submitReport() {
   }
 }
 
-const isUserVerified = ref(true);
-
 onBeforeMount(async () => {
-  const { isVerified } = await trpc.user.isUserVerified.query()
+  const { isVerified } = await trpc.user.isUserVerified.query();
   if (!isVerified) {
     isUserVerified.value = isVerified;
     pageLoaded.value = true;
@@ -144,6 +156,7 @@ onBeforeMount(async () => {
   } else {
     const { playgrounds } = await trpc.playground.getPlaygrounds.query();
     availablePlaygrounds.value = playgrounds;
+    searchPlaygrounds.value = availablePlaygrounds.value;
   }
 
   const { categories } = await trpc.reportCategory.getReportCategories.query();
@@ -199,14 +212,19 @@ onBeforeMount(async () => {
                 </FwbTableHeadCell>
               </FwbTableHead>
               <FwbTableBody>
-                <FwbTableRow v-for="playground in searchPlaygrounds" :key="playground.id">
+                <FwbTableRow
+                  v-for="playground in searchPlaygrounds?.filter(
+                    (playground) => searchPlaygrounds!.indexOf(playground) < limit
+                  ) || []"
+                  :key="playground.id"
+                >
                   <FwbTableCell> {{ playground.address.district }}</FwbTableCell>
                   <FwbTableCell>
                     {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
                   >
                   <FwbTableCell>
                     <fwb-button
-                      color="default"
+                      color="purple"
                       pill
                       square
                       @click="
@@ -232,6 +250,10 @@ onBeforeMount(async () => {
                 </FwbTableRow>
               </FwbTableBody>
             </FwbTable>
+            <div class="my-4 flex w-full items-center justify-end gap-2">
+              <FwbButton @click="showMorePlaygrounds" outline color="purple"> Show more </FwbButton>
+              <FwbButton @click="showLessPlaygrounds" outline color="purple"> Show less </FwbButton>
+            </div>
           </div>
         </Transition>
         <Transition>
