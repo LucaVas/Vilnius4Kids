@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { trpc } from '@/trpc';
 import { ref, onBeforeMount } from 'vue';
-import { FwbSpinner, FwbHeading } from 'flowbite-vue';
+import { FwbSpinner, FwbHeading, FwbP } from 'flowbite-vue';
 import { Report } from '../../../server/src/entities/report/report';
 import ReportsTable from '@/components/ReportsTable.vue';
 

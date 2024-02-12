@@ -168,8 +168,8 @@ onMounted(async () => {
                   outline
                   loading-position="suffix"
                   @click="savePlayground(m.id)"
-                  >Save
-                  <template #suffix> </template>
+                  ><template #prefix></template>Save
+                  <template #suffix></template>
                 </FwbButton>
                 <FwbButton
                   v-else
@@ -179,8 +179,8 @@ onMounted(async () => {
                   size="md"
                   loading-position="suffix"
                   @click="unsavePlayground(m.id)"
-                  >Unsave
-                  <template #suffix> </template>
+                  ><template #prefix></template>Unsave
+                  <template #suffix></template>
                 </FwbButton>
 
                 <FwbButton
