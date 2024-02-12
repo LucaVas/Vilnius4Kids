@@ -54,7 +54,7 @@ const navigation = computed(() =>
           <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
             {{ tag }}
           </p>
-          <FwbAvatar img="src/assets/avatar_male.svg" rounded />
+          <FwbAvatar status="online" status-position="top-left" rounded />
         </div>
       </template>
     </FwbNavbar>
