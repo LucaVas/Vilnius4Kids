@@ -32,12 +32,13 @@ const navigation = computed(() =>
 </script>
 
 <template>
-  <div class="navbar">
-    <FwbNavbar>
-      <template #default="{ isShowMenu }">
-        <FwbNavbarCollapse :isShowMenu="isShowMenu" :class="isShowMenu ? 'collapsed' : null">
-          <!-- prettier-ignore -->
-          <FwbNavbarLink
+  <div class="flex min-h-svh flex-col justify-between">
+    <div class="navbar">
+      <FwbNavbar>
+        <template #default="{ isShowMenu }">
+          <FwbNavbarCollapse :isShowMenu="isShowMenu" :class="isShowMenu ? 'collapsed' : null">
+            <!-- prettier-ignore -->
+            <FwbNavbarLink
           v-for="link in navigation"
           :key="link.name"
           :is-active="route.name === link.name"
@@ -48,33 +49,35 @@ const navigation = computed(() =>
         >
           {{ link.label }}
         </FwbNavbarLink>
-          <slot name="menu" />
-        </FwbNavbarCollapse>
-        <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
-          <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
-            {{ tag }}
-          </p>
-          <FwbAvatar status="online" status-position="top-left" rounded />
-        </div>
-      </template>
-    </FwbNavbar>
-  </div>
-
-  <main class="main flex h-full w-screen flex-col content-center items-center p-4">
-    <div class="container h-full w-screen">
-      <RouterView />
+            <slot name="menu" />
+          </FwbNavbarCollapse>
+          <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
+            <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
+              {{ tag }}
+            </p>
+            <FwbAvatar status="online" status-position="top-left" rounded />
+          </div>
+        </template>
+      </FwbNavbar>
     </div>
-  </main>
-  <div>
-    <FwbFooter>
-      <FwbFooterCopyright by="Vilnius4kids" class="mb-2" />
-      <FwbFooterLinkGroup>
-        <FwbFooterLink href="#"> About </FwbFooterLink>
-        <FwbFooterLink href="#"> Privacy Policy </FwbFooterLink>
-        <FwbFooterLink href="#"> Licensing </FwbFooterLink>
-        <FwbFooterLink href="#"> Contact </FwbFooterLink>
-      </FwbFooterLinkGroup>
-    </FwbFooter>
+
+    <main class="main flex h-full w-screen flex-col content-center items-center p-4">
+      <div class="container h-full w-screen">
+        <RouterView />
+      </div>
+    </main>
+
+    <div>
+      <FwbFooter>
+        <FwbFooterCopyright by="Vilnius4kids" class="mb-2" />
+        <FwbFooterLinkGroup>
+          <FwbFooterLink href="#"> About </FwbFooterLink>
+          <FwbFooterLink href="#"> Privacy Policy </FwbFooterLink>
+          <FwbFooterLink href="#"> Licensing </FwbFooterLink>
+          <FwbFooterLink href="#"> Contact </FwbFooterLink>
+        </FwbFooterLinkGroup>
+      </FwbFooter>
+    </div>
   </div>
 </template>
 
