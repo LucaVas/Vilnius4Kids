@@ -14,9 +14,6 @@ import { FwbButton } from 'flowbite-vue';
 defineProps<{
   reports: Report[];
 }>();
-// defineEmits<{
-//   delete: [id: number];
-// }>();
 
 function convertDate(date: Date) {
   const d = new Date(date);
@@ -32,7 +29,7 @@ function convertDate(date: Date) {
       <FwbTableHeadCell class="hidden sm:table-cell">Status</FwbTableHeadCell>
       <FwbTableHeadCell> </FwbTableHeadCell>
     </FwbTableHead>
-    <FwbTableBody v-if="reports.length !== 0">
+    <FwbTableBody>
       <FwbTableRow v-for="report in reports" :key="report.id" data-testid="report-row">
         <FwbTableCell class="pr-0"
           >{{ report.playground.address.street }}
@@ -50,8 +47,8 @@ function convertDate(date: Date) {
         </FwbTableCell>
         <FwbTableCell class="align-center flex justify-center">
           <FwbButton
-            color="dark"
-            outline
+            color="purple"
+            pill
             square
             component="RouterLink"
             tag="router-link"
@@ -71,14 +68,6 @@ function convertDate(date: Date) {
             </svg>
           </FwbButton>
         </FwbTableCell>
-      </FwbTableRow>
-    </FwbTableBody>
-    <FwbTableBody v-else>
-      <FwbTableRow v-for="i in 11" :key="i" data-testid="empty-report-row">
-        <FwbTableCell class="pr-0"></FwbTableCell>
-        <FwbTableCell class="hidden sm:table-cell"></FwbTableCell>
-        <FwbTableCell class="hidden sm:table-cell"> </FwbTableCell>
-        <FwbTableCell class="align-center flex justify-center"> </FwbTableCell>
       </FwbTableRow>
     </FwbTableBody>
   </FwbTable>

@@ -51,7 +51,7 @@ const navigation = computed(() =>
           <slot name="menu" />
         </FwbNavbarCollapse>
         <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
-          <p class="max-w-24 overflow-auto font-medium text-violet-800" data-testid="username-tag">
+          <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
             {{ tag }}
           </p>
           <FwbAvatar img="src/assets/avatar_male.svg" rounded />
@@ -69,10 +69,10 @@ const navigation = computed(() =>
     <FwbFooter>
       <FwbFooterCopyright by="Vilnius4kids" class="mb-2" />
       <FwbFooterLinkGroup>
-        <FwbFooterLink href="#" class="text-violet-800"> About </FwbFooterLink>
-        <FwbFooterLink href="#" class="text-violet-800"> Privacy Policy </FwbFooterLink>
-        <FwbFooterLink href="#" class="text-violet-800"> Licensing </FwbFooterLink>
-        <FwbFooterLink href="#" class="text-violet-800"> Contact </FwbFooterLink>
+        <FwbFooterLink href="#"> About </FwbFooterLink>
+        <FwbFooterLink href="#"> Privacy Policy </FwbFooterLink>
+        <FwbFooterLink href="#"> Licensing </FwbFooterLink>
+        <FwbFooterLink href="#"> Contact </FwbFooterLink>
       </FwbFooterLinkGroup>
     </FwbFooter>
   </div>

@@ -154,16 +154,16 @@ onMounted(async () => {
                 {{ m.address.city }}
               </h5>
               <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
-                <FwbButton color="default" outline size="md" square>
+                <FwbButton color="dark" outline size="md" class="p-1" square>
                   <a :href="getAppUrl(m.position.lat, m.position.lng)"
-                    ><img src="@/assets/map.png" alt="Maps icon" class="max-h-5"
+                    ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
                   /></a>
                 </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
                   :disabled="loadingSave"
                   :loading="loadingSave"
-                  color="green"
+                  color="dark"
                   square
                   outline
                   loading-position="suffix"
@@ -175,7 +175,7 @@ onMounted(async () => {
                   v-else
                   :loading="loadingSave"
                   data-testid="save-playground-button"
-                  color="green"
+                  color="dark"
                   size="md"
                   loading-position="suffix"
                   @click="unsavePlayground(m.id)"
@@ -185,7 +185,6 @@ onMounted(async () => {
 
                 <FwbButton
                   color="purple"
-                  outline
                   square
                   size="md"
                   data-testid="go-to-playground-button"

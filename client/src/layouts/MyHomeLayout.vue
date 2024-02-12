@@ -23,6 +23,7 @@ const tag = ref('');
 
 onBeforeMount(async () => {
   const { isVerified } = await trpc.user.isUserVerified.query();
+
   if (isVerified) {
     links.value.push({ label: 'My reports', name: 'MyReports' });
   }
