@@ -169,7 +169,7 @@ onBeforeMount(async () => {
 <template>
   <div v-if="pageLoaded" class="flex h-full w-full flex-col justify-between p-6">
     <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
-    <FwbP class="mb-4 font-light">
+    <FwbP class="mb-12 font-light">
       A public playground for kids can be a wonderful place for children to play, socialize, and
       develop important skills. However, there are potential issues that may arise, and it's crucial
       to address them to ensure the safety and well-being of the children.</FwbP

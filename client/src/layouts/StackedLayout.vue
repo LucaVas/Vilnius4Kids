@@ -60,7 +60,7 @@ const navigation = computed(() =>
     </FwbNavbar>
   </div>
 
-  <main class="main flex h-full w-screen flex-col content-center items-center p-4">
+  <main class="flex w-screen flex-col items-center justify-start p-4">
     <div class="container h-full w-screen">
       <RouterView />
     </div>
@@ -83,7 +83,6 @@ const navigation = computed(() =>
 .navbar {
   background-color: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-  height: 10svh;
 }
 
 .collapsed {
@@ -96,11 +95,7 @@ const navigation = computed(() =>
   left: 0;
 }
 
-.main {
+main {
   min-height: 75svh;
-}
-
-.footer {
-  height: 15svh;
 }
 </style>
