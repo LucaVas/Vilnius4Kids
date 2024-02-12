@@ -14,7 +14,7 @@ defineEmits<{
   <div
     class="flex flex-col rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800"
   >
-    <img class="rounded-t-lg p-10 " src="../assets/family.svg" alt="image of family" />
+    <img class="max-h-80 rounded-t-lg p-10" src="../assets/family.svg" alt="image of family" />
     <div class="flex flex-col items-center justify-center gap-4 px-2 pb-4">
       <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
         {{ playground.address.street }} {{ playground.address.number }}

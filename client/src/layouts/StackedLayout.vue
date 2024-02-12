@@ -44,19 +44,17 @@ const navigation = computed(() =>
           @click="router.push({ name: link.name });"
           link-attr="to"
           component="RouterLink"
-          class="flex content-center items-center hover:text-violet-500"
+          class="flex content-center items-center"
         >
           {{ link.label }}
         </FwbNavbarLink>
           <slot name="menu" />
         </FwbNavbarCollapse>
         <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
-          <p class="max-w-24 overflow-auto" data-testid="username-tag">{{ tag }}</p>
-          <FwbAvatar
-            img="https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"
-            status="online"
-            rounded
-          />
+          <p class="max-w-24 overflow-auto font-medium text-violet-800" data-testid="username-tag">
+            {{ tag }}
+          </p>
+          <FwbAvatar img="src/assets/avatar_male.svg" rounded />
         </div>
       </template>
     </FwbNavbar>
@@ -71,10 +69,10 @@ const navigation = computed(() =>
     <FwbFooter>
       <FwbFooterCopyright by="Vilnius4kids" class="mb-2" />
       <FwbFooterLinkGroup>
-        <FwbFooterLink href="#"> About </FwbFooterLink>
-        <FwbFooterLink href="#"> Privacy Policy </FwbFooterLink>
-        <FwbFooterLink href="#"> Licensing </FwbFooterLink>
-        <FwbFooterLink href="#"> Contact </FwbFooterLink>
+        <FwbFooterLink href="#" class="text-violet-800"> About </FwbFooterLink>
+        <FwbFooterLink href="#" class="text-violet-800"> Privacy Policy </FwbFooterLink>
+        <FwbFooterLink href="#" class="text-violet-800"> Licensing </FwbFooterLink>
+        <FwbFooterLink href="#" class="text-violet-800"> Contact </FwbFooterLink>
       </FwbFooterLinkGroup>
     </FwbFooter>
   </div>

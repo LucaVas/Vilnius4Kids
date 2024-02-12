@@ -308,7 +308,7 @@ onBeforeMount(async () => {
                 <template #footer>
                   <div class="flex items-center justify-end">
                     <div class="flex gap-3">
-                      <FwbButton class="rounded-lg hover:bg-gray-200 hover:dark:bg-gray-600" square>
+                      <FwbButton class="rounded-lg" color="purple" square>
                         <svg
                           class="h-6 w-6"
                           fill="none"
@@ -324,7 +324,7 @@ onBeforeMount(async () => {
                           />
                         </svg>
                       </FwbButton>
-                      <FwbButton class="rounded-lg hover:bg-gray-200 hover:dark:bg-gray-600" square>
+                      <FwbButton class="rounded-lg" color="purple" square>
                         <svg
                           class="h-6 w-6"
                           fill="none"

@@ -145,27 +145,27 @@ onMounted(async () => {
           }"
         >
           <FwbCard>
-            <div class="flex flex-col bg-gray-200 p-4">
+            <div class="flex max-w-64 flex-col bg-slate-100 p-4">
               <h5
-                class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"
+                class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
                 data-testid="infobox-playground-address"
               >
                 {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
                 {{ m.address.city }}
               </h5>
               <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
-                <FwbButton color="purple" size="xs" outline square>
-                  <a :href="getAppUrl(m.position.lat, m.position.lng)"><img src="../assets/maps.png" alt=""></a>
+                <FwbButton color="default" outline size="md" square>
+                  <a :href="getAppUrl(m.position.lat, m.position.lng)"
+                    ><img src="@/assets/map.png" alt="Maps icon" class="max-h-5"
+                  /></a>
                 </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
                   :disabled="loadingSave"
                   :loading="loadingSave"
-                  size="xs"
                   color="green"
                   square
                   outline
-                  class="pl-3"
                   loading-position="suffix"
                   @click="savePlayground(m.id)"
                   >Save
@@ -176,8 +176,7 @@ onMounted(async () => {
                   :loading="loadingSave"
                   data-testid="save-playground-button"
                   color="green"
-                  size="xs"
-                  class="pl-2"
+                  size="md"
                   loading-position="suffix"
                   @click="unsavePlayground(m.id)"
                   >Unsave
@@ -185,17 +184,17 @@ onMounted(async () => {
                 </FwbButton>
 
                 <FwbButton
-                  color="yellow"
+                  color="purple"
                   outline
                   square
-                  size="xs"
+                  size="md"
                   data-testid="go-to-playground-button"
                   component="RouterLink"
                   tag="router-link"
                   :href="{ name: 'Playground', params: { id: m.id } } as any"
                 >
                   <svg
-                    class="h-5 w-5"
+                    class="h-5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +213,7 @@ onMounted(async () => {
       </GMapMarker>
     </GMapMap>
 
-    <FwbSpinner v-else size="12" color="purple" />
+    <FwbSpinner v-else size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
 </template>
 

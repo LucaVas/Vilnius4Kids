@@ -16,8 +16,8 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div v-if="!pageLoaded" class="flex h-full items-center justify-center">
-    <FwbSpinner size="12" color="purple" />
+  <div v-if="!pageLoaded">
+    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
   <div v-else class="px-2 py-4">
     <FwbHeading tag="h4" class="mb-4">My reports</FwbHeading>
