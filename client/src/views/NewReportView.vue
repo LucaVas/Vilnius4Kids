@@ -223,7 +223,7 @@ onBeforeMount(async () => {
                     {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
                   >
                   <FwbTableCell>
-                    <fwb-button
+                    <FwbButton
                       color="purple"
                       pill
                       square
@@ -245,7 +245,7 @@ onBeforeMount(async () => {
                           fill-rule="evenodd"
                         />
                       </svg>
-                    </fwb-button>
+                    </FwbButton>
                   </FwbTableCell>
                 </FwbTableRow>
               </FwbTableBody>
@@ -268,7 +268,7 @@ onBeforeMount(async () => {
                   showTopics = false;
                   getCategoriesByTopic(category.topic);
                 "
-                color="default"
+                color="purple"
                 outline
                 class="w-full"
                 >{{ category.topic }}</FwbButton
@@ -282,7 +282,7 @@ onBeforeMount(async () => {
               <FwbButton
                 v-for="category in subCategories"
                 :key="category.id"
-                color="default"
+                color="purple"
                 outline
                 @click="
                   reportInfo.categoryId = category.id;
@@ -366,6 +366,7 @@ onBeforeMount(async () => {
           v-if="showForm && !reportSent"
           :disabled="reportSent"
           square
+          color="purple"
           @click="submitReport"
         >
           Submit report
@@ -373,6 +374,7 @@ onBeforeMount(async () => {
         <FwbButton
           v-if="reportSent"
           square
+          color="purple"
           component="RouterLink"
           tag="router-link"
           :href="{ name: 'MyHome' } as any"
@@ -382,6 +384,7 @@ onBeforeMount(async () => {
         <FwbButton
           v-if="!showTopics && !showCategories && !showForm && !showPlaygroundSearch"
           @click="showPlaygroundSearch = true"
+          color="purple"
           >Report an issue</FwbButton
         >
       </FwbButtonGroup>

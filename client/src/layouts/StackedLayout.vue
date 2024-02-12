@@ -44,7 +44,7 @@ const navigation = computed(() =>
           @click="router.push({ name: link.name });"
           link-attr="to"
           component="RouterLink"
-          class="flex content-center items-center"
+          class="flex content-center items-center hover:text-violet-500"
         >
           {{ link.label }}
         </FwbNavbarLink>

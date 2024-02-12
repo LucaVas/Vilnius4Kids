@@ -35,7 +35,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           :maxlength="60"
           v-model="userForm.username"
           :required="true"
-          class="text-sm font-medium text-gray-900 dark:text-white"
+          class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
         <FwbInput
@@ -43,7 +43,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           placeholder="Email"
           v-model="userForm.email"
           :required="true"
-          class="text-sm font-medium text-gray-900 dark:text-white"
+          class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
         <FwbInput
@@ -56,7 +56,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           autocomplete="current-password"
           v-model="userForm.password"
           :required="true"
-          class="text-sm font-medium text-gray-900 dark:text-white"
+          class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
         <FwbAlert v-if="hasSucceeded" type="info" data-testid="tokenMessage">

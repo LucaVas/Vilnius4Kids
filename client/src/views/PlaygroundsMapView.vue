@@ -155,7 +155,7 @@ onMounted(async () => {
               </h5>
               <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
                 <FwbButton color="purple" size="xs" outline square>
-                  <a :href="getAppUrl(m.position.lat, m.position.lng)">Directions</a>
+                  <a :href="getAppUrl(m.position.lat, m.position.lng)"><img src="../assets/maps.png" alt=""></a>
                 </FwbButton>
                 <FwbButton
                   v-if="!m.saved"
