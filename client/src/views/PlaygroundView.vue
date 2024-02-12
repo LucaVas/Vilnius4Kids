@@ -103,7 +103,7 @@ async function removePlaygroundFromFavorites(id: number) {
 
 <template>
   <div v-if="!pageLoaded">
-    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2"/>
+    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
   <div v-else class="flex h-full w-full flex-col gap-2 p-4" data-testid="playground-view-card">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
@@ -191,25 +191,25 @@ async function removePlaygroundFromFavorites(id: number) {
       <FwbButton color="dark" outline square @click="$router.go(-1)">Back</FwbButton>
       <FwbButtonGroup class="gap-2">
         <FwbButton
-          color="green"
+          color="purple"
           v-if="!saved"
-          outline
           square
           :loading="loadingSave"
+          loading-position="suffix"
           @click="savePlayground(currentPlayground.id)"
-          >Save</FwbButton
-        >
+          ><template #prefix></template>Save<template #suffix></template
+        ></FwbButton>
         <FwbButton
-          color="green"
+          color="purple"
           v-else
-          outline
           square
           :loading="loadingSave"
+          loading-position="suffix"
           @click="removePlaygroundFromFavorites(currentPlayground.id)"
-          >Unsave</FwbButton
-        >
+          ><template #prefix></template>Unsave<template #suffix></template
+        ></FwbButton>
         <FwbButton
-          color="red"
+          color="purple"
           outline
           square
           data-testid="report-button"
