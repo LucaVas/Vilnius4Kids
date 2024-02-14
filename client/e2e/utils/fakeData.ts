@@ -1,17 +1,18 @@
 import { Chance } from 'chance';
 
 export const random = process.env.CI ? Chance(1) : Chance();
+const usernamePool = 'abcdefghijklmnopqrstuvwxyz1234567890_';
 
 export const fakeUser = () => ({
   email: random.email(),
-  username: random.string({ alpha: true, numeric: true, symbols: false }),
+  username: random.string({ pool: usernamePool }),
   password: 'Password123.',
-  role: 'tester'
+  role: 'tester',
 });
 
 export const unverifiedFakeUser = () => ({
   email: random.email(),
-  username: random.string({ alpha: true, numeric: true, symbols: false }),
+  username: random.string({ pool: usernamePool }),
   password: 'Password123.',
   role: 'user',
 });
