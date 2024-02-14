@@ -14,12 +14,13 @@ export default (username: string, recipient: string) => ({
 
         if (env !== 'test') {
             const info = await transporter.sendMail(message);
-            if (info.rejected) {
+            if (info.rejected.length !== 0) {
                 logger.error('Error while sending email: ', info.response);
                 throw new Error('Error while sending email.');
             }
             if (info.accepted) {
-                logger.info('Email sent successfully with ID ', info.messageId);
+                logger.info('Email sent successfully: ');
+                logger.info(info);
             }
         }
     },
@@ -32,12 +33,13 @@ export default (username: string, recipient: string) => ({
 
         if (env !== 'test') {
             const info = await transporter.sendMail(message);
-            if (info.rejected) {
+            if (info.rejected.length !== 0) {
                 logger.error('Error while sending email: ', info.response);
                 throw new Error('Error while sending email.');
             }
             if (info.accepted) {
-                logger.info('Email sent successfully with ID ', info.messageId);
+                logger.info('Email sent successfully: ');
+                logger.info(info);
             }
         }
     },

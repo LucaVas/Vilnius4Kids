@@ -4,14 +4,14 @@ export const random = process.env.CI ? Chance(1) : Chance();
 
 export const fakeUser = () => ({
   email: random.email(),
-  username: random.string(),
+  username: random.string({ alpha: true, numeric: true, symbols: false }),
   password: 'Password123.',
   role: 'tester'
 });
 
 export const unverifiedFakeUser = () => ({
   email: random.email(),
-  username: random.string(),
+  username: random.string({ alpha: true, numeric: true, symbols: false }),
   password: 'Password123.',
   role: 'user',
 });
