@@ -56,11 +56,16 @@ const schema = z
                 .default('postgres'),
             host: z.string().default('localhost'),
             port: z.coerce.number().default(5432),
-            database: isInMemory ? z.string().optional() : z.string(),
-            username: isInMemory ? z.string().optional() : z.string(),
-            password: isInMemory ? z.string().optional() : z.string(),
+            database: isInMemory
+                ? z.string().optional()
+                : z.string().default('vilnius4kidsdb'),
+            username: isInMemory
+                ? z.string().optional()
+                : z.string().default('postgres'),
+            password: isInMemory
+                ? z.string().optional()
+                : z.string().default('postgres'),
 
-            // By default, log and synchronize the database schema only for tests and development.
             logging: z.preprocess(
                 coerceBoolean,
                 z.boolean().default(isDevTest)
