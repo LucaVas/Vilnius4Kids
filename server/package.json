@@ -1,7 +1,7 @@
 {
     "name": "@vilnius4kids/server",
     "version": "1.0.0",
-    "description": "",
+    "description": "Server application",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsup src/index.ts",
