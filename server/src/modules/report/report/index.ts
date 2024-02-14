@@ -60,11 +60,17 @@ export default authenticatedProcedure
             });
 
             const sender = mailSender(user.username, user.email);
-            sender.sendReport(newReport.id);
-
-            return {
-                newReport,
-                message: 'Report added successfully.',
-            };
+            try {
+                await sender.sendReport(newReport.id);
+                return {
+                    newReport,
+                    message: 'Report added successfully.',
+                };
+            } catch (error) {
+                throw new TRPCError({
+                    message: `Error while sending report email.`,
+                    code: 'INTERNAL_SERVER_ERROR',
+                });
+            }
         }
     );
