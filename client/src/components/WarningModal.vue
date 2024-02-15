@@ -6,6 +6,14 @@ defineProps({
     type: Number,
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,
+  },
 });
 
 defineEmits(['close', 'delete']);
@@ -13,7 +21,7 @@ defineEmits(['close', 'delete']);
 <template>
   <FwbModal size="md" @close="$emit('close')">
     <template #header>
-      <div class="flex items-center text-lg">Playground #{{ playgroundId }}</div>
+      <div class="flex items-center text-lg">{{ title }}{{ playgroundId }}</div>
     </template>
 
     <template #body>
@@ -33,13 +41,13 @@ defineEmits(['close', 'delete']);
         />
       </svg>
       <h3 class="mb-5 text-center text-lg font-normal text-gray-500 dark:text-gray-400">
-        Are you sure you want to delete this playground?
+        {{ message }}
       </h3>
     </template>
     <template #footer>
       <div class="flex justify-between">
         <FwbButton @click="$emit('close')" color="purple" outline> Cancel </FwbButton>
-        <FwbButton @click="$emit('delete')" color="purple"> Delete </FwbButton>
+        <FwbButton @click="$emit('delete')" color="purple"> Confirm </FwbButton>
       </div>
     </template>
   </FwbModal>

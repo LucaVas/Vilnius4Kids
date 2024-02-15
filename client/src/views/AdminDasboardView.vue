@@ -15,9 +15,11 @@ import {
 import { trpc } from '../trpc';
 import { Playground } from '../../../server/src/entities/playground/playground';
 import WarningModal from '@/components/WarningModal.vue';
+import EditPlaygroundModal from '@/components/EditPlaygroundModal.vue';
+import { type BarePlayground } from '../../../server/src/entities/playground/schema';
 
 const pageLoaded = ref(false);
-const availablePlaygrounds = ref<Playground[]>();
+const availablePlaygrounds = ref<Playground[]>([]);
 const playgroundsToShow = ref<Playground[]>();
 const filteredPlaygrounds = ref<Playground[]>();
 const isFiltered = ref(false);
@@ -26,7 +28,9 @@ const currentPage = ref(0);
 const playgroundLimit = 5;
 const totalPages = ref(1);
 const playgroundToDelete = ref(0);
+const playgroundToEdit = ref(0);
 const isDeleteModalOpen = ref(false);
+const isEditModalOpen = ref(false);
 
 function paginatePlaygrounds() {
   if (availablePlaygrounds.value === undefined) return;
@@ -88,9 +92,23 @@ function openDeleteModal(id: number) {
   isDeleteModalOpen.value = true;
 }
 
+function openEditModal(id: number) {
+  playgroundToEdit.value = id;
+  isEditModalOpen.value = true;
+}
+
 async function deletePlayground() {
   await trpc.playground.deletePlayground.mutate({ id: playgroundToDelete.value });
   isDeleteModalOpen.value = false;
+}
+
+async function editPlayground(editedPlayground: BarePlayground) {
+  await trpc.playground.updatePlayground.mutate(editedPlayground);
+  availablePlaygrounds.value[playgroundToEdit.value] = {
+    ...availablePlaygrounds.value[playgroundToEdit.value],
+    ...editedPlayground,
+  };
+  isEditModalOpen.value = false;
 }
 
 onBeforeMount(async () => {
@@ -191,7 +209,7 @@ onBeforeMount(async () => {
                 square
                 outline
                 class="px-2"
-                @click="console.log('Edit')"
+                @click="openEditModal(playground.id)"
               >
                 Edit
               </FwbButton>
@@ -215,5 +233,13 @@ onBeforeMount(async () => {
     @close="isDeleteModalOpen = false"
     @delete="deletePlayground"
     :playgroundId="playgroundToDelete"
+    title="Playground "
+    message="Are you sure you want to delete this playground?"
+  />
+  <EditPlaygroundModal
+    v-if="isEditModalOpen"
+    @close="isEditModalOpen = false"
+    @edit="editPlayground"
+    :playground="availablePlaygrounds[playgroundToEdit]"
   />
 </template>

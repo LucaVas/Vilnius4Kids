@@ -5,14 +5,14 @@ import { playgroundUpdateSchema } from '../../../entities/playground/schema';
 
 export default adminProcedure
     .input(playgroundUpdateSchema)
-    .mutation(async ({ input: { id, isPrivate, isOpen }, ctx: { db } }) => {
+    .mutation(async ({ input: { id, isPrivate, isOpen, description }, ctx: { db } }) => {
         const { affected, raw } = await db
             .getRepository(Playground)
             .createQueryBuilder()
             .update()
-            .set({ isOpen, isPrivate })
+            .set({ isOpen, isPrivate, description })
             .where('id = :id', { id })
-            .returning(['id', 'isOpen', 'isPrivate'])
+            .returning(['id', 'isOpen', 'isPrivate', 'description'])
             .execute();
 
         if (affected === 0) {
