@@ -2,10 +2,11 @@ import {
   createRouter,
   createWebHistory,
 } from 'vue-router';
-import { authenticate, hideForAuth, showForVerified } from './guards';
+import { authenticate, hideForAdmin, hideForAuth, showForAdmin, showForVerified } from './guards';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
 import HomeViewVue from '@/views/HomeView.vue';
+import AdminLayoutVue from '@/layouts/AdminLayout.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,7 +14,7 @@ const router = createRouter({
     {
       path: '/',
       component: MyHomeLayoutVue,
-      beforeEnter: [authenticate],
+      beforeEnter: [authenticate, hideForAdmin],
       children: [
         {
           path: '/myHome',
@@ -50,6 +51,18 @@ const router = createRouter({
           name: 'MyReports',
           beforeEnter: [showForVerified],
           component: () => import('../views/MyReportsView.vue'),
+        },
+      ],
+    },
+    {
+      path: '/',
+      component: AdminLayoutVue,
+      beforeEnter: [authenticate, showForAdmin],
+      children: [
+        {
+          path: '/dashboard',
+          name: 'AdminDashboard',
+          component: () => import('../views/AdminDasboardView.vue'),
         },
       ],
     },

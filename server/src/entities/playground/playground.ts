@@ -47,16 +47,18 @@ export class Playground {
     address: Address;
 
     @ManyToMany(() => User, (user) => user.playgrounds, {
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
     })
     @JoinTable()
     users: User[];
 
-    @OneToMany(() => Report, (report) => report.playground)
+    @OneToMany(() => Report, (report) => report.playground, {
+        onDelete: 'CASCADE',
+    })
     reports: Report[];
 
     @OneToMany(() => Rating, (rating) => rating.playground, {
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
     })
     ratings: Rating[];
 }

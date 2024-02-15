@@ -4,15 +4,13 @@ import StackedLayout from './StackedLayout.vue';
 import { getUsername, logout } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
-import { trpc } from '../trpc';
 
 const router = useRouter();
 const usernameTag = ref('');
 
 const links = ref([
-  { label: 'My playgrounds', name: 'MyHome' },
-  { label: 'Find a playground', name: 'Playgrounds' },
-  { label: 'Report an issue', name: 'NewReport' },
+  { label: 'Playgrounds', name: 'MyHome' },
+  { label: 'Reports', name: 'MyHome' },
 ]);
 
 function logoutUser() {
@@ -21,11 +19,6 @@ function logoutUser() {
 }
 
 onBeforeMount(async () => {
-  const { isVerified } = await trpc.user.isUserVerified.query();
-
-  if (isVerified) {
-    links.value.push({ label: 'My reports', name: 'MyReports' });
-  }
   const username = await getUsername();
   usernameTag.value = username;
 });

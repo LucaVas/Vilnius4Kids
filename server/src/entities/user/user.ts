@@ -50,21 +50,21 @@ export class User {
     address: Address;
 
     @ManyToMany(() => Playground, (playground) => playground.users, {
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
     })
     playgrounds: Playground[];
 
-    @OneToMany(() => Report, (report) => report.user, { onDelete: 'SET NULL' })
+    @OneToMany(() => Report, (report) => report.user, { onDelete: 'CASCADE' })
     reports: Report[];
 
-    @OneToMany(() => Rating, (rating) => rating.user, { onDelete: 'SET NULL' })
+    @OneToMany(() => Rating, (rating) => rating.user, { onDelete: 'CASCADE' })
     ratings: Rating[];
 
     @OneToOne(
         () => VerificationToken,
         (verificationToken) => verificationToken.user,
         {
-            onDelete: 'SET NULL',
+            onDelete: 'CASCADE',
         }
     )
     @JoinColumn()
