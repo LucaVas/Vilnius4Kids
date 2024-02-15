@@ -17,6 +17,7 @@ import { Playground } from '../../../server/src/entities/playground/playground';
 import WarningModal from '@/components/WarningModal.vue';
 import EditPlaygroundModal from '@/components/EditPlaygroundModal.vue';
 import { type BarePlayground } from '../../../server/src/entities/playground/schema';
+import NewPlaygroundModal from '@/components/NewPlaygroundModal.vue';
 
 const pageLoaded = ref(false);
 const availablePlaygrounds = ref<Playground[]>([]);
@@ -31,6 +32,7 @@ const playgroundToDelete = ref(0);
 const playgroundToEdit = ref(0);
 const isDeleteModalOpen = ref(false);
 const isEditModalOpen = ref(false);
+const isAddModalOpen = ref(false);
 
 function paginatePlaygrounds() {
   if (availablePlaygrounds.value === undefined) return;
@@ -87,6 +89,10 @@ function filterPlaygrounds() {
   isFiltered.value = true;
 }
 
+function openAddModal() {
+  isAddModalOpen.value = true;
+}
+
 function openDeleteModal(id: number) {
   playgroundToDelete.value = id;
   isDeleteModalOpen.value = true;
@@ -126,31 +132,38 @@ onBeforeMount(async () => {
     <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
   <div v-else class="px-2">
-    <FwbInput
-      v-model="playgroundName"
-      label="Search for a playground"
-      placeholder="Enter a playground name"
-      size="lg"
-      @keyup="filterPlaygrounds"
-    >
-      <template #prefix>
-        <svg
-          aria-hidden="true"
-          class="h-5 w-5 text-gray-500 dark:text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+    <div class="flex">
+      <div class="flex-grow">
+        <FwbInput
+          v-model="playgroundName"
+          label="Search for a playground"
+          placeholder="Enter a playground name"
+          size="lg"
+          @keyup="filterPlaygrounds"
         >
-          <path
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
-        </svg>
-      </template>
-    </FwbInput>
+          <template #prefix>
+            <svg
+              aria-hidden="true"
+              class="h-5 w-5 text-gray-500 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+              />
+            </svg>
+          </template>
+        </FwbInput>
+      </div>
+      <div class="align-center ml-2 flex flex-col justify-end">
+        <FwbButton size="md" color="purple" class="h-14" @click="openAddModal">New</FwbButton>
+      </div>
+    </div>
     <FwbTable class="mt-4">
       <FwbTableHead>
         <FwbTableHeadCell>District</FwbTableHeadCell>
@@ -241,5 +254,10 @@ onBeforeMount(async () => {
     @close="isEditModalOpen = false"
     @edit="editPlayground"
     :playground="availablePlaygrounds[playgroundToEdit]"
+  />
+  <NewPlaygroundModal
+    v-if="isAddModalOpen"
+    @close="isAddModalOpen = false"
+    @create="console.log($event)"
   />
 </template>
