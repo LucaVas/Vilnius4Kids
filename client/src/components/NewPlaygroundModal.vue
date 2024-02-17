@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbModal, FwbButton, FwbSelect, FwbTextarea, FwbInput } from 'flowbite-vue';
+import { FwbModal, FwbButton, FwbSelect, FwbTextarea, FwbInput, FwbToggle } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
 import { type PlaygroundInsert } from '../../../server/src/entities/playground/schema';
 import { trpc } from '../trpc';
@@ -19,30 +19,20 @@ const emit = defineEmits<{
 }>();
 
 const newPlaygroundInfo = ref({
-  isPrivate: '',
-  isOpen: '',
+  isPrivate: false,
+  isOpen: true,
   description: '',
   latitude: '',
   longitude: '',
   addressId: '',
 });
 
-const isPrivateOptions = [
-  { value: 'true', name: 'Private' },
-  { value: 'false', name: 'Public' },
-];
-
-const isOpenOptions = [
-  { value: 'true', name: 'Open' },
-  { value: 'false', name: 'Closed' },
-];
-
 function editPlayground() {
   if (!newPlaygroundInfo.value) return;
   emit('create', {
     ...newPlaygroundInfo.value,
-    isOpen: newPlaygroundInfo.value.isOpen === 'true',
-    isPrivate: newPlaygroundInfo.value.isPrivate === 'true',
+    isOpen: newPlaygroundInfo.value.isOpen,
+    isPrivate: newPlaygroundInfo.value.isPrivate,
     latitude: Number(newPlaygroundInfo.value.latitude),
     longitude: Number(newPlaygroundInfo.value.longitude),
     addressId: Number(newPlaygroundInfo.value.addressId),
@@ -67,14 +57,16 @@ onMounted(async () => {
       <form class="p-4 md:p-5">
         <div class="mb-4 grid grid-cols-2 gap-4">
           <div class="col-span-1">
-            <FwbSelect
-              :v-model="newPlaygroundInfo.isPrivate"
-              :options="isPrivateOptions"
-              label="Private"
+            <FwbToggle
+              v-model="newPlaygroundInfo.isPrivate"
+              :label="newPlaygroundInfo.isPrivate ? 'Private' : 'Public'"
             />
           </div>
           <div class="col-span-1">
-            <FwbSelect :v-model="newPlaygroundInfo.isOpen" :options="isOpenOptions" label="Open" />
+            <FwbToggle
+              v-model="newPlaygroundInfo.isOpen"
+              :label="newPlaygroundInfo.isOpen ? 'Open' : 'Closed'"
+            />
           </div>
           <div class="col-span-1">
             <FwbInput v-model="newPlaygroundInfo.latitude" label="Latitude" />

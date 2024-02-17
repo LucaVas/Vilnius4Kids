@@ -16,8 +16,13 @@ import { trpc } from '../trpc';
 import { Playground } from '../../../server/src/entities/playground/playground';
 import WarningModal from '@/components/WarningModal.vue';
 import EditPlaygroundModal from '@/components/EditPlaygroundModal.vue';
-import { type BarePlayground } from '../../../server/src/entities/playground/schema';
+import {
+  type BarePlayground,
+  PlaygroundInsert,
+} from '../../../server/src/entities/playground/schema';
 import NewPlaygroundModal from '@/components/NewPlaygroundModal.vue';
+import NewAddressModal from '@/components/NewAddressModal.vue';
+import { AddressInsert } from '../../../server/src/entities/address/schema';
 
 const pageLoaded = ref(false);
 const availablePlaygrounds = ref<Playground[]>([]);
@@ -30,9 +35,10 @@ const playgroundLimit = 5;
 const totalPages = ref(1);
 const playgroundToDelete = ref(0);
 const playgroundToEdit = ref(0);
-const isDeleteModalOpen = ref(false);
-const isEditModalOpen = ref(false);
-const isAddModalOpen = ref(false);
+const isDeletePlaygroundModalOpen = ref(false);
+const isEditPlaygroundModalOpen = ref(false);
+const isAddPlaygroundModalOpen = ref(false);
+const isNewAddressModalOpen = ref(false);
 
 function paginatePlaygrounds() {
   if (availablePlaygrounds.value === undefined) return;
@@ -89,23 +95,26 @@ function filterPlaygrounds() {
   isFiltered.value = true;
 }
 
-function openAddModal() {
-  isAddModalOpen.value = true;
+function openAddPlaygroundModal() {
+  isAddPlaygroundModalOpen.value = true;
+}
+function openNewAddressModal() {
+  isNewAddressModalOpen.value = true;
 }
 
-function openDeleteModal(id: number) {
+function openDeletePlaygroundModal(id: number) {
   playgroundToDelete.value = id;
-  isDeleteModalOpen.value = true;
+  isDeletePlaygroundModalOpen.value = true;
 }
 
-function openEditModal(id: number) {
+function openEditPlaygroundModal(id: number) {
   playgroundToEdit.value = id;
-  isEditModalOpen.value = true;
+  isEditPlaygroundModalOpen.value = true;
 }
 
 async function deletePlayground() {
   await trpc.playground.deletePlayground.mutate({ id: playgroundToDelete.value });
-  isDeleteModalOpen.value = false;
+  isDeletePlaygroundModalOpen.value = false;
 }
 
 async function editPlayground(editedPlayground: BarePlayground) {
@@ -114,7 +123,18 @@ async function editPlayground(editedPlayground: BarePlayground) {
     ...availablePlaygrounds.value[playgroundToEdit.value],
     ...editedPlayground,
   };
-  isEditModalOpen.value = false;
+  isEditPlaygroundModalOpen.value = false;
+}
+
+async function addPlayground(newPlayground: PlaygroundInsert) {
+  await trpc.playground.addPlayground.mutate(newPlayground);
+  availablePlaygrounds.value.push(newPlayground);
+  isAddPlaygroundModalOpen.value = false;
+}
+
+async function addAddress(newAddress: AddressInsert) {
+  await trpc.address.addAddress.mutate(newAddress);
+  isNewAddressModalOpen.value = false;
 }
 
 onBeforeMount(async () => {
@@ -131,7 +151,16 @@ onBeforeMount(async () => {
   <div v-if="!pageLoaded">
     <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
+
   <div v-else class="px-2">
+    <div class="align-center flex justify-end gap-2">
+      <FwbButton size="sm" color="purple" outline @click="openAddPlaygroundModal"
+        >New playground</FwbButton
+      >
+      <FwbButton size="sm" color="purple" outline @click="openNewAddressModal"
+        >New Address</FwbButton
+      >
+    </div>
     <div class="flex">
       <div class="flex-grow">
         <FwbInput
@@ -160,9 +189,6 @@ onBeforeMount(async () => {
           </template>
         </FwbInput>
       </div>
-      <div class="align-center ml-2 flex flex-col justify-end">
-        <FwbButton size="md" color="purple" class="h-14" @click="openAddModal">New</FwbButton>
-      </div>
     </div>
     <FwbTable class="mt-4">
       <FwbTableHead>
@@ -181,7 +207,12 @@ onBeforeMount(async () => {
           >
           <FwbTableCell>
             <div class="align-items flex min-w-min justify-center gap-2">
-              <FwbButton size="sm" color="purple" square @click="openDeleteModal(playground.id)">
+              <FwbButton
+                size="sm"
+                color="purple"
+                square
+                @click="openDeletePlaygroundModal(playground.id)"
+              >
                 <svg
                   fill="#ffffff"
                   class="h-5 w-5"
@@ -222,7 +253,7 @@ onBeforeMount(async () => {
                 square
                 outline
                 class="px-2"
-                @click="openEditModal(playground.id)"
+                @click="openEditPlaygroundModal(playground.id)"
               >
                 Edit
               </FwbButton>
@@ -242,22 +273,27 @@ onBeforeMount(async () => {
     </div>
   </div>
   <WarningModal
-    v-if="isDeleteModalOpen"
-    @close="isDeleteModalOpen = false"
+    v-if="isDeletePlaygroundModalOpen"
+    @close="isDeletePlaygroundModalOpen = false"
     @delete="deletePlayground"
     :playgroundId="playgroundToDelete"
     title="Playground "
     message="Are you sure you want to delete this playground?"
   />
   <EditPlaygroundModal
-    v-if="isEditModalOpen"
-    @close="isEditModalOpen = false"
+    v-if="isEditPlaygroundModalOpen"
+    @close="isEditPlaygroundModalOpen = false"
     @edit="editPlayground"
     :playground="availablePlaygrounds[playgroundToEdit]"
   />
   <NewPlaygroundModal
-    v-if="isAddModalOpen"
-    @close="isAddModalOpen = false"
-    @create="console.log($event)"
+    v-if="isAddPlaygroundModalOpen"
+    @close="isAddPlaygroundModalOpen = false"
+    @create="addPlayground"
+  />
+  <NewAddressModal
+    v-if="isNewAddressModalOpen"
+    @close="isNewAddressModalOpen = false"
+    @create="addAddress"
   />
 </template>

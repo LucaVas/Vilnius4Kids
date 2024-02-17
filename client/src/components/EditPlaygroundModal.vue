@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FwbModal, FwbButton, FwbSelect, FwbTextarea } from 'flowbite-vue';
+import { FwbModal, FwbButton, FwbTextarea, FwbToggle } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
 import { type BarePlayground } from '../../../server/src/entities/playground/schema';
 
@@ -13,26 +13,16 @@ const emit = defineEmits<{
 }>();
 
 const playgroundEditInfo = ref({
-  isPrivate: '',
-  isOpen: '',
+  isPrivate: false,
+  isOpen: true,
   description: '',
 });
-
-const isPrivateOptions = [
-  { value: 'true', name: 'Private' },
-  { value: 'false', name: 'Public' },
-];
-
-const isOpenOptions = [
-  { value: 'true', name: 'Open' },
-  { value: 'false', name: 'Closed' },
-];
 
 function editPlayground() {
   const editedPlayground = {
     ...props.playground,
-    isPrivate: playgroundEditInfo.value.isPrivate === 'true',
-    isOpen: playgroundEditInfo.value.isOpen === 'true',
+    isPrivate: playgroundEditInfo.value.isPrivate,
+    isOpen: playgroundEditInfo.value.isOpen,
     longitude: Number(props.playground.longitude),
     latitude: Number(props.playground.latitude),
     description: playgroundEditInfo.value.description,
@@ -41,8 +31,8 @@ function editPlayground() {
 }
 
 onMounted(() => {
-  playgroundEditInfo.value.isPrivate = props.playground.isPrivate.toString();
-  playgroundEditInfo.value.isOpen = props.playground.isOpen.toString();
+  playgroundEditInfo.value.isPrivate = props.playground.isPrivate;
+  playgroundEditInfo.value.isOpen = props.playground.isOpen;
   playgroundEditInfo.value.description = props.playground.description ?? '';
 });
 </script>
@@ -54,15 +44,14 @@ onMounted(() => {
     <template #body>
       <form class="p-4 md:p-5">
         <div class="mb-4 grid grid-cols-2 gap-4">
-          <div class="col-span-2">
-            <FwbSelect
+          <div class="col-span-1">
+            <FwbToggle
               v-model="playgroundEditInfo.isPrivate"
-              :options="isPrivateOptions"
-              label="Private"
+              :label="playgroundEditInfo.isPrivate ? 'Private' : 'Public'"
             />
           </div>
-          <div class="col-span-2">
-            <FwbSelect v-model="playgroundEditInfo.isOpen" :options="isOpenOptions" label="Open" />
+          <div class="col-span-1">
+            <FwbToggle v-model="playgroundEditInfo.isOpen" :label="playgroundEditInfo.isOpen ? 'Open' : 'Closed'" />
           </div>
           <div class="col-span-2">
             <FwbTextarea v-model="playgroundEditInfo.description" :rows="4" label="Description" />
