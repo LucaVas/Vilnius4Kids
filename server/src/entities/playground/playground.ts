@@ -40,23 +40,18 @@ export class Playground {
     updatedAt: Date;
 
     @OneToOne(() => Address, (address) => address.playground, {
-        onDelete: 'SET NULL',
         cascade: ['insert'],
     })
     @JoinColumn()
     address: Address;
 
-    @ManyToMany(() => User, (user) => user.playgrounds, {
-        onDelete: 'SET NULL',
-    })
+    @ManyToMany(() => User, (user) => user.playgrounds)
     @JoinTable()
     users: User[];
 
     @OneToMany(() => Report, (report) => report.playground)
     reports: Report[];
 
-    @OneToMany(() => Rating, (rating) => rating.playground, {
-        onDelete: 'SET NULL',
-    })
+    @OneToMany(() => Rating, (rating) => rating.playground)
     ratings: Rating[];
 }
