@@ -9,8 +9,8 @@ const router = useRouter();
 const usernameTag = ref('');
 
 const links = ref([
-  { label: 'Playgrounds', name: 'MyHome' },
-  { label: 'Reports', name: 'MyHome' },
+  { label: 'Playgrounds', name: 'AdminDashboard' },
+  { label: 'Reports', name: 'AdminReports' },
 ]);
 
 function logoutUser() {

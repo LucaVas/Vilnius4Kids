@@ -63,9 +63,6 @@ export class User {
     @OneToOne(
         () => VerificationToken,
         (verificationToken) => verificationToken.user,
-        {
-            onDelete: 'CASCADE',
-        }
     )
     @JoinColumn()
     verificationToken: VerificationToken;
