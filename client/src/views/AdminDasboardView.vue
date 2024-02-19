@@ -150,7 +150,7 @@ onBeforeMount(async () => {
 
   <div v-else class="px-2">
     <div class="align-center flex justify-end gap-2">
-      <FwbButton size="sm" color="purple" outline @click="openAddPlaygroundModal"
+      <FwbButton size="sm" color="purple" data-testid="newPlaygroundButton" outline @click="openAddPlaygroundModal"
         >New playground</FwbButton
       >
     </div>
@@ -161,6 +161,7 @@ onBeforeMount(async () => {
           label="Search for a playground"
           placeholder="Enter a playground name"
           size="lg"
+          data-testid="playgroundSearchInput"
           @keyup="filterPlaygrounds"
         >
           <template #prefix>
@@ -192,8 +193,8 @@ onBeforeMount(async () => {
         </FwbTableHeadCell>
       </FwbTableHead>
 
-      <FwbTableBody>
-        <FwbTableRow v-for="playground in playgroundsToShow" :key="playground.id">
+      <FwbTableBody data-testid="playgroundsTable">
+        <FwbTableRow v-for="playground in playgroundsToShow" :key="playground.id" :data-testid="'playgroundRow-' + playground.id">
           <FwbTableCell> {{ playground.address.district }}</FwbTableCell>
           <FwbTableCell>
             {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell

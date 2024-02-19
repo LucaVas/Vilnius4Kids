@@ -10,6 +10,13 @@ export const fakeUser = () => ({
   role: 'tester',
 });
 
+export const fakeAdmin = () => ({
+  email: random.email(),
+  username: random.string({ pool: usernamePool }),
+  password: 'Password123.',
+  role: 'admin',
+});
+
 export const unverifiedFakeUser = () => ({
   email: random.email(),
   username: random.string({ pool: usernamePool }),
