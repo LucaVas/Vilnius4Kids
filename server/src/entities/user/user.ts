@@ -44,11 +44,10 @@ export class User {
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     updatedAt: Date;
 
-    @ManyToOne(() => Address, (address) => address.users, {
-        onDelete: 'SET NULL',
-    })
+    @ManyToOne(() => Address, (address) => address.users)
     address: Address;
 
+<<<<<<< HEAD
     @ManyToMany(() => Playground, (playground) => playground.users, {
         onDelete: 'CASCADE',
     })
@@ -58,11 +57,26 @@ export class User {
     reports: Report[];
 
     @OneToMany(() => Rating, (rating) => rating.user, { onDelete: 'CASCADE' })
+=======
+    @ManyToMany(() => Playground, (playground) => playground.users)
+    playgrounds: Playground[];
+
+    @OneToMany(() => Report, (report) => report.user)
+    reports: Report[];
+
+    @OneToMany(() => Rating, (rating) => rating.user)
+>>>>>>> main
     ratings: Rating[];
 
     @OneToOne(
         () => VerificationToken,
         (verificationToken) => verificationToken.user,
+<<<<<<< HEAD
+=======
+        {
+            onDelete: 'SET NULL', // this will set null in user table verification_token_id column
+        }
+>>>>>>> main
     )
     @JoinColumn()
     verificationToken: VerificationToken;

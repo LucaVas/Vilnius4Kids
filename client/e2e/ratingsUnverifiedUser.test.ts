@@ -31,7 +31,7 @@ test.describe.serial('unverified user rate playgrounds', () => {
     const map = page.getByTestId('playgrounds-map');
     await expect(map).not.toBeHidden({ timeout: 5000 });
 
-    await page.locator('div[role="button"]').first().click();
+    await page.locator('div[role="button"]').last().click();
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 

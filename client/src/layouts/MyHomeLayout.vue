@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { FwbNavbarLink } from 'flowbite-vue';
 import StackedLayout from './StackedLayout.vue';
-import { getUsername, logout } from '@/stores/user';
-import { useRouter } from 'vue-router';
+import { getUsername } from '@/stores/user';
 import { ref, onBeforeMount } from 'vue';
 import { trpc } from '../trpc';
-
-const router = useRouter();
-const usernameTag = ref('');
 
 const links = ref([
   { label: 'My playgrounds', name: 'MyHome' },
@@ -15,10 +10,7 @@ const links = ref([
   { label: 'Report an issue', name: 'NewReport' },
 ]);
 
-function logoutUser() {
-  logout();
-  router.push({ name: 'Login' });
-}
+const tag = ref('');
 
 onBeforeMount(async () => {
   const { isVerified } = await trpc.user.isUserVerified.query();
@@ -27,16 +19,10 @@ onBeforeMount(async () => {
     links.value.push({ label: 'My reports', name: 'MyReports' });
   }
   const username = await getUsername();
-  usernameTag.value = username;
+  tag.value = username;
 });
 </script>
 
 <template>
-  <StackedLayout :links="links" :tag="usernameTag">
-    <template #menu>
-      <FwbNavbarLink @click.prevent="logoutUser" link="#" class="flex content-center items-center"
-        >Logout</FwbNavbarLink
-      >
-    </template>
-  </StackedLayout>
+  <StackedLayout :links="links" :tag="tag"></StackedLayout>
 </template>

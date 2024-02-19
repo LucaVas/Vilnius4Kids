@@ -37,6 +37,7 @@ export class Report {
     category: ReportCategory;
 
     @ManyToOne(() => User, (user) => user.reports, {
+<<<<<<< HEAD
         onDelete: 'CASCADE',
     })
     user: User;
@@ -44,6 +45,13 @@ export class Report {
     @OneToMany(() => ReportStatusChangeLog, (log) => log.report, {
         onDelete: 'CASCADE',
     })
+=======
+        onDelete: 'CASCADE', // When a user is deleted, delete the report as well
+    })
+    user: User;
+
+    @OneToMany(() => ReportStatusChangeLog, (log) => log.report)
+>>>>>>> main
     changeLogs: ReportStatusChangeLog[];
 
     @ManyToOne(() => Playground, (playground) => playground.reports, {

@@ -116,100 +116,102 @@ onMounted(async () => {
       :options="mapInfo.options"
       class="map"
     >
-      <GMapMarker
-        :key="index"
-        v-for="(m, index) in mapInfo.markers"
-        :data-testid="'map-marker-' + m.id"
-        :position="m.position"
-        :clickable="true"
-        :draggable="false"
-        :icon="{
-          url: 'https://img.icons8.com/color/48/marker--v1.png',
-          scaledSize: { width: 25, height: 25 },
-          labelOrigin: { x: 16, y: -10 },
-        }"
-        @click="openMarker(m.id)"
-      >
-        <GMapInfoWindow
-          data-testid="infobox"
-          :closeclick="true"
-          @closeclick="openMarker(null)"
-          :opened="openedMarkerID === m.id"
-          :options="{
-            pixelOffset: {
-              width: 10,
-              height: 0,
-            },
-            maxWidth: 320,
-            maxHeight: 320,
+      <div data-testid="mapMarkers">
+        <GMapMarker
+          :key="index"
+          v-for="(m, index) in mapInfo.markers"
+          :data-testid="'mapMarker-' + m.id"
+          :position="m.position"
+          :clickable="true"
+          :draggable="false"
+          :icon="{
+            url: 'https://img.icons8.com/color/48/marker--v1.png',
+            scaledSize: { width: 25, height: 25 },
+            labelOrigin: { x: 16, y: -10 },
           }"
+          @click="openMarker(m.id)"
         >
-          <FwbCard>
-            <div class="flex max-w-64 flex-col bg-slate-100 p-4">
-              <h5
-                class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
-                data-testid="infobox-playground-address"
-              >
-                {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
-                {{ m.address.city }}
-              </h5>
-              <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
-                <FwbButton color="dark" outline size="md" class="p-1" square>
-                  <a :href="getAppUrl(m.position.lat, m.position.lng)"
-                    ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
-                  /></a>
-                </FwbButton>
-                <FwbButton
-                  v-if="!m.saved"
-                  :disabled="loadingSave"
-                  :loading="loadingSave"
-                  color="dark"
-                  square
-                  outline
-                  loading-position="suffix"
-                  @click="savePlayground(m.id)"
-                  ><template #prefix></template>Save
-                  <template #suffix></template>
-                </FwbButton>
-                <FwbButton
-                  v-else
-                  :loading="loadingSave"
-                  data-testid="save-playground-button"
-                  color="dark"
-                  size="md"
-                  loading-position="suffix"
-                  @click="unsavePlayground(m.id)"
-                  ><template #prefix></template>Unsave
-                  <template #suffix></template>
-                </FwbButton>
-
-                <FwbButton
-                  color="purple"
-                  square
-                  size="md"
-                  data-testid="go-to-playground-button"
-                  component="RouterLink"
-                  tag="router-link"
-                  :href="{ name: 'Playground', params: { id: m.id } } as any"
+          <GMapInfoWindow
+            data-testid="infobox"
+            :closeclick="true"
+            @closeclick="openMarker(null)"
+            :opened="openedMarkerID === m.id"
+            :options="{
+              pixelOffset: {
+                width: 10,
+                height: 0,
+              },
+              maxWidth: 320,
+              maxHeight: 320,
+            }"
+          >
+            <FwbCard>
+              <div class="flex max-w-64 flex-col bg-slate-100 p-4">
+                <h5
+                  class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
+                  data-testid="infobox-playground-address"
                 >
-                  <svg
-                    class="h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+                  {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
+                  {{ m.address.city }}
+                </h5>
+                <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
+                  <FwbButton color="dark" outline size="md" class="p-1" square>
+                    <a :href="getAppUrl(m.position.lat, m.position.lng)" target="_blank" rel="noreferrer"
+                      ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
+                    /></a>
+                  </FwbButton>
+                  <FwbButton
+                    v-if="!m.saved"
+                    :disabled="loadingSave"
+                    :loading="loadingSave"
+                    color="dark"
+                    square
+                    outline
+                    loading-position="suffix"
+                    @click="savePlayground(m.id)"
+                    ><template #prefix></template>Save
+                    <template #suffix></template>
+                  </FwbButton>
+                  <FwbButton
+                    v-else
+                    :loading="loadingSave"
+                    data-testid="save-playground-button"
+                    color="dark"
+                    size="md"
+                    loading-position="suffix"
+                    @click="unsavePlayground(m.id)"
+                    ><template #prefix></template>Unsave
+                    <template #suffix></template>
+                  </FwbButton>
+
+                  <FwbButton
+                    color="purple"
+                    square
+                    size="md"
+                    data-testid="go-to-playground-button"
+                    component="RouterLink"
+                    tag="router-link"
+                    :href="{ name: 'Playground', params: { id: m.id } } as any"
                   >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </FwbButton>
-              </FwbButtonGroup>
-            </div>
-          </FwbCard>
-        </GMapInfoWindow>
-      </GMapMarker>
+                    <svg
+                      class="h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </FwbButton>
+                </FwbButtonGroup>
+              </div>
+            </FwbCard>
+          </GMapInfoWindow>
+        </GMapMarker>
+      </div>
     </GMapMap>
 
     <FwbSpinner v-else size="12" color="purple" class="absolute left-1/2 top-1/2" />

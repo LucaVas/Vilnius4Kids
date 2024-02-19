@@ -1,9 +1,4 @@
-import {
-    Column,
-    Entity,
-    OneToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '..';
 
 @Entity('verification_tokens')
@@ -18,7 +13,7 @@ export class VerificationToken {
     createdAt: Date;
 
     @OneToOne(() => User, (user) => user.verificationToken, {
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE', // When a user is deleted, delete the verification token as well
     })
     user: User;
 }
