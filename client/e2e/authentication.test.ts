@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { loginNewUser } from 'utils/api';
 import { fakeUser } from 'utils/fakeData';
 
 /**
@@ -49,18 +48,26 @@ test.describe.serial('signup and login sequence', () => {
 });
 
 test('visitor can log out', async ({ page }) => {
-  await loginNewUser(page);
+  const myHomeLink = page.getByRole('link', { name: 'My playgrounds' });
+
+  await page.goto('/login');
+
+  const loginForm = page.getByRole('form', { name: 'Login' });
+  await loginForm.locator('input[type="email"]').fill(email);
+  await loginForm.locator('input[type="password"]').fill(password);
+  await loginForm.locator('button[type="submit"]').click();
+
+  await expect(myHomeLink).toBeVisible();
 
   await page.goto('/myHome');
-  const logoutLink = page.getByRole('link', { name: 'Logout' });
+  const logoutButton = page.getByTestId('logoutButton');
+  await logoutButton.click({ timeout: 30000 });
 
-  await logoutLink.click();
-
-  await expect(logoutLink).toBeHidden();
+  await expect(logoutButton).toBeHidden();
 
   await expect(page).toHaveURL('/login');
 
   await page.goto('/myHome');
-  await expect(logoutLink).toBeHidden();
+  await expect(logoutButton).toBeHidden();
   await expect(page).toHaveURL('/login');
 });

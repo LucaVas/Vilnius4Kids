@@ -31,7 +31,7 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     const map = page.getByTestId('playgrounds-map');
     await expect(map).not.toBeHidden({ timeout: 5000 });
 
-    await page.locator('div[role="button"]').first().click({ timeout: 50000 });
+    await page.locator('div[role="button"]').last().click({ timeout: 50000 });
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 
