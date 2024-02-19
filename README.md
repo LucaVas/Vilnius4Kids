@@ -21,6 +21,13 @@ Vilnius4Kids goes beyond being a playground locator. It's a community-driven pla
 
 To start using Vilnius4kids, visit [our page](https://vilniusforkids.mjjduaus31rmk.eu-central-1.cs.amazonlightsail.com/).
 
+## Report bug and issues
+
+If there are any issues to report, you can:
+
+1. Open an issue here on Github
+2. Reach out to us by using our dedicated [Discord channel](https://discord.gg/9es9xUQ8)
+
 ## Development
 
 Users will find the following features available:

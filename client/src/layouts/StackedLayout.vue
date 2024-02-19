@@ -1,18 +1,13 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import {
-  FwbAvatar,
   FwbFooter,
   FwbFooterCopyright,
   FwbFooterLink,
   FwbFooterLinkGroup,
-  FwbNavbar,
-  FwbNavbarCollapse,
-  FwbNavbarLink,
 } from 'flowbite-vue';
+import Navbar from '@/components/Navbar.vue';
 
-const { links } = defineProps<{
+const { links, tag } = defineProps<{
   links: {
     label: string;
     name: string;
@@ -20,45 +15,10 @@ const { links } = defineProps<{
   tag: string;
 }>();
 
-const route = useRoute();
-const router = useRouter();
-
-const navigation = computed(() =>
-  links.map((item) => ({
-    ...item,
-    isActive: route.name === item.name,
-  }))
-);
 </script>
 
 <template>
-  <div class="navbar">
-    <FwbNavbar>
-      <template #default="{ isShowMenu }">
-        <FwbNavbarCollapse :isShowMenu="isShowMenu" :class="isShowMenu ? 'collapsed' : null">
-          <!-- prettier-ignore -->
-          <FwbNavbarLink
-          v-for="link in navigation"
-          :key="link.name"
-          :is-active="route.name === link.name"
-          @click="router.push({ name: link.name });"
-          link-attr="to"
-          component="RouterLink"
-          class="flex content-center items-center"
-        >
-          {{ link.label }}
-        </FwbNavbarLink>
-          <slot name="menu" />
-        </FwbNavbarCollapse>
-        <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5">
-          <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
-            {{ tag }}
-          </p>
-          <FwbAvatar status="online" status-position="top-left" rounded />
-        </div>
-      </template>
-    </FwbNavbar>
-  </div>
+  <Navbar :links="links" :tag="tag" />
 
   <main class="flex w-screen flex-col items-center justify-start p-4">
     <div class="container h-full w-screen">
@@ -80,21 +40,6 @@ const navigation = computed(() =>
 </template>
 
 <style scoped>
-.navbar {
-  background-color: #fff;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.collapsed {
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1);
-  z-index: 100;
-  position: absolute;
-  top: 2.5rem;
-  left: 0;
-}
-
 main {
   min-height: 75svh;
 }
