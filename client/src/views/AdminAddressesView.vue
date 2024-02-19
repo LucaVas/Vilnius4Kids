@@ -13,41 +13,41 @@ import {
   FwbPagination,
 } from 'flowbite-vue';
 import { trpc } from '../trpc';
-import { Playground } from '../../../server/src/entities/playground/playground';
 import WarningModal from '@/components/WarningModal.vue';
-import EditPlaygroundModal from '@/components/EditPlaygroundModal.vue';
+import NewAddressModal from '@/components/NewAddressModal.vue';
 import {
-  type PlaygroundUpdate,
-  type PlaygroundInsert,
-} from '../../../server/src/entities/playground/schema';
-import NewPlaygroundModal from '@/components/NewPlaygroundModal.vue';
+  type AddressInsert,
+  type AddressUpdate,
+} from '../../../server/src/entities/address/schema';
+import { Address } from '../../../server/src/entities/address/address';
+import EditAddressModal from '@/components/EditAddressModal.vue';
 
 const pageLoaded = ref(false);
-const availablePlaygrounds = ref<Playground[]>([]);
-const playgroundsToShow = ref<Playground[]>();
-const filteredPlaygrounds = ref<Playground[]>();
+const availableAddresses = ref<Address[]>([]);
+const AddressesToShow = ref<Address[]>();
+const filteredAddresses = ref<Address[]>();
 const isFiltered = ref(false);
-const playgroundName = ref('');
+const addressName = ref('');
 const currentPage = ref(0);
-const playgroundLimit = 5;
+const addressLimit = 5;
 const totalPages = ref(1);
-const playgroundToDelete = ref(0);
-const playgroundToEdit = ref(0);
-const isDeletePlaygroundModalOpen = ref(false);
-const isEditPlaygroundModalOpen = ref(false);
-const isAddPlaygroundModalOpen = ref(false);
+const addressToDelete = ref(0);
+const addressToEdit = ref(0);
+const isDeleteAddressModalOpen = ref(false);
+const isEditAddressModalOpen = ref(false);
+const isNewAddressModalOpen = ref(false);
 
-function paginatePlaygrounds() {
-  if (availablePlaygrounds.value === undefined) return;
-  const start = currentPage.value * playgroundLimit;
-  const end = start + playgroundLimit;
+function paginateAddresses() {
+  if (availableAddresses.value === undefined) return;
+  const start = currentPage.value * addressLimit;
+  const end = start + addressLimit;
 
-  if (isFiltered.value && filteredPlaygrounds.value) {
-    playgroundsToShow.value = filteredPlaygrounds.value.filter(
+  if (isFiltered.value && filteredAddresses.value) {
+    AddressesToShow.value = filteredAddresses.value.filter(
       (_, index) => index >= start && index < end
     );
   } else {
-    playgroundsToShow.value = availablePlaygrounds.value.filter(
+    AddressesToShow.value = availableAddresses.value.filter(
       (_, index) => index >= start && index < end
     );
   }
@@ -70,70 +70,71 @@ function removeDiacritics(text: string) {
   return output;
 }
 
-function filterPlaygrounds() {
-  if (availablePlaygrounds.value === undefined) return;
-  if (playgroundName.value === '') {
+function filterAddresses() {
+  if (availableAddresses.value === undefined) return;
+  if (addressName.value === '') {
     isFiltered.value = false;
-    totalPages.value = Math.floor(availablePlaygrounds.value.length / playgroundLimit);
-    playgroundsToShow.value = availablePlaygrounds.value.slice(0, playgroundLimit);
+    totalPages.value = Math.floor(availableAddresses.value.length / addressLimit);
+    AddressesToShow.value = availableAddresses.value.slice(0, addressLimit);
     return;
   }
-  filteredPlaygrounds.value = availablePlaygrounds.value?.filter((playground) => {
-    const normalizedDistrict = removeDiacritics(playground.address.district.toLowerCase());
-    const normalizedStreet = removeDiacritics(playground.address.street.toLowerCase());
-    const normalizedInput = removeDiacritics(playgroundName.value.toLowerCase());
+  filteredAddresses.value = availableAddresses.value?.filter((address) => {
+    const normalizedDistrict = removeDiacritics(address.district.toLowerCase());
+    const normalizedStreet = removeDiacritics(address.street.toLowerCase());
+    const normalizedInput = removeDiacritics(addressName.value.toLowerCase());
 
     return (
       normalizedDistrict.includes(normalizedInput) || normalizedStreet.includes(normalizedInput)
     );
   });
-  totalPages.value = Math.floor(filteredPlaygrounds.value.length / playgroundLimit);
-  playgroundsToShow.value = filteredPlaygrounds.value.slice(0, playgroundLimit);
+  totalPages.value = Math.floor(filteredAddresses.value.length / addressLimit);
+  AddressesToShow.value = filteredAddresses.value.slice(0, addressLimit);
   isFiltered.value = true;
 }
 
-function openAddPlaygroundModal() {
-  isAddPlaygroundModalOpen.value = true;
+function openNewAddressModal() {
+  isNewAddressModalOpen.value = true;
 }
 
-function openDeletePlaygroundModal(id: number) {
-  playgroundToDelete.value = id;
-  isDeletePlaygroundModalOpen.value = true;
+function openDeleteAddressModal(id: number) {
+  addressToDelete.value = id;
+  isDeleteAddressModalOpen.value = true;
 }
 
-function openEditPlaygroundModal(id: number) {
-  playgroundToEdit.value = id;
-  isEditPlaygroundModalOpen.value = true;
+function openEditAddressModal(id: number) {
+  addressToEdit.value = id;
+  isEditAddressModalOpen.value = true;
 }
 
-async function deletePlayground() {
-  await trpc.playground.deletePlayground.mutate({ id: playgroundToDelete.value });
-  isDeletePlaygroundModalOpen.value = false;
+async function deleteAddress() {
+  await trpc.address.deleteAddress.mutate({ id: addressToDelete.value });
+  isDeleteAddressModalOpen.value = false;
   loadPage();
 }
 
-async function editPlayground(editedPlayground: PlaygroundUpdate) {
-  await trpc.playground.updatePlayground.mutate(editedPlayground);
-  availablePlaygrounds.value[playgroundToEdit.value] = {
-    ...availablePlaygrounds.value[playgroundToEdit.value],
-    ...editedPlayground,
+async function editAddress(editedAddress: AddressUpdate) {
+  await trpc.address.updateAddress.mutate(editedAddress);
+  availableAddresses.value[addressToEdit.value] = {
+    ...availableAddresses.value[addressToEdit.value],
+    ...editedAddress,
   };
-  isEditPlaygroundModalOpen.value = false;
+  isEditAddressModalOpen.value = false;
+  loadPage();
 }
 
-async function addPlayground(newPlayground: PlaygroundInsert) {
-  await trpc.playground.addPlayground.mutate(newPlayground);
-  isAddPlaygroundModalOpen.value = false;
+async function addAddress(newAddress: AddressInsert) {
+  await trpc.address.addAddress.mutate(newAddress);
+  isNewAddressModalOpen.value = false;
   loadPage();
 }
 
 async function loadPage() {
   pageLoaded.value = false;
 
-  const { playgrounds } = await trpc.playground.getPlaygrounds.query();
-  availablePlaygrounds.value = playgrounds;
-  playgroundsToShow.value = availablePlaygrounds.value.slice(0, playgroundLimit);
-  totalPages.value = Math.floor(playgrounds.length / playgroundLimit);
+  const { addresses, count } = await trpc.address.getAddresses.query();
+  availableAddresses.value = addresses;
+  AddressesToShow.value = availableAddresses.value.slice(0, addressLimit);
+  totalPages.value = Math.floor(count / addressLimit);
 
   pageLoaded.value = true;
 }
@@ -150,18 +151,18 @@ onBeforeMount(async () => {
 
   <div v-else class="px-2">
     <div class="align-center flex justify-end gap-2">
-      <FwbButton size="sm" color="purple" outline @click="openAddPlaygroundModal"
-        >New playground</FwbButton
+      <FwbButton size="sm" color="purple" outline @click="openNewAddressModal"
+        >New Address</FwbButton
       >
     </div>
     <div class="flex">
       <div class="flex-grow">
         <FwbInput
-          v-model="playgroundName"
-          label="Search for a playground"
-          placeholder="Enter a playground name"
+          v-model="addressName"
+          label="Search for an address"
+          placeholder="Enter an address"
           size="lg"
-          @keyup="filterPlaygrounds"
+          @keyup="filterAddresses"
         >
           <template #prefix>
             <svg
@@ -193,18 +194,16 @@ onBeforeMount(async () => {
       </FwbTableHead>
 
       <FwbTableBody>
-        <FwbTableRow v-for="playground in playgroundsToShow" :key="playground.id">
-          <FwbTableCell> {{ playground.address.district }}</FwbTableCell>
-          <FwbTableCell>
-            {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
-          >
+        <FwbTableRow v-for="address in AddressesToShow" :key="address.id">
+          <FwbTableCell> {{ address.district }}</FwbTableCell>
+          <FwbTableCell> {{ address.street }} {{ address.number }}</FwbTableCell>
           <FwbTableCell>
             <div class="align-items flex min-w-min justify-center gap-2">
               <FwbButton
                 size="sm"
                 color="purple"
                 square
-                @click="openDeletePlaygroundModal(playground.id)"
+                @click="openDeleteAddressModal(address.id)"
               >
                 <svg
                   fill="#ffffff"
@@ -246,7 +245,7 @@ onBeforeMount(async () => {
                 square
                 outline
                 class="px-2"
-                @click="openEditPlaygroundModal(playground.id)"
+                @click="openEditAddressModal(address.id)"
               >
                 Edit
               </FwbButton>
@@ -261,27 +260,27 @@ onBeforeMount(async () => {
         v-model="currentPage"
         :total-pages="totalPages >= 1 ? totalPages : 1"
         :slice-length="2"
-        @click="paginatePlaygrounds"
+        @click="paginateAddresses"
       ></FwbPagination>
     </div>
   </div>
   <WarningModal
-    v-if="isDeletePlaygroundModalOpen"
-    @close="isDeletePlaygroundModalOpen = false"
-    @delete="deletePlayground"
-    :playgroundId="playgroundToDelete"
+    v-if="isDeleteAddressModalOpen"
+    @close="isDeleteAddressModalOpen = false"
+    @delete="deleteAddress"
+    :playgroundId="addressToDelete"
     title="Playground "
     message="Are you sure you want to delete this playground?"
   />
-  <EditPlaygroundModal
-    v-if="isEditPlaygroundModalOpen"
-    @close="isEditPlaygroundModalOpen = false"
-    @edit="editPlayground"
-    :playground="availablePlaygrounds[playgroundToEdit]"
+  <EditAddressModal
+    v-if="isEditAddressModalOpen"
+    @close="isEditAddressModalOpen = false"
+    @edit="editAddress"
+    :address="availableAddresses.filter((address) => address.id === addressToEdit)[0]"
   />
-  <NewPlaygroundModal
-    v-if="isAddPlaygroundModalOpen"
-    @close="isAddPlaygroundModalOpen = false"
-    @create="addPlayground"
+  <NewAddressModal
+    v-if="isNewAddressModalOpen"
+    @close="isNewAddressModalOpen = false"
+    @create="addAddress"
   />
 </template>

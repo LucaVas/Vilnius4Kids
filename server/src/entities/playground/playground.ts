@@ -45,13 +45,7 @@ export class Playground {
     @JoinColumn()
     address: Address;
 
-<<<<<<< HEAD
-    @ManyToMany(() => User, (user) => user.playgrounds, {
-        onDelete: 'CASCADE',
-    })
-=======
     @ManyToMany(() => User, (user) => user.playgrounds)
->>>>>>> main
     @JoinTable()
     users: User[];
 
@@ -60,12 +54,6 @@ export class Playground {
     })
     reports: Report[];
 
-<<<<<<< HEAD
-    @OneToMany(() => Rating, (rating) => rating.playground, {
-        onDelete: 'CASCADE',
-    })
-=======
     @OneToMany(() => Rating, (rating) => rating.playground)
->>>>>>> main
     ratings: Rating[];
 }

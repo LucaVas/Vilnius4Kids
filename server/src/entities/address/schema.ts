@@ -38,7 +38,12 @@ export const addressInsertSchema = addressSchema.omit({
     createdAt: true,
     updatedAt: true,
 });
-export const addressUpdateSchema = addressSchema.required({ id: true }).partial();
+
+export const addressUpdateSchema = addressSchema
+    .omit({ createdAt: true, updatedAt: true })
+    .required({ id: true })
+    .partial();
+
 export const addressDeleteSchema = addressSchema.pick({ id: true });
 
 export type AddressSelect = z.infer<typeof addressSchema>;
