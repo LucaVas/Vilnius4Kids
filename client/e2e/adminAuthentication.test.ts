@@ -1,27 +1,19 @@
 import { test, expect } from '@playwright/test';
 import { fakeAdmin } from './utils/fakeData';
+import { signupNewUser } from 'utils/api';
 
 /**
  * Created on: 2024-02-19
  * Related issues: #41
  */
 
-const { email, username, password } = fakeAdmin();
+const { email, username, password, role } = fakeAdmin();
 
-test.describe.serial('signup and login sequence', () => {
-  test('admin can signup', async ({ page }) => {
-    await page.goto('/signup');
-    const successMessage = page.getByTestId('successMessage');
-    await expect(successMessage).toBeHidden();
+test.beforeAll(async () => {
+  await signupNewUser({ email, username, password, role });
+});
 
-    const form = page.getByRole('form', { name: 'Signup' });
-    await form.locator('input[id="username"]').fill(username);
-    await form.locator('input[type="email"]').fill(email);
-    await form.locator('input[type="password"]').fill(password);
-    await form.locator('button[type="submit"]').click();
-
-    await expect(successMessage).toBeVisible({ timeout: 5000 });
-  });
+test.describe.serial('login sequence', () => {
 
   test('admin can not access his dashboard before login', async ({ page }) => {
     await page.goto('/myHome');
