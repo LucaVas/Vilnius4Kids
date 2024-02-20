@@ -77,7 +77,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           {{ errorMessage }}
         </AlertError>
 
-        <div class="grid">
+        <div class="grid gap-2">
           <FwbButton
             class="flex items-center justify-center"
             color="purple"
@@ -88,6 +88,17 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             size="xl"
             >Sign up
             <template #suffix> </template>
+          </FwbButton>
+          <FwbButton
+            class="flex items-center justify-center"
+            color="purple"
+            component="RouterLink"
+            tag="router-link"
+            :href="{ name: 'Playgrounds' } as any"
+            outline
+            type="submit"
+            size="xl"
+            >Try without account
           </FwbButton>
         </div>
       </template>

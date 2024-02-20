@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { FwbButton } from 'flowbite-vue';
+import NewsCard from '@/components/NewsCard.vue';
+import ContactCard from '@/components/ContactCard.vue';
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800">
-    <div class="container mx-auto px-6 py-8">
+  <div class="flex flex-col gap-6">
+    <div class="container mx-auto bg-white px-6 py-8 shadow">
       <div class="items-center lg:flex" data-testid="homepage-hero-section">
         <div class="lg:w-1/2">
           <h2
@@ -50,6 +52,30 @@ import { FwbButton } from 'flowbite-vue';
           <img src="../assets/playing-children.svg" alt="family" />
         </div>
       </div>
+    </div>
+
+    <div class="flex flex-col items-center gap-4 px-2 sm:flex-row md:p-0">
+      <NewsCard
+        href="/playgrounds"
+        title="New demo released"
+        description="Now it's possible to use our application without an account. Try it now!"
+        class="hover:bg-gray-100 md:h-full"
+      />
+      <NewsCard
+        href="/signup"
+        title="Signup for all features"
+        description="Create an account to get access to all features of our application. It's free!"
+        class="hover:bg-gray-100 md:h-full"
+      />
+      <NewsCard
+        href="#"
+        title="Google Maps integration"
+        class="hover:bg-gray-100 md:h-full"
+        description="We have integrated Google Maps to make it easier to find playgrounds. Click on your favorite, and get the directions right away. Check it out!"
+      />
+    </div>
+    <div class="w-full">
+      <ContactCard />
     </div>
   </div>
 </template>

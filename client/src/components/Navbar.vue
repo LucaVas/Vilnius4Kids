@@ -30,7 +30,12 @@ const navigation = computed(() =>
 </script>
 
 <template>
-  <nav class="flex w-full items-center justify-between border-gray-200 bg-white p-4">
+  <nav class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4">
+    <!-- logo -->
+    <a href="/" class="flex items-center">
+      <img src="../assets/logo.png" class="h-12 rounded-full" alt="Vilniu4Kids Logo" />
+    </a>
+
     <!-- avatar -->
     <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5 bg-white">
       <FwbAvatar status="online" status-position="top-left" rounded />
