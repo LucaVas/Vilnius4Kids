@@ -44,15 +44,14 @@ test.describe.serial('Work with addresses dashboard', () => {
     await expect(searchInput).not.toBeHidden();
 
     page.locator('tr').first().waitFor();
-    expect(await page.locator('tr').count()).not.toBe(0);
+    const rows = page.locator('tr');
+    expect(await rows.count()).not.toBe(0);
 
     await searchInput.pressSequentially('fakeinput', { delay: 50 });
-    page.locator('tr').first().waitFor();
-    expect(await page.locator('tr').count()).toBe(1);
+    expect(await rows.count()).toBe(1);
 
     await searchInput.clear();
-    page.locator('tr').first().waitFor();
-    expect(await page.locator('tr').count()).toBe(6);
+    expect(await rows.count()).toBe(6);
   });
 
   test('user cannot create addresses without details', async ({ page }) => {
