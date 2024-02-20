@@ -3,11 +3,11 @@ import { Address, User } from '@server/entities';
 import { fakeAddress, fakeUser } from '@server/entities/tests/fakes';
 import { adminContext } from '@tests/utils/context';
 import { Role } from '@server/entities/user/Role';
-import categoryRouter from '../../..';
+import router from '..'
 
 const db = await createTestDatabase();
 const user = await db.getRepository(User).save(fakeUser({ role: Role.ADMIN }));
-const { deleteAddress } = categoryRouter.createCaller(
+const { deleteAddress } = router.createCaller(
     adminContext({ db }, user)
 );
 
