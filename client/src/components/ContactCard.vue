@@ -1,11 +1,24 @@
-import { FwbInput, FwbButton } from 'flowbite-vue';
+import { FwbInput, FwbButton, FwbAlert } from 'flowbite-vue';
 <script setup lang="ts">
-import { FwbButton } from 'flowbite-vue';
+import { FwbAlert, FwbButton } from 'flowbite-vue';
+import useErrorMessage from '../composables/useErrorMessage/index';
+import { ref } from 'vue';
+import { trpc } from '../trpc';
+
+const subscribed = ref(false);
+const successMessage = ref('');
+const email = ref('');
+
+const [subscribe, errorMessage] = useErrorMessage(async () => {
+  const { message } = await trpc.user.subscribe.mutate({ email: email.value });
+  successMessage.value = message;
+  subscribed.value = true;
+});
 </script>
 
 <template>
   <div class="max-w rounded-lg border border-gray-200 bg-white p-4 shadow sm:p-6 md:p-8">
-    <form class="space-y-6" action="#">
+    <form class="space-y-6" @submit.prevent="subscribe">
       <h5 class="text-xl font-medium text-black">Get more updates</h5>
       <p class="text-sm text-gray-500">
         Subscribe to our newsletter and get the latest updates and news.
@@ -30,12 +43,37 @@ import { FwbButton } from 'flowbite-vue';
           </div>
           <input
             type="text"
+            v-model="email"
             class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500"
             placeholder="your@email.com"
           />
         </div>
         <FwbButton color="purple">Subscribe</FwbButton>
       </div>
+
+      <FwbAlert
+        v-if="subscribed"
+        icon
+        type="success"
+        closable
+        border
+        class="mb-2 w-full"
+        data-testid="successMessage"
+      >
+        {{ successMessage }}
+      </FwbAlert>
+
+      <FwbAlert
+        v-if="errorMessage"
+        icon
+        type="danger"
+        closable
+        border
+        class="mb-2 w-full"
+        data-testid="errorMessage"
+      >
+        {{ errorMessage }}
+      </FwbAlert>
 
       <div class="text-sm font-medium text-gray-500">
         <p>By subscribing, you agree with ConvertKit's Terms of Service and Privacy Policy.</p>
