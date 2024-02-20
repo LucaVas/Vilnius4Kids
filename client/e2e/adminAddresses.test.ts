@@ -70,7 +70,7 @@ test.describe.serial('Work with addresses dashboard', () => {
     const errorMessage = page.getByTestId('errorMessage');
     await errorMessage.waitFor();
 
-    expect(errorMessage).not.toBeHidden()
+    await expect(errorMessage).toBeVisible();
   });
 
   test('user can create, edit and delete addresses', async ({ page }) => {
