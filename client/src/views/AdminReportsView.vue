@@ -1,17 +1,6 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount } from 'vue';
-import {
-  FwbSpinner,
-  FwbInput,
-  FwbTable,
-  FwbTableHead,
-  FwbTableHeadCell,
-  FwbTableBody,
-  FwbTableRow,
-  FwbTableCell,
-  FwbButton,
-  FwbPagination,
-} from 'flowbite-vue';
+import { FwbSpinner, FwbPagination } from 'flowbite-vue';
 import { trpc } from '../trpc';
 import ReportsTable from '@/components/ReportsTable.vue';
 import type { Report } from '@vilnius4kids/server/src/entities';
@@ -32,7 +21,7 @@ const sortingOptions = ref([
   { value: 'oldest', name: 'Oldest' },
 ]);
 
-const reportsToShow = ref<Report[]>();
+const reportsToShow = ref<Report[]>([]);
 const currentPage = ref(0);
 const reportsLimit = 5;
 const totalPages = ref(1);
@@ -58,8 +47,9 @@ function filterReports() {
     reportsToShow.value = availableReports.value.slice(0, reportsLimit);
     return;
   }
-  reportsToShow.value = availableReports.value.filter((report) => report.status === reportStatusSelected.value).slice(0, reportsLimit);;
-
+  reportsToShow.value = availableReports.value
+    .filter((report) => report.status === reportStatusSelected.value)
+    .slice(0, reportsLimit);
 }
 
 // async function editReport(editedPlayground: BarePlayground) {
