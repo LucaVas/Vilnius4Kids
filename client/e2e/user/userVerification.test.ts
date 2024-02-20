@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { findVerificationToken } from 'utils/api';
-import { fakeUser } from 'utils/fakeData';
+import { fakeUser } from '../utils/fakeData';
 
 /**
  * Created on: 2024-02-07

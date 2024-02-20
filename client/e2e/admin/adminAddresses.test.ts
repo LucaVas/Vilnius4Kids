@@ -55,6 +55,24 @@ test.describe.serial('Work with addresses dashboard', () => {
     expect(await page.locator('tr').count()).toBe(6);
   });
 
+  test('user cannot create addresses without details', async ({ page }) => {
+    await page.goto('/addresses');
+
+    const newAddressButton = page.getByTestId('newAddressButton');
+    await expect(newAddressButton).toBeVisible();
+    await newAddressButton.click();
+
+    const form = page.getByTestId('newAddressForm');
+    await expect(form).toBeVisible();
+
+    await page.getByText('Confirm').click();
+
+    const errorMessage = page.getByTestId('errorMessage');
+    await errorMessage.waitFor();
+
+    expect(errorMessage).toContainText(/Validation error/);
+  });
+
   test('user can create, edit and delete addresses', async ({ page }) => {
     await page.goto('/addresses');
 
@@ -75,12 +93,18 @@ test.describe.serial('Work with addresses dashboard', () => {
     await page.getByTestId('zipCodeInput').nth(1).fill('12345');
     await page.getByTestId('districtInput').nth(1).fill('Fake district');
     await page.getByTestId('cityInput').nth(1).fill('Fake city');
-
     await page.getByText('Confirm').click();
-
     await page.waitForTimeout(1000);
 
-    // edit
+    await searchInput.pressSequentially('fake district', { delay: 50 });
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(2);
+    expect(page.locator('tr').nth(1).locator('td').first()).toContainText('fake district');
+  });
+
+  test('user can edit addresses', async ({ page }) => {
+    await page.goto('/addresses');
+    const searchInput = page.getByRole('textbox', { name: 'Enter an address' });
 
     await searchInput.pressSequentially('fake district', { delay: 50 });
     page.locator('tr').first().waitFor();
@@ -92,21 +116,19 @@ test.describe.serial('Work with addresses dashboard', () => {
     await editButton.click();
 
     await page.getByTestId('cityInput').nth(1).fill('Fake city');
-
     await page.getByText('Confirm').click();
-
     await page.waitForTimeout(1000);
-
-    // delete
 
     await searchInput.pressSequentially('fake district', { delay: 50 });
     page.locator('tr').first().waitFor();
-    expect(await page.locator('tr').count()).toBe(2);
-    expect(page.locator('tr').nth(1).locator('td').first()).toContainText('fake district');
-    await expect(editButton).toBeVisible();
-    await editButton.click();
+    const deleteButton = page.getByTestId('deleteAddressButton');
+    await expect(deleteButton).toBeVisible();
+    await deleteButton.click();
+  });
 
-    await page.getByText('Cancel').click();
+  test('user can delete addresses', async ({ page }) => {
+    await page.goto('/addresses');
+    const searchInput = page.getByRole('textbox', { name: 'Enter an address' });
 
     await searchInput.pressSequentially('fake district', { delay: 50 });
     page.locator('tr').first().waitFor();
@@ -123,24 +145,5 @@ test.describe.serial('Work with addresses dashboard', () => {
     await searchInput.press('Enter');
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(1);
-  });
-
-  test('user cannot create addresses without details', async ({ page }) => {
-    await page.goto('/addresses');
-
-    const newAddressButton = page.getByTestId('newAddressButton');
-    await expect(newAddressButton).toBeVisible();
-    await newAddressButton.click();
-
-    const form = page.getByTestId('newAddressForm');
-    await expect(form).toBeVisible();
-
-    await page.getByText('Confirm').click();
-
-
-    const errorMessage = page.getByTestId('errorMessage');
-    await errorMessage.waitFor();
-
-    expect(errorMessage).toContainText(/Validation error/);
   });
 });

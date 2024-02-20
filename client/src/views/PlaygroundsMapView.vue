@@ -116,11 +116,10 @@ onMounted(async () => {
       :options="mapInfo.options"
       class="map"
     >
-      <div data-testid="mapMarkers">
+      <div>
         <GMapMarker
           :key="index"
           v-for="(m, index) in mapInfo.markers"
-          :data-testid="'mapMarker-' + m.id"
           :position="m.position"
           :clickable="true"
           :draggable="false"
@@ -156,7 +155,10 @@ onMounted(async () => {
                 </h5>
                 <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
                   <FwbButton color="dark" outline size="md" class="p-1" square>
-                    <a :href="getAppUrl(m.position.lat, m.position.lng)" target="_blank" rel="noreferrer"
+                    <a
+                      :href="getAppUrl(m.position.lat, m.position.lng)"
+                      target="_blank"
+                      rel="noreferrer"
                       ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
                     /></a>
                   </FwbButton>

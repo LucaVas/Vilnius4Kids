@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from 'utils/api';
-import { fakeUser } from 'utils/fakeData';
+import { signupNewUser } from '../utils/api';
+import { fakeUser } from '../utils/fakeData';
 
 /**
  * Created on: 2024-01-31

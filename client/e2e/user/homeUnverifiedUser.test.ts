@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from './utils/api';
-import { fakeUser, unverifiedFakeUser } from './utils/fakeData';
+import { signupNewUser } from '../utils/api';
+import { fakeUser, unverifiedFakeUser } from '../utils/fakeData';
 
 /**
  * Created on: 2024-02-08
@@ -37,7 +37,7 @@ test.describe.serial('unverified user home notification', () => {
     await form.locator('input[type="password"]').fill(unverifiedUser.password);
     await form.locator('button[type="submit"]').click();
     await expect(myHomeLink).toBeVisible();
-    
+
     await page.goto('/myHome');
 
     const notVerifiedInfoMessage = page.getByTestId('notVerifiedInfoMessage');
