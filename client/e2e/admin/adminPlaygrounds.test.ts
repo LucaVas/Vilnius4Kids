@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from 'utils/api';
-import { fakeAdmin } from 'utils/fakeData';
+import { signupNewUser } from '../utils/api';
+import { fakeAdmin } from '../utils/fakeData';
 
 /**
  * Created on: 2024-02-19
@@ -55,15 +55,41 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
     expect(await page.locator('tr').count()).toBe(6);
   });
 
+  test('create test address', async ({ page }) => {
+    await page.goto('/addresses');
+
+    const addressSearchInput = page.getByRole('textbox', { name: 'Enter an address' });
+
+    const newAddressButton = page.getByTestId('newAddressButton');
+    await expect(newAddressButton).toBeVisible();
+    await newAddressButton.click();
+
+    const addressForm = page.getByTestId('newAddressForm');
+    await expect(addressForm).toBeVisible();
+
+    await page.getByTestId('streetInput').nth(1).fill('test street');
+    await page.getByTestId('numberInput').nth(1).fill('1');
+    await page.getByTestId('zipCodeInput').nth(1).fill('12345');
+    await page.getByTestId('districtInput').nth(1).fill('test district');
+    await page.getByTestId('cityInput').nth(1).fill('test city');
+
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    await addressSearchInput.fill('test district');
+    await addressSearchInput.press('Enter');
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(2);
+  });
+
   test('user can create, edit and delete a playgrounds', async ({ page }) => {
+    // create
     await page.goto('/playgrounds');
 
     const searchInput = page.getByRole('textbox', { name: 'Enter a playground name' });
-
     const newPlaygroundButton = page.getByTestId('newPlaygroundButton');
     await expect(newPlaygroundButton).toBeVisible();
-
-    // create
 
     await newPlaygroundButton.click();
 
@@ -72,7 +98,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await page.getByTestId('latitudeInput').nth(1).fill('123');
     await page.getByTestId('longitudeInput').nth(1).fill('456');
-    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Address').selectOption('test street 1, test district, 12345 test city');
     await page.getByLabel('Description').fill('test description');
 
     await page.getByText('Confirm').click();
@@ -144,7 +170,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await page.getByTestId('latitudeInput').nth(1).fill('123');
     await page.getByTestId('longitudeInput').nth(1).fill('456');
-    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Address').selectOption('test street 1, test district, 12345 test city');
     await page.getByLabel('Description').fill('test description');
 
     await page.getByText('Confirm').click();
@@ -155,12 +181,15 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await page.getByTestId('latitudeInput').nth(1).fill('123');
     await page.getByTestId('longitudeInput').nth(1).fill('456');
-    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Address').selectOption('test street 1, test district, 12345 test city');
     await page.getByLabel('Description').fill('test description');
 
     await page.getByText('Confirm').click();
 
-    expect(page.getByTestId('errorMessage')).toContainText(
+    const errorMessage = page.getByTestId('errorMessage');
+    await errorMessage.waitFor();
+
+    expect(errorMessage).toContainText(
       'Playground already exists at this location'
     );
 
@@ -184,6 +213,30 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await searchInput.fill('test district');
     await searchInput.press('Enter');
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(1);
+  });
+
+  test('delete test address', async ({ page }) => {
+    // delete test address
+    await page.goto('/addresses');
+
+    const addressSearchInput = page.getByRole('textbox', { name: 'Enter an address' });
+
+    await addressSearchInput.fill('test district');
+    await addressSearchInput.press('Enter');
+    page.locator('tr').first().waitFor();
+    const deleteAddressButton = page.getByTestId('deleteAddressButton');
+    await expect(deleteAddressButton).toBeVisible();
+    await deleteAddressButton.click();
+
+    await expect(page.locator('h3')).toContainText('Are you sure you want to delete this address?');
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    await addressSearchInput.fill('test district');
+    await addressSearchInput.press('Enter');
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(1);
   });

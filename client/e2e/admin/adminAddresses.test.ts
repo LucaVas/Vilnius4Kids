@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from 'utils/api';
-import { fakeAdmin } from 'utils/fakeData';
+import { signupNewUser } from '../utils/api';
+import { fakeAdmin } from '../utils/fakeData';
 
 /**
  * Created on: 2024-02-20
@@ -137,6 +137,10 @@ test.describe.serial('Work with addresses dashboard', () => {
 
     await page.getByText('Confirm').click();
 
-    expect(page.getByTestId('errorMessage')).toContainText(/Validation error/);
+
+    const errorMessage = page.getByTestId('errorMessage');
+    await errorMessage.waitFor();
+
+    expect(errorMessage).toContainText(/Validation error/);
   });
 });

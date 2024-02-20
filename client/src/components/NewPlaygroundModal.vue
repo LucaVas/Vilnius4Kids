@@ -46,7 +46,7 @@ onMounted(async () => {
   availableAddresses.value = addresses;
   addressOptions.value = availableAddresses.value.map((address) => ({
     value: address.id.toString(),
-    name: `${address.street} ${address.number}, ${address.district} ,${address.zipCode} ${address.city}`,
+    name: `${address.street} ${address.number}, ${address.district}, ${address.zipCode} ${address.city}`,
   }));
 });
 </script>

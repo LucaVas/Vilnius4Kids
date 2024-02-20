@@ -4,6 +4,7 @@ import type { AppRouter } from '@vilnius4kids/server/src/shared/trpc';
 import { fakeAddress, fakeUser } from './fakeData';
 import type { Page } from '@playwright/test';
 import { superjson } from './superjson/common';
+import { AddressSelect } from '@vilnius4kids/server/src/entities/address/schema';
 
 const trpc = createTRPCProxyClient<AppRouter>({
   transformer: superjson,
@@ -24,7 +25,7 @@ export async function signupNewUser(userSignup = fakeUser()) {
 
 export async function addTestPlayground() {
   try {
-    const address = await trpc.address.addAddress.mutate(fakeAddress())
+    const address = await trpc.address.addAddress.mutate(fakeAddress());
     await trpc.playground.addPlayground.mutate({
       isPrivate: false,
       isOpen: true,
@@ -34,13 +35,13 @@ export async function addTestPlayground() {
       description: 'Test description',
     });
   } catch (error) {
-    console.error('ERROR', error)
+    console.error('Error while adding test playground', error);
   }
 }
 
 export async function findVerificationToken() {
-  const { token } = await trpc.verificationToken.getVerificationToken.query()
-  return token !== null
+  const { token } = await trpc.verificationToken.getVerificationToken.query();
+  return token !== null;
 }
 
 /**

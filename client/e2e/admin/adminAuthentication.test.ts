@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { fakeAdmin } from 'utils/fakeData';
+import { fakeAdmin } from '../utils/fakeData';
 
 /**
  * Created on: 2024-02-19
