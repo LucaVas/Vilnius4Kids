@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from '../utils/api';
-import { fakeAdmin } from '../utils/fakeData';
+import { signupNewUser } from './utils/api';
+import { fakeAdmin } from './utils/fakeData';
 
 /**
  * Created on: 2024-02-19
@@ -175,28 +175,28 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
     expect(await page.locator('tr').count()).toBe(2);
   });
 
-    test('user can delete a playground', async ({ page }) => {
-      await page.goto('/playgrounds');
-      const searchInput = page.getByRole('textbox', { name: 'Enter a playground name' });
+  test('user can delete a playground', async ({ page }) => {
+    await page.goto('/playgrounds');
+    const searchInput = page.getByRole('textbox', { name: 'Enter a playground name' });
 
-      await searchInput.pressSequentially('test district', { delay: 100 });
-      page.locator('tr').first().waitFor();
-      const deleteButton = page.getByTestId('deletePlaygroundButton');
-      await expect(deleteButton).toBeVisible();
-      await deleteButton.click();
+    await searchInput.pressSequentially('test district', { delay: 100 });
+    page.locator('tr').first().waitFor();
+    const deleteButton = page.getByTestId('deletePlaygroundButton');
+    await expect(deleteButton).toBeVisible();
+    await deleteButton.click();
 
-      await expect(page.locator('h3')).toContainText(
-        'Are you sure you want to delete this playground?'
-      );
-      await page.getByText('Confirm').click();
+    await expect(page.locator('h3')).toContainText(
+      'Are you sure you want to delete this playground?'
+    );
+    await page.getByText('Confirm').click();
 
-      await page.waitForTimeout(1500);
+    await page.waitForTimeout(1500);
 
-      await searchInput.fill('test district');
-      await searchInput.press('Enter');
-      page.locator('tr').first().waitFor();
-      expect(await page.locator('tr').count()).toBe(1);
-    });
+    await searchInput.fill('test district');
+    await searchInput.press('Enter');
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(1);
+  });
 
   test('user can delete a test address', async ({ page }) => {
     // delete test address

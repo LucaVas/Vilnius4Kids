@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from '../utils/api';
-import { fakeUser } from '../utils/fakeData';
+import { signupNewUser } from './utils/api';
+import { fakeUser } from './utils/fakeData';
 
 /**
  * Created on: 2024-01-29
@@ -31,10 +31,7 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     const map = page.getByTestId('playgrounds-map');
     await expect(map).not.toBeHidden({ timeout: 5000 });
 
-    await page
-      .locator('div[role="button"]')
-      .nth(5)
-      .click();
+    await page.locator('div[role="button"]').nth(5).click();
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 

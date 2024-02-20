@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { fakeUser } from '../utils/fakeData';
+import { fakeUser } from './utils/fakeData';
 
 /**
  * Created on: 2024-02-07
@@ -24,6 +24,5 @@ test.describe.serial('verification token sequence', () => {
 
     await expect(successMessage).toBeVisible({ timeout: 5000 });
     await expect(tokenMessage).toBeVisible({ timeout: 5000 });
-    });
-
+  });
 });

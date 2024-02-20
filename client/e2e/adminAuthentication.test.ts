@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { fakeUser } from '../utils/fakeData';
+import { fakeAdmin } from './utils/fakeData';
 
 /**
- * Created on: 2024-01-20
- * Related issues: #13
+ * Created on: 2024-02-19
+ * Related issues: #41
  */
 
-const { email, username, password } = fakeUser();
+const { email, username, password } = fakeAdmin();
 
 test.describe.serial('signup and login sequence', () => {
-  test('visitor can signup', async ({ page }) => {
+  test('admin can signup', async ({ page }) => {
     await page.goto('/signup');
     const successMessage = page.getByTestId('successMessage');
     await expect(successMessage).toBeHidden();
@@ -23,32 +23,32 @@ test.describe.serial('signup and login sequence', () => {
     await expect(successMessage).toBeVisible({ timeout: 5000 });
   });
 
-  test('visitor can not access his homepage before login', async ({ page }) => {
+  test('admin can not access his dashboard before login', async ({ page }) => {
     await page.goto('/myHome');
 
     // user is redirected to login page
     await page.waitForURL('/login');
   });
 
-  test('visitor can login', async ({ page }) => {
+  test('admin can login', async ({ page }) => {
     await page.goto('/login');
-    const myHomeLink = page.getByRole('link', { name: 'My playgrounds' });
-    await expect(myHomeLink).toBeHidden();
+    const playgroundsLink = page.getByRole('link', { name: 'Playgrounds' });
+    await expect(playgroundsLink).toBeHidden();
 
     const form = page.getByRole('form', { name: 'Login' });
     await form.locator('input[type="email"]').fill(email);
     await form.locator('input[type="password"]').fill(password);
     await form.locator('button[type="submit"]').click();
 
-    await expect(myHomeLink).toBeVisible();
+    await expect(playgroundsLink).toBeVisible();
 
     await page.reload();
-    await expect(myHomeLink).toBeVisible();
+    await expect(playgroundsLink).toBeVisible();
   });
 });
 
-test('visitor can log out', async ({ page }) => {
-  const myHomeLink = page.getByRole('link', { name: 'My playgrounds' });
+test('admin can log out', async ({ page }) => {
+  const dashboardLink = page.getByRole('link', { name: 'Playgrounds' });
 
   await page.goto('/login');
 
@@ -57,9 +57,9 @@ test('visitor can log out', async ({ page }) => {
   await loginForm.locator('input[type="password"]').fill(password);
   await loginForm.locator('button[type="submit"]').click();
 
-  await expect(myHomeLink).toBeVisible();
+  await expect(dashboardLink).toBeVisible();
 
-  await page.goto('/myHome');
+  await page.goto('/dashboard');
   const logoutButton = page.getByTestId('logoutButton');
   await logoutButton.click({ timeout: 30000 });
 
@@ -67,7 +67,7 @@ test('visitor can log out', async ({ page }) => {
 
   await expect(page).toHaveURL('/login');
 
-  await page.goto('/myHome');
+  await page.goto('/dashboard');
   await expect(logoutButton).toBeHidden();
   await expect(page).toHaveURL('/login');
 });

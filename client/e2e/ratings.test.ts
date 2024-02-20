@@ -1,13 +1,13 @@
 import { test, expect } from '@playwright/test';
-import { signupNewUser } from '../utils/api';
-import { unverifiedFakeUser } from '../utils/fakeData';
+import { signupNewUser } from './utils/api';
+import { fakeUser } from './utils/fakeData';
 
 /**
- * Created on: 2024-02-07
- * Related issues: #2
+ * Created on: 2024-01-28
+ * Related issues: #23
  */
 
-const { email, username, password, role } = unverifiedFakeUser();
+const { email, username, password, role } = fakeUser();
 
 test.beforeAll(async () => {
   await signupNewUser({ email, username, password, role });
@@ -24,8 +24,8 @@ test.beforeEach(async ({ page }) => {
   await expect(myHomeLink).toBeVisible();
 });
 
-test.describe.serial('report playgrounds', () => {
-  test('unverified user cannot make a report and cannot see his reports', async ({ page }) => {
+test.describe.serial('rate playgrounds', () => {
+  test('user can rate a playground and update their ratings', async ({ page }) => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
@@ -40,22 +40,23 @@ test.describe.serial('report playgrounds', () => {
     await goToBtn.click({ timeout: 5000 });
 
     const playgroundViewCard = page.getByTestId('playground-view-card');
-    await expect(playgroundViewCard).not.toBeHidden({ timeout: 15000 });
+    await expect(playgroundViewCard).not.toBeHidden({ timeout: 5000 });
 
-    const reportButton = page.getByTestId('report-button');
-    await expect(reportButton).not.toBeHidden();
-    await reportButton.click();
+    const ratingStars = page.getByTestId('rating-stars');
+    await expect(ratingStars).not.toBeHidden();
 
-    const notVerifiedMessage = page.getByTestId('notVerifiedMessage');
-    await expect(notVerifiedMessage).not.toBeHidden({ timeout: 5000 });
-    await expect(notVerifiedMessage).toHaveText(
-      'Only verified users can report on playgrounds. Make sure to confirm your email first.'
-    );
+    const starFour = page.getByTestId('rating-star-4');
+    const starColor = await starFour.getAttribute('fill');
 
-    const myReportsLink = page.getByRole('link', { name: 'My reports' });
-    await expect(myReportsLink).toBeHidden();
-
-    await page.goto('/myReports');
-    await expect(page).toHaveURL(/myHome/);
+    // already rated
+    if (starColor === '#fbbf24') {
+      await page.getByTestId('rating-star-3').click();
+      expect(await starFour.getAttribute('fill')).toEqual('#6a6969');
+      await starFour.click();
+      expect(await starFour.getAttribute('fill')).toEqual('#fbbf24');
+    } else {
+      await starFour.click();
+      expect(await starFour.getAttribute('fill')).toEqual('#fbbf24');
+    }
   });
 });
