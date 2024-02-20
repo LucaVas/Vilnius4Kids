@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { FwbModal, FwbButton, FwbInput } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
-import { type BareAddress, type AddressUpdate } from '../../../server/src/entities/address/schema';
+import { type BareAddress } from '../../../server/src/entities/address/schema';
+import { trpc } from '../trpc';
+import AlertError from '@/components/AlertError.vue';
+import useErrorMessage from '../composables/useErrorMessage/index';
 
 const props = defineProps<{
   address: BareAddress;
@@ -17,18 +20,19 @@ const addressToEdit = ref({
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'edit', value: AddressUpdate): void;
 }>();
 
-function editAddress() {
+const [editAddress, errorMessage] = useErrorMessage(async () => {
   if (!addressToEdit.value) return;
 
-  emit('edit', {
+  await trpc.address.updateAddress.mutate({
     ...addressToEdit.value,
     number: Number(addressToEdit.value.number),
     zipCode: Number(addressToEdit.value.zipCode),
   });
-}
+
+  emit('close');
+});
 
 onMounted(() => {
   console.log(props.address);
@@ -48,22 +52,56 @@ onMounted(() => {
       <form class="p-4 md:p-5">
         <div class="mb-4 grid grid-cols-3 gap-4">
           <div class="col-span-2">
-            <FwbInput type="text" v-model="addressToEdit.street" label="Street" />
+            <FwbInput
+              type="text"
+              v-model="addressToEdit.street"
+              data-testid="streetInput"
+              label="Street"
+            />
           </div>
           <div class="col-span-1">
-            <FwbInput type="number" v-model="addressToEdit.number" label="Number" />
+            <FwbInput
+              type="number"
+              v-model="addressToEdit.number"
+              data-testid="numberInput"
+              label="Number"
+            />
           </div>
           <div class="col-span-1">
-            <FwbInput type="number" v-model="addressToEdit.zipCode" label="Zip Code" />
+            <FwbInput
+              type="number"
+              v-model="addressToEdit.zipCode"
+              data-testid="zipCodeInput"
+              label="Zip Code"
+            />
           </div>
           <div class="col-span-2">
-            <FwbInput type="text" v-model="addressToEdit.district" label="District" />
+            <FwbInput
+              type="text"
+              v-model="addressToEdit.district"
+              data-testid="districtInput"
+              label="District"
+            />
           </div>
           <div class="col-span-3">
-            <FwbInput type="text" v-model="addressToEdit.city" label="City" />
+            <FwbInput
+              type="text"
+              v-model="addressToEdit.city"
+              data-testid="cityInput"
+              label="City"
+            />
           </div>
         </div>
       </form>
+      <AlertError
+        icon
+        type="danger"
+        v-if="errorMessage"
+        :message="errorMessage"
+        data-testid="errorMessage"
+      >
+        {{ errorMessage }}
+      </AlertError>
     </template>
     <template #footer>
       <div class="flex justify-between">

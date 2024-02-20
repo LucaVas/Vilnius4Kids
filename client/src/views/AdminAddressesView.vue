@@ -15,10 +15,6 @@ import {
 import { trpc } from '../trpc';
 import WarningModal from '@/components/WarningModal.vue';
 import NewAddressModal from '@/components/NewAddressModal.vue';
-import {
-  type AddressInsert,
-  type AddressUpdate,
-} from '../../../server/src/entities/address/schema';
 import { Address } from '../../../server/src/entities/address/address';
 import EditAddressModal from '@/components/EditAddressModal.vue';
 
@@ -95,6 +91,10 @@ function filterAddresses() {
 function openNewAddressModal() {
   isNewAddressModalOpen.value = true;
 }
+function closeNewAddressModal() {
+  isNewAddressModalOpen.value = false;
+  loadPage();
+}
 
 function openDeleteAddressModal(id: number) {
   addressToDelete.value = id;
@@ -105,26 +105,14 @@ function openEditAddressModal(id: number) {
   addressToEdit.value = id;
   isEditAddressModalOpen.value = true;
 }
-
-async function deleteAddress() {
-  await trpc.address.deleteAddress.mutate({ id: addressToDelete.value });
-  isDeleteAddressModalOpen.value = false;
-  loadPage();
-}
-
-async function editAddress(editedAddress: AddressUpdate) {
-  await trpc.address.updateAddress.mutate(editedAddress);
-  availableAddresses.value[addressToEdit.value] = {
-    ...availableAddresses.value[addressToEdit.value],
-    ...editedAddress,
-  };
+function closeEditAddressModal() {
   isEditAddressModalOpen.value = false;
   loadPage();
 }
 
-async function addAddress(newAddress: AddressInsert) {
-  await trpc.address.addAddress.mutate(newAddress);
-  isNewAddressModalOpen.value = false;
+async function deleteAddress() {
+  await trpc.address.deleteAddress.mutate({ id: addressToDelete.value });
+  isDeleteAddressModalOpen.value = false;
   loadPage();
 }
 
@@ -136,6 +124,7 @@ async function loadPage() {
   AddressesToShow.value = availableAddresses.value.slice(0, addressLimit);
   totalPages.value = Math.floor(count / addressLimit);
 
+  addressName.value = '';
   pageLoaded.value = true;
 }
 
@@ -151,7 +140,12 @@ onBeforeMount(async () => {
 
   <div v-else class="px-2">
     <div class="align-center flex justify-end gap-2">
-      <FwbButton size="sm" color="purple" outline @click="openNewAddressModal"
+      <FwbButton
+        size="sm"
+        color="purple"
+        outline
+        data-testid="newAddressButton"
+        @click="openNewAddressModal"
         >New Address</FwbButton
       >
     </div>
@@ -162,6 +156,7 @@ onBeforeMount(async () => {
           label="Search for an address"
           placeholder="Enter an address"
           size="lg"
+          data-testid="addressSearchInput"
           @keyup="filterAddresses"
         >
           <template #prefix>
@@ -193,7 +188,7 @@ onBeforeMount(async () => {
         </FwbTableHeadCell>
       </FwbTableHead>
 
-      <FwbTableBody>
+      <FwbTableBody data-testid="addressesTable">
         <FwbTableRow v-for="address in AddressesToShow" :key="address.id">
           <FwbTableCell> {{ address.district }}</FwbTableCell>
           <FwbTableCell> {{ address.street }} {{ address.number }}</FwbTableCell>
@@ -203,6 +198,7 @@ onBeforeMount(async () => {
                 size="sm"
                 color="purple"
                 square
+                data-testid="deleteAddressButton"
                 @click="openDeleteAddressModal(address.id)"
               >
                 <svg
@@ -245,6 +241,7 @@ onBeforeMount(async () => {
                 square
                 outline
                 class="px-2"
+                data-testid="editAddressButton"
                 @click="openEditAddressModal(address.id)"
               >
                 Edit
@@ -270,17 +267,12 @@ onBeforeMount(async () => {
     @delete="deleteAddress"
     :playgroundId="addressToDelete"
     title="Playground "
-    message="Are you sure you want to delete this playground?"
+    message="Are you sure you want to delete this address?"
   />
   <EditAddressModal
     v-if="isEditAddressModalOpen"
-    @close="isEditAddressModalOpen = false"
-    @edit="editAddress"
+    @close="closeEditAddressModal"
     :address="availableAddresses.filter((address) => address.id === addressToEdit)[0]"
   />
-  <NewAddressModal
-    v-if="isNewAddressModalOpen"
-    @close="isNewAddressModalOpen = false"
-    @create="addAddress"
-  />
+  <NewAddressModal v-if="isNewAddressModalOpen" @close="closeNewAddressModal" />
 </template>
