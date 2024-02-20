@@ -119,10 +119,12 @@ async function editPlayground(editedPlayground: PlaygroundUpdate) {
     ...editedPlayground,
   };
   isEditPlaygroundModalOpen.value = false;
+  loadPage()
 }
 
 async function addPlayground(newPlayground: PlaygroundInsert) {
   await trpc.playground.addPlayground.mutate(newPlayground);
+  console.log(newPlayground)
   isAddPlaygroundModalOpen.value = false;
   loadPage();
 }
@@ -135,6 +137,8 @@ async function loadPage() {
   playgroundsToShow.value = availablePlaygrounds.value.slice(0, playgroundLimit);
   totalPages.value = Math.floor(playgrounds.length / playgroundLimit);
 
+  playgroundName.value = '';
+  
   pageLoaded.value = true;
 }
 
@@ -204,6 +208,7 @@ onBeforeMount(async () => {
               <FwbButton
                 size="sm"
                 color="purple"
+                data-testid="deletePlaygroundButton"
                 square
                 @click="openDeletePlaygroundModal(playground.id)"
               >
@@ -247,6 +252,7 @@ onBeforeMount(async () => {
                 square
                 outline
                 class="px-2"
+                data-testid="editPlaygroundButton"
                 @click="openEditPlaygroundModal(playground.id)"
               >
                 Edit
@@ -278,7 +284,7 @@ onBeforeMount(async () => {
     v-if="isEditPlaygroundModalOpen"
     @close="isEditPlaygroundModalOpen = false"
     @edit="editPlayground"
-    :playground="availablePlaygrounds[playgroundToEdit]"
+    :playground="availablePlaygrounds.filter((playground) => playground.id === playgroundToEdit)[0]"
   />
   <NewPlaygroundModal
     v-if="isAddPlaygroundModalOpen"

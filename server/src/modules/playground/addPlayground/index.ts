@@ -7,7 +7,7 @@ export default adminProcedure
     .input(playgroundInsertSchema)
     .mutation(
         async ({
-            input: { isPrivate, isOpen, addressId, longitude, latitude },
+            input: { isPrivate, isOpen, addressId, longitude, latitude, description },
             ctx: { db },
         }) => {
             const address = await db
@@ -27,6 +27,7 @@ export default adminProcedure
                 address,
                 longitude,
                 latitude,
+                description
             });
 
             return {

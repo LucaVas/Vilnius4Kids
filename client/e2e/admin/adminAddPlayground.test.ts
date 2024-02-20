@@ -55,5 +55,77 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
     expect(await page.locator('tr').count()).toBe(6);
   });
 
-  
+  test('user can create, edit and delete a playgrounds', async ({ page }) => {
+    await page.goto('/playgrounds');
+
+    const searchInput = page.getByRole('textbox', { name: 'Enter a playground name' });
+
+    const newPlaygroundButton = page.getByTestId('newPlaygroundButton');
+    await expect(newPlaygroundButton).toBeVisible();
+
+    // create
+    
+    await newPlaygroundButton.click();
+
+    const form = page.getByTestId('newPlaygroundForm');
+    await expect(form).toBeVisible();
+
+    await page.getByTestId('latitudeInput').nth(1).fill('123');
+    await page.getByTestId('longitudeInput').nth(1).fill('456');
+    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Description').fill('test description');
+
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    // edit
+
+    await searchInput.pressSequentially('test district', { delay: 100 });
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(2);
+    expect(page.locator('tr').nth(1).locator('td').first()).toContainText('test district');
+
+    const editButton = page.getByTestId('editPlaygroundButton');
+    await expect(editButton).toBeVisible();
+    await editButton.click();
+
+    await expect(page.getByTestId('latitudeInput').nth(1)).toHaveValue(/[0-9]/);
+    await expect(page.getByTestId('longitudeInput').nth(1)).toHaveValue(/[0-9]/);
+    await expect(page.getByLabel('Description')).toHaveValue('test description');
+
+    await page.getByLabel('Description').fill('new description');
+
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    // delete
+
+    await searchInput.pressSequentially('test district', { delay: 100 });
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(2);
+    expect(page.locator('tr').nth(1).locator('td').first()).toContainText('test district');
+    await expect(editButton).toBeVisible();
+    await editButton.click();
+
+    await expect(page.getByLabel('Description')).toHaveValue('new description');
+
+    await page.getByText('Cancel').click();
+
+    const deleteButton = page.getByTestId('deletePlaygroundButton');
+    await expect(deleteButton).toBeVisible();
+    await deleteButton.click();
+
+    await expect(page.locator('h3')).toContainText(
+      'Are you sure you want to delete this playground?'
+    );
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    await searchInput.pressSequentially('test district', { delay: 100 });
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(1);
+  });
 });

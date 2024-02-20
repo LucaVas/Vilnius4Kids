@@ -36,6 +36,7 @@ function editPlayground() {
     latitude: Number(newPlaygroundInfo.value.latitude),
     longitude: Number(newPlaygroundInfo.value.longitude),
     addressId: Number(newPlaygroundInfo.value.addressId),
+    description: newPlaygroundInfo.value.description,
   });
 }
 
@@ -54,7 +55,7 @@ onMounted(async () => {
       <div class="flex items-center text-lg">New playground</div>
     </template>
     <template #body>
-      <form class="p-4 md:p-5">
+      <form class="p-4 md:p-5" data-testid="newPlaygroundForm">
         <div class="mb-4 grid grid-cols-2 gap-4">
           <div class="col-span-1">
             <FwbToggle
@@ -69,16 +70,17 @@ onMounted(async () => {
             />
           </div>
           <div class="col-span-1">
-            <FwbInput v-model="newPlaygroundInfo.latitude" label="Latitude" />
+            <FwbInput v-model="newPlaygroundInfo.latitude" label="Latitude" data-testid="latitudeInput" />
           </div>
           <div class="col-span-1">
-            <FwbInput v-model="newPlaygroundInfo.longitude" label="Longitude" />
+            <FwbInput v-model="newPlaygroundInfo.longitude" label="Longitude" data-testid="longitudeInput" />
           </div>
           <div class="col-span-2">
             <FwbSelect
               v-model="newPlaygroundInfo.addressId"
               :options="addressOptions"
               label="Address"
+              data-testid="addressSelect"
             />
           </div>
           <div class="col-span-2">
