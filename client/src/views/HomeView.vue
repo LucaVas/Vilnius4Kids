@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { FwbButton } from 'flowbite-vue';
-import NewsCard from '@/components/NewsCard.vue';
 import ContactCard from '@/components/ContactCard.vue';
+import CardsCarousel from '@/components/CardsCarousel.vue';
 </script>
 
 <template>
@@ -54,25 +54,10 @@ import ContactCard from '@/components/ContactCard.vue';
       </div>
     </div>
 
-    <div class="flex flex-col items-center gap-4 px-2 sm:flex-row md:p-0">
-      <NewsCard
-        href="/playgrounds"
-        title="New demo released"
-        description="Now it's possible to use our application without an account. Try it now!"
-        class="hover:bg-gray-100 md:h-full"
-      />
-      <NewsCard
-        href="/signup"
-        title="Signup for all features"
-        description="Create an account to get access to all features of our application. It's free!"
-        class="hover:bg-gray-100 md:h-full"
-      />
-      <NewsCard
-        href="#"
-        title="Google Maps integration"
-        class="hover:bg-gray-100 md:h-full"
-        description="We have integrated Google Maps to make it easier to find playgrounds. Click on your favorite, and get the directions right away. Check it out!"
-      />
+    <div
+      class="container mx-auto flex flex-col items-center gap-4 px-2 sm:max-h-96 sm:flex-row md:p-0"
+    >
+      <CardsCarousel />
     </div>
     <div class="w-full">
       <ContactCard />
