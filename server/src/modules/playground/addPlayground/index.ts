@@ -7,7 +7,14 @@ export default adminProcedure
     .input(playgroundInsertSchema)
     .mutation(
         async ({
-            input: { isPrivate, isOpen, addressId, longitude, latitude, description },
+            input: {
+                isPrivate,
+                isOpen,
+                addressId,
+                longitude,
+                latitude,
+                description,
+            },
             ctx: { db },
         }) => {
             const address = await db
@@ -21,18 +28,33 @@ export default adminProcedure
                 });
             }
 
-            const playground = await db.getRepository(Playground).save({
-                isPrivate,
-                isOpen,
-                address,
-                longitude,
-                latitude,
-                description
-            });
+            try {
+                const playground = await db.getRepository(Playground).save({
+                    isPrivate,
+                    isOpen,
+                    address,
+                    longitude,
+                    latitude,
+                    description,
+                });
 
-            return {
-                playground,
-                message: 'Playground added successfully.',
-            };
+                return {
+                    playground,
+                    message: 'Playground added successfully.',
+                };
+            } catch (error) {
+                if (!(error instanceof Error)) {
+                    throw error;
+                }
+
+                if (error.message.includes('duplicate key')) {
+                    throw new TRPCError({
+                        code: 'BAD_REQUEST',
+                        message: `Playground already exists at this location.`,
+                    });
+                }
+
+                throw error;
+            }
         }
     );

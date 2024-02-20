@@ -46,7 +46,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).not.toBe(0);
 
-    await searchInput.pressSequentially('fakeinput', { delay: 100 });
+    await searchInput.pressSequentially('fakeinput', { delay: 50 });
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(1);
 
@@ -64,7 +64,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
     await expect(newPlaygroundButton).toBeVisible();
 
     // create
-    
+
     await newPlaygroundButton.click();
 
     const form = page.getByTestId('newPlaygroundForm');
@@ -81,7 +81,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     // edit
 
-    await searchInput.pressSequentially('test district', { delay: 100 });
+    await searchInput.pressSequentially('test district', { delay: 50 });
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(2);
     expect(page.locator('tr').nth(1).locator('td').first()).toContainText('test district');
@@ -102,7 +102,7 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     // delete
 
-    await searchInput.pressSequentially('test district', { delay: 100 });
+    await searchInput.pressSequentially('test district', { delay: 50 });
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(2);
     expect(page.locator('tr').nth(1).locator('td').first()).toContainText('test district');
@@ -113,6 +113,8 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await page.getByText('Cancel').click();
 
+    await searchInput.pressSequentially('test district', { delay: 50 });
+    page.locator('tr').first().waitFor();
     const deleteButton = page.getByTestId('deletePlaygroundButton');
     await expect(deleteButton).toBeVisible();
     await deleteButton.click();
@@ -124,7 +126,64 @@ test.describe.serial('Work with playgrounds dahsboard', () => {
 
     await page.waitForTimeout(1000);
 
-    await searchInput.pressSequentially('test district', { delay: 100 });
+    await searchInput.fill('test district');
+    await searchInput.press('Enter');
+    page.locator('tr').first().waitFor();
+    expect(await page.locator('tr').count()).toBe(1);
+  });
+
+  test('user cannot create playground on existing location', async ({ page }) => {
+    await page.goto('/playgrounds');
+
+    const newPlaygroundButton = page.getByTestId('newPlaygroundButton');
+    await expect(newPlaygroundButton).toBeVisible();
+    await newPlaygroundButton.click();
+
+    const form = page.getByTestId('newPlaygroundForm');
+    await expect(form).toBeVisible();
+
+    await page.getByTestId('latitudeInput').nth(1).fill('123');
+    await page.getByTestId('longitudeInput').nth(1).fill('456');
+    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Description').fill('test description');
+
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    await newPlaygroundButton.click();
+
+    await page.getByTestId('latitudeInput').nth(1).fill('123');
+    await page.getByTestId('longitudeInput').nth(1).fill('456');
+    await page.getByLabel('Address').selectOption('test street 12, test district ,12345 test city');
+    await page.getByLabel('Description').fill('test description');
+
+    await page.getByText('Confirm').click();
+
+    expect(page.getByTestId('errorMessage')).toContainText(
+      'Playground already exists at this location'
+    );
+
+    await page.getByText('Cancel').click();
+
+    await page.waitForTimeout(1000);
+
+    const searchInput = page.getByRole('textbox', { name: 'Enter a playground name' });
+    await searchInput.pressSequentially('test district', { delay: 50 });
+    page.locator('tr').first().waitFor();
+    const deleteButton = page.getByTestId('deletePlaygroundButton');
+    await expect(deleteButton).toBeVisible();
+    await deleteButton.click();
+
+    await expect(page.locator('h3')).toContainText(
+      'Are you sure you want to delete this playground?'
+    );
+    await page.getByText('Confirm').click();
+
+    await page.waitForTimeout(1000);
+
+    await searchInput.fill('test district');
+    await searchInput.press('Enter');
     page.locator('tr').first().waitFor();
     expect(await page.locator('tr').count()).toBe(1);
   });

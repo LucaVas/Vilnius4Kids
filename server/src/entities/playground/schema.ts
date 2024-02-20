@@ -17,8 +17,8 @@ export const playgroundSchema = validates<BarePlayground>().with({
     isOpen: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    latitude: z.number(),
-    longitude: z.number(),
+    latitude: z.number({ required_error: 'Latitude is required.'}),
+    longitude: z.number({ required_error: 'Longitude is required.'}),
     description: z.string().max(500),
 });
 
@@ -28,7 +28,7 @@ export const playgroundInsertSchema = playgroundSchema
         createdAt: true,
         updatedAt: true,
     })
-    .extend({ addressId: z.number().int().positive() });
+    .extend({ addressId: z.number().int().positive({message: 'Address is required.'}) });
 export const playgroundUpdateSchema = playgroundSchema
     .omit({ addressId: true, createdAt: true, updatedAt: true })
     .required({ id: true })

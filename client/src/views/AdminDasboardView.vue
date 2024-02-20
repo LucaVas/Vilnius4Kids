@@ -13,14 +13,10 @@ import {
   FwbPagination,
 } from 'flowbite-vue';
 import { trpc } from '../trpc';
-import { Playground } from '../../../server/src/entities/playground/playground';
 import WarningModal from '@/components/WarningModal.vue';
 import EditPlaygroundModal from '@/components/EditPlaygroundModal.vue';
-import {
-  type PlaygroundUpdate,
-  type PlaygroundInsert,
-} from '../../../server/src/entities/playground/schema';
 import NewPlaygroundModal from '@/components/NewPlaygroundModal.vue';
+import { Playground } from '../../../server/src/entities/playground/playground';
 
 const pageLoaded = ref(false);
 const availablePlaygrounds = ref<Playground[]>([]);
@@ -95,6 +91,10 @@ function filterPlaygrounds() {
 function openAddPlaygroundModal() {
   isAddPlaygroundModalOpen.value = true;
 }
+function closeAddPlaygroundModal() {
+  isAddPlaygroundModalOpen.value = false;
+  loadPage();
+}
 
 function openDeletePlaygroundModal(id: number) {
   playgroundToDelete.value = id;
@@ -105,27 +105,14 @@ function openEditPlaygroundModal(id: number) {
   playgroundToEdit.value = id;
   isEditPlaygroundModalOpen.value = true;
 }
+function closeEditPlaygroundModal() {
+  isEditPlaygroundModalOpen.value = false;
+  loadPage();
+}
 
 async function deletePlayground() {
   await trpc.playground.deletePlayground.mutate({ id: playgroundToDelete.value });
   isDeletePlaygroundModalOpen.value = false;
-  loadPage();
-}
-
-async function editPlayground(editedPlayground: PlaygroundUpdate) {
-  await trpc.playground.updatePlayground.mutate(editedPlayground);
-  availablePlaygrounds.value[playgroundToEdit.value] = {
-    ...availablePlaygrounds.value[playgroundToEdit.value],
-    ...editedPlayground,
-  };
-  isEditPlaygroundModalOpen.value = false;
-  loadPage()
-}
-
-async function addPlayground(newPlayground: PlaygroundInsert) {
-  await trpc.playground.addPlayground.mutate(newPlayground);
-  console.log(newPlayground)
-  isAddPlaygroundModalOpen.value = false;
   loadPage();
 }
 
@@ -138,7 +125,7 @@ async function loadPage() {
   totalPages.value = Math.floor(playgrounds.length / playgroundLimit);
 
   playgroundName.value = '';
-  
+
   pageLoaded.value = true;
 }
 
@@ -154,7 +141,12 @@ onBeforeMount(async () => {
 
   <div v-else class="px-2">
     <div class="align-center flex justify-end gap-2">
-      <FwbButton size="sm" color="purple" data-testid="newPlaygroundButton" outline @click="openAddPlaygroundModal"
+      <FwbButton
+        size="sm"
+        color="purple"
+        data-testid="newPlaygroundButton"
+        outline
+        @click="openAddPlaygroundModal"
         >New playground</FwbButton
       >
     </div>
@@ -198,7 +190,11 @@ onBeforeMount(async () => {
       </FwbTableHead>
 
       <FwbTableBody data-testid="playgroundsTable">
-        <FwbTableRow v-for="playground in playgroundsToShow" :key="playground.id" :data-testid="'playgroundRow-' + playground.id">
+        <FwbTableRow
+          v-for="playground in playgroundsToShow"
+          :key="playground.id"
+          :data-testid="'playgroundRow-' + playground.id"
+        >
           <FwbTableCell> {{ playground.address.district }}</FwbTableCell>
           <FwbTableCell>
             {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
@@ -282,13 +278,8 @@ onBeforeMount(async () => {
   />
   <EditPlaygroundModal
     v-if="isEditPlaygroundModalOpen"
-    @close="isEditPlaygroundModalOpen = false"
-    @edit="editPlayground"
+    @close="closeEditPlaygroundModal"
     :playground="availablePlaygrounds.filter((playground) => playground.id === playgroundToEdit)[0]"
   />
-  <NewPlaygroundModal
-    v-if="isAddPlaygroundModalOpen"
-    @close="isAddPlaygroundModalOpen = false"
-    @create="addPlayground"
-  />
+  <NewPlaygroundModal v-if="isAddPlaygroundModalOpen" @close="closeAddPlaygroundModal" />
 </template>

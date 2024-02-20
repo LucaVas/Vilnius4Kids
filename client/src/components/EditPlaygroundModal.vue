@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { FwbModal, FwbButton, FwbTextarea, FwbToggle, FwbInput } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
+import AlertError from '@/components/AlertError.vue';
+import useErrorMessage from '../composables/useErrorMessage/index';
+import { trpc } from '../trpc';
 import { type BarePlayground } from '../../../server/src/entities/playground/schema';
 
 const props = defineProps<{
@@ -9,7 +12,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'edit', value: BarePlayground): void;
 }>();
 
 const playgroundEditInfo = ref({
@@ -20,17 +22,17 @@ const playgroundEditInfo = ref({
   description: '',
 });
 
-function editPlayground() {
-  const editedPlayground = {
+const [editPlayground, errorMessage] = useErrorMessage(async () => {
+  await trpc.playground.updatePlayground.mutate({
     ...props.playground,
     isPrivate: playgroundEditInfo.value.isPrivate,
     isOpen: playgroundEditInfo.value.isOpen,
     longitude: Number(props.playground.longitude),
     latitude: Number(props.playground.latitude),
     description: playgroundEditInfo.value.description,
-  };
-  emit('edit', editedPlayground);
-}
+  });
+  emit('close');
+});
 
 onMounted(() => {
   playgroundEditInfo.value.isPrivate = props.playground.isPrivate;
@@ -61,16 +63,36 @@ onMounted(() => {
             />
           </div>
           <div class="col-span-1">
-            <FwbInput type="number" data-testid="latitudeInput" v-model="playgroundEditInfo.latitude" label="Latitude" />
+            <FwbInput
+              type="number"
+              data-testid="latitudeInput"
+              v-model="playgroundEditInfo.latitude"
+              label="Latitude"
+            />
           </div>
           <div class="col-span-1">
-            <FwbInput type="number" data-testid="longitudeInput" v-model="playgroundEditInfo.longitude" label="Longitude" />
+            <FwbInput
+              type="number"
+              data-testid="longitudeInput"
+              v-model="playgroundEditInfo.longitude"
+              label="Longitude"
+              
+            />
           </div>
           <div class="col-span-2">
             <FwbTextarea v-model="playgroundEditInfo.description" :rows="4" label="Description" />
           </div>
         </div>
       </form>
+      <AlertError
+        icon
+        type="danger"
+        v-if="errorMessage"
+        :message="errorMessage"
+        data-testid="errorMessage"
+      >
+        {{ errorMessage }}
+      </AlertError>
     </template>
     <template #footer>
       <div class="flex justify-between">

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { FwbModal, FwbButton, FwbSelect, FwbTextarea, FwbInput, FwbToggle } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
-import { type PlaygroundInsert } from '../../../server/src/entities/playground/schema';
 import { trpc } from '../trpc';
 import { type AddressSelect } from '../../../server/src/entities/address/schema';
+import useErrorMessage from '../composables/useErrorMessage/index';
+import AlertError from '@/components/AlertError.vue';
 
 const availableAddresses = ref<AddressSelect[]>();
 const addressOptions = ref([
@@ -15,7 +16,6 @@ const addressOptions = ref([
 
 const emit = defineEmits<{
   (e: 'close'): void;
-  (e: 'create', value: PlaygroundInsert): void;
 }>();
 
 const newPlaygroundInfo = ref({
@@ -27,9 +27,9 @@ const newPlaygroundInfo = ref({
   addressId: '',
 });
 
-function editPlayground() {
+const [createPlayground, errorMessage] = useErrorMessage(async () => {
   if (!newPlaygroundInfo.value) return;
-  emit('create', {
+  await trpc.playground.addPlayground.mutate({
     ...newPlaygroundInfo.value,
     isOpen: newPlaygroundInfo.value.isOpen,
     isPrivate: newPlaygroundInfo.value.isPrivate,
@@ -38,7 +38,8 @@ function editPlayground() {
     addressId: Number(newPlaygroundInfo.value.addressId),
     description: newPlaygroundInfo.value.description,
   });
-}
+  emit('close');
+});
 
 onMounted(async () => {
   const { addresses } = await trpc.address.getAddresses.query();
@@ -70,10 +71,18 @@ onMounted(async () => {
             />
           </div>
           <div class="col-span-1">
-            <FwbInput v-model="newPlaygroundInfo.latitude" label="Latitude" data-testid="latitudeInput" />
+            <FwbInput
+              v-model="newPlaygroundInfo.latitude"
+              label="Latitude"
+              data-testid="latitudeInput"
+            />
           </div>
           <div class="col-span-1">
-            <FwbInput v-model="newPlaygroundInfo.longitude" label="Longitude" data-testid="longitudeInput" />
+            <FwbInput
+              v-model="newPlaygroundInfo.longitude"
+              label="Longitude"
+              data-testid="longitudeInput"
+            />
           </div>
           <div class="col-span-2">
             <FwbSelect
@@ -88,11 +97,20 @@ onMounted(async () => {
           </div>
         </div>
       </form>
+      <AlertError
+        icon
+        type="danger"
+        v-if="errorMessage"
+        :message="errorMessage"
+        data-testid="errorMessage"
+      >
+        {{ errorMessage }}
+      </AlertError>
     </template>
     <template #footer>
       <div class="flex justify-between">
         <FwbButton @click="$emit('close')" color="purple" outline> Cancel </FwbButton>
-        <FwbButton @click="editPlayground" color="purple"> Confirm </FwbButton>
+        <FwbButton @click="createPlayground" color="purple"> Confirm </FwbButton>
       </div>
     </template>
   </FwbModal>

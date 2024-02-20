@@ -7,7 +7,7 @@ export default authenticatedProcedure.query(async ({ ctx: { db } }) => {
             address: true,
             users: true,
         },
-    });
+    }) 
 
     return {
         playgrounds,
