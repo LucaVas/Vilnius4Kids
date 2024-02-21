@@ -30,7 +30,9 @@ const navigation = computed(() =>
 </script>
 
 <template>
-  <nav class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4">
+  <nav
+    class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4"
+  >
     <div class="flex gap-6">
       <!-- logo -->
       <a href="/" class="flex items-center">
@@ -146,7 +148,7 @@ const navigation = computed(() =>
   left: 0;
   height: 100vh;
   width: 100vw;
-  position: absolute;
+  position: fixed;
 }
 
 #hide-navbar {
