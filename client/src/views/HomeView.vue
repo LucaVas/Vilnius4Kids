@@ -54,13 +54,8 @@ import CardsCarousel from '@/components/CardsCarousel.vue';
       </div>
     </div>
 
-    <div
-      class="container mx-auto flex flex-col items-center gap-4 px-2 sm:max-h-96 sm:flex-row md:p-0"
-    >
-      <CardsCarousel />
-    </div>
-    <div class="w-full">
-      <ContactCard />
-    </div>
+    <CardsCarousel />
+
+    <ContactCard />
   </div>
 </template>

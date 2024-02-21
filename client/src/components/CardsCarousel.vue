@@ -43,7 +43,7 @@ const cards = [
         :title="card.title"
         :description="card.description"
         :date="card.date"
-        class="mr-2 hover:bg-gray-100"
+        class="mx-2 hover:bg-gray-100"
       />
     </Slide>
   </Carousel>
