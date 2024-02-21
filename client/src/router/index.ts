@@ -1,7 +1,4 @@
-import {
-  createRouter,
-  createWebHistory,
-} from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import { authenticate, hideForAuth, showForVerified } from './guards';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
@@ -88,6 +85,11 @@ const router = createRouter({
           path: '',
           name: 'Home',
           component: HomeViewVue,
+        },
+        {
+          path: '/demo',
+          name: 'Demo',
+          component: () => import('../views/DemoView.vue'),
         },
       ],
     },

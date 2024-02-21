@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { FwbButton } from 'flowbite-vue';
+import ContactCard from '@/components/ContactCard.vue';
+import CardsCarousel from '@/components/CardsCarousel.vue';
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800">
-    <div class="container mx-auto px-6 py-8">
+  <div class="flex flex-col gap-6">
+    <div class="container mx-auto bg-white px-6 py-8 shadow">
       <div class="items-center lg:flex" data-testid="homepage-hero-section">
         <div class="lg:w-1/2">
           <h2
@@ -50,6 +52,15 @@ import { FwbButton } from 'flowbite-vue';
           <img src="../assets/playing-children.svg" alt="family" />
         </div>
       </div>
+    </div>
+
+    <div
+      class="container mx-auto flex flex-col items-center gap-4 px-2 sm:max-h-96 sm:flex-row md:p-0"
+    >
+      <CardsCarousel />
+    </div>
+    <div class="w-full">
+      <ContactCard />
     </div>
   </div>
 </template>

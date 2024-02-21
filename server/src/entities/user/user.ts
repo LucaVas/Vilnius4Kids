@@ -13,6 +13,7 @@ import { Playground } from '../playground/playground';
 import { Report } from '../report/report';
 import { Rating } from '..';
 import { VerificationToken } from '../verification_token/verificationToken';
+import { Subscription } from '../subscription/subscription';
 import { Role } from './Role';
 
 @Entity('users')
@@ -65,4 +66,8 @@ export class User {
     )
     @JoinColumn()
     verificationToken: VerificationToken;
+
+    @OneToOne(() => Subscription, (subscription) => subscription.user)
+    @JoinColumn()
+    subscription: Subscription;
 }
