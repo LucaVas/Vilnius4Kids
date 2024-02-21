@@ -94,7 +94,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             color="purple"
             component="RouterLink"
             tag="router-link"
-            :href="{ name: 'Playgrounds' } as any"
+            :href="{ name: 'Demo' } as any"
             outline
             type="submit"
             size="xl"

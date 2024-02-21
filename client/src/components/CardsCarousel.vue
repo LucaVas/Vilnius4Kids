@@ -13,7 +13,7 @@ const cards = [
   {
     id: 0,
     date: '2024-02-20',
-    href: '/playgrounds',
+    href: '/demo',
     title: 'New demo released',
     description: "Now it's possible to use our application without an account. Try it now!",
   },

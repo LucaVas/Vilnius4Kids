@@ -87,8 +87,8 @@ const router = createRouter({
           component: HomeViewVue,
         },
         {
-          path: '/playgrounds',
-          name: 'Playgrounds',
+          path: '/demo',
+          name: 'Demo',
           component: () => import('../views/DemoView.vue'),
         },
       ],
