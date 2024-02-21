@@ -5,12 +5,12 @@ import CardsCarousel from '@/components/CardsCarousel.vue';
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
-    <div class="container mx-auto bg-white px-6 py-8 shadow">
-      <div class="items-center lg:flex" data-testid="homepage-hero-section">
-        <div class="lg:w-1/2">
+  <div class="flex flex-col gap-8">
+    <div class="container mx-auto rounded-lg bg-white px-2 py-6">
+      <div class="items-center px-12 py-20 lg:flex" data-testid="homepage-hero-section">
+        <div class="space-y-6 lg:w-1/2">
           <h2
-            class="flex items-center justify-center text-3xl font-bold text-gray-800 dark:text-gray-100 lg:justify-start"
+            class="flex items-center justify-center text-5xl font-bold text-gray-800 dark:text-gray-100 lg:justify-start"
           >
             Vilnius4Kids
           </h2>
