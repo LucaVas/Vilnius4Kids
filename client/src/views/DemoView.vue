@@ -2,12 +2,10 @@
 import { ref, onMounted } from 'vue';
 import { trpc } from '../trpc';
 import { Address } from '../../../server/src/entities/address/address';
-import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner } from 'flowbite-vue';
-import { authUserId } from '../stores/user';
+import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner, FwbAlert } from 'flowbite-vue';
 
 type Marker = {
   id: number;
-  saved: boolean;
   address: Address;
   position: {
     lat: number;
@@ -15,7 +13,6 @@ type Marker = {
   };
 };
 
-const loadingSave = ref(false);
 const pageLoaded = ref(false);
 
 const mapInfo = ref({
@@ -71,24 +68,6 @@ function openMarker(id: number | null) {
   openedMarkerID.value = id;
 }
 
-async function savePlayground(id: number) {
-  loadingSave.value = true;
-  const success = await trpc.playground.addFavoritePlayground.mutate({ id });
-  if (success.message) {
-    loadingSave.value = false;
-    mapInfo.value.markers.map((m) => (m.id === id ? (m.saved = true) : null));
-  }
-}
-
-async function unsavePlayground(id: number) {
-  loadingSave.value = true;
-  const success = await trpc.playground.deleteFavoritePlayground.mutate({ id });
-  if (success.message) {
-    loadingSave.value = false;
-    mapInfo.value.markers.map((m) => (m.id === id ? (m.saved = false) : null));
-  }
-}
-
 onMounted(async () => {
   pageLoaded.value = false;
   const { playgrounds } = await trpc.playground.getPlaygrounds.query();
@@ -99,7 +78,6 @@ onMounted(async () => {
       lng: Number(p.longitude),
     },
     address: p.address,
-    saved: p.users.some((user) => user.id === authUserId.value),
   }));
 
   pageLoaded.value = true;
@@ -107,7 +85,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- landing page with Tailwind -->
+  <div class="flex flex-col items-center gap-2">
+    <FwbAlert icon type="info" closable border class="mb-2 w-full" data-testid="infoMessage">
+      Several features are disabled for the demo. To see the full functionality,
+      <RouterLink
+        :to="{ name: 'Signup' }"
+        class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        >sign up.</RouterLink
+      >
+    </FwbAlert>
+  </div>
   <div class="flex items-center justify-center" data-testid="playgrounds-map">
     <GMapMap
       v-if="pageLoaded"
@@ -156,42 +143,21 @@ onMounted(async () => {
                 </h5>
                 <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
                   <FwbButton color="dark" outline size="md" class="p-1" square>
-                    <a :href="getAppUrl(m.position.lat, m.position.lng)" target="_blank" rel="noreferrer"
+                    <a
+                      :href="getAppUrl(m.position.lat, m.position.lng)"
+                      target="_blank"
+                      rel="noreferrer"
                       ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
                     /></a>
                   </FwbButton>
-                  <FwbButton
-                    v-if="!m.saved"
-                    :disabled="loadingSave"
-                    :loading="loadingSave"
-                    color="dark"
-                    square
-                    outline
-                    loading-position="suffix"
-                    @click="savePlayground(m.id)"
-                    ><template #prefix></template>Save
-                    <template #suffix></template>
-                  </FwbButton>
-                  <FwbButton
-                    v-else
-                    :loading="loadingSave"
-                    data-testid="save-playground-button"
-                    color="dark"
-                    size="md"
-                    loading-position="suffix"
-                    @click="unsavePlayground(m.id)"
-                    ><template #prefix></template>Unsave
-                    <template #suffix></template>
-                  </FwbButton>
-
+                  <FwbButton disabled color="dark" square outline>Save</FwbButton>
                   <FwbButton
                     color="purple"
+                    outline
+                    disabled
                     square
                     size="md"
                     data-testid="go-to-playground-button"
-                    component="RouterLink"
-                    tag="router-link"
-                    :href="{ name: 'Playground', params: { id: m.id } } as any"
                   >
                     <svg
                       class="h-5"
@@ -220,7 +186,6 @@ onMounted(async () => {
 
 <style scoped>
 .map {
-  margin: -1rem 0rem;
   width: 100svw;
   height: 75svh;
 }

@@ -30,13 +30,20 @@ const navigation = computed(() =>
 </script>
 
 <template>
-  <nav class="flex w-full items-center justify-between border-gray-200 bg-white p-4">
-    <!-- avatar -->
-    <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5 bg-white">
-      <FwbAvatar status="online" status-position="top-left" rounded />
-      <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
-        {{ tag }}
-      </p>
+  <nav class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4">
+    <div class="flex gap-6">
+      <!-- logo -->
+      <a href="/" class="flex items-center">
+        <img src="../assets/logo.png" class="h-12 rounded-full" alt="Vilniu4Kids Logo" />
+      </a>
+
+      <!-- avatar -->
+      <div v-if="tag !== ''" class="flex items-center justify-evenly gap-5 bg-white">
+        <FwbAvatar status="online" status-position="top-left" rounded />
+        <p class="max-w-24 overflow-auto font-medium" data-testid="username-tag">
+          {{ tag }}
+        </p>
+      </div>
     </div>
 
     <!-- burger menu button -->
