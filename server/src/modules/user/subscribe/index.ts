@@ -1,28 +1,38 @@
 import { publicProcedure } from '@server/trpc';
-import { User } from '@server/entities';
+import { Subscription, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-
-export const subscribeSchema = z.object({
-    email: z.string().toLowerCase().trim().describe('Email to subscribe.'),
-});
+import { subscriptionInsertSchema } from '@server/entities/subscription/schema';
+import mailSender from '@server/modules/emailService';
 
 export default publicProcedure
     .meta({ description: 'Endpoint dedicated for subscription.' })
-    .input(subscribeSchema)
+    .input(subscriptionInsertSchema)
     .mutation(async ({ input: { email }, ctx: { db } }) => {
         const user = await db.getRepository(User).findOne({
             where: { email },
         });
 
-        if (user) {
+        const sender = mailSender(null, email);
+        try {
+            await sender.sendSubscriptionEmail();
+        } catch (error) {
             throw new TRPCError({
-                message: `Something went wrong ...`,
-                code: 'BAD_REQUEST',
+                message: `Error while sending subscription email.`,
+                code: 'INTERNAL_SERVER_ERROR',
             });
         }
 
-        // TODO: implement subscription logic and send email
+        const subscription = db.getRepository(Subscription).create({
+            email,
+            isUser: !!user,
+            isContacted: true,
+        });
+
+        if (user) {
+            subscription.user = user;
+        }
+
+        await db.getRepository(Subscription).save(subscription);
 
         return {
             message: `Thank you for subscribing!`,
