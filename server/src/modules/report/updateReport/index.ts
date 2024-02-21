@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { Report, ReportStatusChangeLog, User } from '@server/entities';
 import mailSender from '@server/modules/emailService';
 import { adminProcedure } from '@server/trpc/adminProcedure';
+import logger from '@server/logger';
 import { reportUpdateSchema } from '../../../entities/report/schema';
 
 export default adminProcedure
@@ -24,16 +25,18 @@ export default adminProcedure
             ]);
 
             if (!user) {
+                logger.error(`User with ID [${authUser.id}] does not exist.`);
                 throw new TRPCError({
                     code: 'NOT_FOUND',
-                    message: `User with ID [${authUser.id}] does not exist.`,
+                    message: `Error while updating report.`,
                 });
             }
 
             if (affected === 0) {
+                logger.error(`Report with ID [${id}] does not exist.`);
                 throw new TRPCError({
                     code: 'NOT_FOUND',
-                    message: `Report with ID [${id}] does not exist.`,
+                    message: `Error while updating report.`,
                 });
             }
 
@@ -48,7 +51,7 @@ export default adminProcedure
             sender.sendReport(raw[0].id);
 
             return {
-                message: `Report with ID [${id}] updated successfully.`,
+                message: `Report updated successfully.`,
                 report: raw[0],
             };
         }

@@ -3,6 +3,8 @@ import { Subscription, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { subscriptionInsertSchema } from '@server/entities/subscription/schema';
 import mailSender from '@server/modules/emailService';
+import logger from '@server/logger';
+
 
 export default publicProcedure
     .meta({ description: 'Endpoint dedicated for subscription.' })
@@ -16,6 +18,7 @@ export default publicProcedure
         try {
             await sender.sendSubscriptionEmail();
         } catch (error) {
+            logger.error(`Error while sending subscription email: ${error}`);
             throw new TRPCError({
                 message: `Error while sending subscription email.`,
                 code: 'INTERNAL_SERVER_ERROR',

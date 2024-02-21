@@ -81,7 +81,7 @@ describe('Get user verification', async () => {
         );
 
         await expect(isUserVerified()).rejects.toThrow(
-            `User with ID ${notSavedUser.id} does not exist`
+            `There was an error while checking for user verification.`
         );
     });
 });

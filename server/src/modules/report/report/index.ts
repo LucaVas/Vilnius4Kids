@@ -9,6 +9,7 @@ import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
 import mailSender from '@server/modules/emailService';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import logger from '@server/logger';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
 export default authenticatedProcedure
@@ -27,20 +28,27 @@ export default authenticatedProcedure
             ]);
 
             if (!playground) {
+                logger.error(
+                    `Playground with ID [${playgroundId}] does not exist.`
+                );
                 throw new TRPCError({
-                    message: `Playground with ID [${playgroundId}] does not exist.`,
+                    message: `Error while creating report.`,
                     code: 'NOT_FOUND',
                 });
             }
             if (!reportCategory) {
+                logger.error(
+                    `Report category with ID [${reportCategoryId}] does not exist.`
+                );
                 throw new TRPCError({
-                    message: `Report category with ID [${reportCategoryId}] does not exist.`,
+                    message: `Error while creating report.`,
                     code: 'NOT_FOUND',
                 });
             }
             if (!user) {
+                logger.error(`User with ID [${authUser.id}] does not exist.`);
                 throw new TRPCError({
-                    message: `User with ID [${authUser.id}] does not exist.`,
+                    message: `Error while creating report.`,
                     code: 'NOT_FOUND',
                 });
             }
@@ -67,6 +75,7 @@ export default authenticatedProcedure
                     message: 'Report added successfully.',
                 };
             } catch (error) {
+                logger.error(`Error while sending report email: ${error}`);
                 throw new TRPCError({
                     message: `Error while sending report email.`,
                     code: 'INTERNAL_SERVER_ERROR',

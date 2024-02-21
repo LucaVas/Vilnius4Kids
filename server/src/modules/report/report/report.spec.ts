@@ -57,7 +57,7 @@ describe('Report a new issue', async () => {
                 description: 'Test report description',
                 reportCategoryId: 1,
             })
-        ).rejects.toThrow('Playground with ID [100] does not exist.');
+        ).rejects.toThrow('Error while creating report.');
     });
 
     it('User cannot report if category does not exist', async () => {
@@ -72,7 +72,7 @@ describe('Report a new issue', async () => {
                 description: 'Test report description',
                 reportCategoryId: 100,
             })
-        ).rejects.toThrow('Report category with ID [100] does not exist.');
+        ).rejects.toThrow('Error while creating report.');
     });
 
     it('Report cannot be created if user does not exist', async () => {
@@ -87,7 +87,7 @@ describe('Report a new issue', async () => {
                 description: 'Test report description',
                 reportCategoryId: 1,
             })
-        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+        ).rejects.toThrow(`Error while creating report.`);
     });
 
     it('User cannot report with a too short description', async () => {

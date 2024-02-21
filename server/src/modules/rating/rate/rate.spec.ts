@@ -96,7 +96,7 @@ describe('Rate playgrounds', async () => {
                 playgroundId: 100,
                 rating: 1.5,
             })
-        ).rejects.toThrow('Playground with ID [100] does not exist.');
+        ).rejects.toThrow('Error while rating playground.');
     });
 
     it('Playground cannot be rated if user does not exists', async () => {
@@ -106,7 +106,7 @@ describe('Rate playgrounds', async () => {
         const { rate } = router.createCaller(authContext({ db }, user));
 
         await expect(rate({ playgroundId: 1, rating: 1.5 })).rejects.toThrow(
-            `User with ID [${user.id}] does not exist.`
+            `Error while rating playground.`
         );
     });
 });

@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { User, VerificationToken } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { verificationTokenValidationSchema } from '@server/entities/verification_token/schema';
+import logger from '@server/logger';
 
 export default publicProcedure
     .input(verificationTokenValidationSchema)
@@ -13,16 +14,18 @@ export default publicProcedure
         });
 
         if (!user) {
+            logger.error(`User with email [${email}] does not exist.`)
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `User with email ${email} does not exist.`,
+                message: 'Error while verifying user.',
             });
         }
 
         if (user.isRegistered) {
+            logger.error(`User with email [${email}] has already been verified.`)
             throw new TRPCError({
                 code: 'BAD_REQUEST',
-                message: 'User has already been verified.',
+                message: 'Error while verifying user.',
             });
         }
 
@@ -32,9 +35,10 @@ export default publicProcedure
         );
 
         if (!isMatch) {
+            logger.error(`Invalid token for user with email [${email}].`)
             throw new TRPCError({
                 code: 'UNAUTHORIZED',
-                message: 'Invalid token, please try again.',
+                message: 'Error while verifying user.',
             });
         }
 

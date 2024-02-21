@@ -1,5 +1,6 @@
 import { Report, User } from '@server/entities';
 import { reportOptionalIdSchema } from '@server/entities/report/schema';
+import logger from '@server/logger';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 
@@ -10,8 +11,9 @@ export default authenticatedProcedure
         const user = await db.getRepository(User).findOneBy({ id });
 
         if (!user) {
+            logger.error(`User with ID [${id}] does not exist.`);
             throw new TRPCError({
-                message: `User with ID [${id}] does not exist.`,
+                message: 'Error while retrieving reports.',
                 code: 'NOT_FOUND',
             });
         }

@@ -37,6 +37,6 @@ describe('Add a new playground', async () => {
     it('User cannot add a new playground if address does not exist', async () => {
         await expect(
             addPlayground({ ...fakePlayground(), addressId: 100 })
-        ).rejects.toThrow('Address with ID [100] does not exist.');
+        ).rejects.toThrow('Error while inserting playground.');
     });
 });

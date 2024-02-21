@@ -25,6 +25,6 @@ describe('Delete an address', async () => {
             deleteAddress({
                 id: 100,
             })
-        ).rejects.toThrow('Address with ID [100] does not exist.');
+        ).rejects.toThrow('Error while deleting address.');
     });
 });

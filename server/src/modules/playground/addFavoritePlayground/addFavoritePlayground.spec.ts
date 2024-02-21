@@ -38,9 +38,9 @@ describe('Add a favorite playground', async () => {
                 authContext({ db }, user)
             );
 
-            await expect(
-                addFavoritePlayground({ id: 100 })
-            ).rejects.toThrow('Playground with ID [100] does not exist.');
+            await expect(addFavoritePlayground({ id: 100 })).rejects.toThrow(
+                'Error while adding playground to favorites.'
+            );
         }
     );
 
@@ -51,7 +51,7 @@ describe('Add a favorite playground', async () => {
         );
 
         await expect(addFavoritePlayground({ id: 1 })).rejects.toThrow(
-            `User with ID [${user.id}] does not exist.`
+            `Error while adding playground to favorites.`
         );
     });
 });

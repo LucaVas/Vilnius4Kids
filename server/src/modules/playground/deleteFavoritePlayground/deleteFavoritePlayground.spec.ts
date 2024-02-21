@@ -42,7 +42,7 @@ describe('Delete a playground from favorites', async () => {
         expect(favoritesAfter[0].playgrounds.length).toBe(0);
 
         expect(res.message).toEqual(
-            'Playground with ID 1 deleted successfully from favorites.'
+            'Playground deleted successfully from favorites.'
         );
     });
 
@@ -52,8 +52,8 @@ describe('Delete a playground from favorites', async () => {
             authContext({ db }, user)
         );
 
-        await expect(
-            deleteFavoritePlayground({ id: 1 })
-        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+        await expect(deleteFavoritePlayground({ id: 1 })).rejects.toThrow(
+            `Error while deleting playground from favorites.`
+        );
     })
 });

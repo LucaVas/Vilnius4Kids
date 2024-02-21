@@ -24,7 +24,7 @@ describe('Update an existing address', async () => {
         expect(address.street).toEqual('street');
         expect(address.city).toEqual('city');
         expect(address.zip_code).toEqual(12345);
-        expect(message).toEqual('Address with ID [1] updated successfully.');
+        expect(message).toEqual('Address updated successfully.');
     });
 
     it('User cannot update a non existing address', async () => {
@@ -33,11 +33,10 @@ describe('Update an existing address', async () => {
                 ...fakeAddress(),
                 id: 100,
             })
-        ).rejects.toThrow('Address with ID [100] does not exist.');
+        ).rejects.toThrow('Error while updating address.');
     });
 
     it('User can update partially an existing address', async () => {
-
         const existingAddress = fakeAddress();
         const existing = await db.getRepository(Address).save(existingAddress);
 
@@ -51,6 +50,6 @@ describe('Update an existing address', async () => {
         expect(address.street).toEqual('street');
         expect(address.city).toEqual(existingAddress.city);
         expect(address.zip_code).toEqual(existingAddress.zipCode);
-        expect(message).toEqual(`Address with ID [${existing.id}] updated successfully.`);
+        expect(message).toEqual(`Address updated successfully.`);
     });
 });

@@ -22,7 +22,7 @@ describe('Update an existing report', async () => {
             status: getStatusFromString('in progress')!,
         });
 
-        expect(message).toEqual('Report with ID [1] updated successfully.');
+        expect(message).toEqual('Report updated successfully.');
         expect(report.description).toEqual('description');
         expect(report.status).toEqual('in progress');
     });
@@ -39,7 +39,7 @@ describe('Update an existing report', async () => {
                 description: 'description',
                 status: getStatusFromString('in progress')!,
             })
-        ).rejects.toThrow('Report with ID [100] does not exist.');
+        ).rejects.toThrow('Error while updating report.');
     });
 
     it('User cannot update a report with an invalid status', async () => {
@@ -72,7 +72,7 @@ describe('Update an existing report', async () => {
                 description: 'Test report description',
                 status: getStatusFromString('in progress')!,
             })
-        ).rejects.toThrow(`User with ID [${user.id}] does not exist.`);
+        ).rejects.toThrow(`Error while updating report.`);
     });
 
     it('Report cannot be updated if user is not an administrator', async () => {

@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import logger from '@server/logger';
 import { playgroundDeleteSchema } from '../../../entities/playground/schema';
 import { User } from '../../../entities/user/user';
 
@@ -14,8 +15,9 @@ export default authenticatedProcedure
         });
 
         if (!user) {
+            logger.error(`User with ID [${authUser.id}] does not exist.`);
             throw new TRPCError({
-                message: `User with ID [${authUser.id}] does not exist.`,
+                message: `Error while deleting playground from favorites.`,
                 code: 'NOT_FOUND',
             });
         }
@@ -27,6 +29,6 @@ export default authenticatedProcedure
         await db.manager.save(user);
 
         return {
-            message: `Playground with ID ${id} deleted successfully from favorites.`,
+            message: `Playground deleted successfully from favorites.`,
         };
     });

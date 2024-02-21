@@ -23,7 +23,7 @@ describe('Get username', async () => {
         const user = db.getRepository(User).create(fakeUser());
         const { getUsername } = router.createCaller(authContext({ db }, user));
         await expect(getUsername()).rejects.toThrow(
-            `User with ID ${user.id} does not exist.`
+            `There was an error while retrieving username.`
         );
     });
 });

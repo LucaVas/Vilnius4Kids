@@ -1,9 +1,21 @@
 import config from '@server/config';
 import logger from '@server/logger';
 import transporter from './transporter';
-import buildMessage from './message';
+import buildMessage, { Message } from './message';
 
 const { smtp, clientPath, env } = config;
+
+async function send(message: Message) {
+    const info = await transporter.sendMail(message);
+    if (info.rejected.length !== 0) {
+        logger.error('Error while sending email: ', info.response);
+        throw new Error('Error while sending email.');
+    }
+    if (info.accepted) {
+        logger.info('Email sent successfully: ');
+        logger.info(info);
+    }
+}
 
 export default (username: string | null, recipient: string) => ({
     sendReport: async (reportId: number) => {
@@ -13,15 +25,7 @@ export default (username: string | null, recipient: string) => ({
         const message = buildMessage(smtp.sender, recipient, subject, html);
 
         if (env !== 'test') {
-            const info = await transporter.sendMail(message);
-            if (info.rejected.length !== 0) {
-                logger.error('Error while sending email: ', info.response);
-                throw new Error('Error while sending email.');
-            }
-            if (info.accepted) {
-                logger.info('Email sent successfully: ');
-                logger.info(info);
-            }
+            send(message);
         }
     },
     sendToken: async (token: string) => {
@@ -32,15 +36,7 @@ export default (username: string | null, recipient: string) => ({
         const message = buildMessage(smtp.sender, recipient, subject, html);
 
         if (env !== 'test') {
-            const info = await transporter.sendMail(message);
-            if (info.rejected.length !== 0) {
-                logger.error('Error while sending email: ', info.response);
-                throw new Error('Error while sending email.');
-            }
-            if (info.accepted) {
-                logger.info('Email sent successfully: ');
-                logger.info(info);
-            }
+            send(message);
         }
     },
     sendSubscriptionEmail: async () => {
@@ -50,15 +46,7 @@ export default (username: string | null, recipient: string) => ({
         const message = buildMessage(smtp.sender, recipient, subject, html);
 
         if (env !== 'test') {
-            const info = await transporter.sendMail(message);
-            if (info.rejected.length !== 0) {
-                logger.error('Error while sending subscription email: ', info.response);
-                throw new Error('Error while sending subscription email.');
-            }
-            if (info.accepted) {
-                logger.info('Subscription email sent successfully: ');
-                logger.info(info);
-            }
+            send(message);
         }
     },
 });
