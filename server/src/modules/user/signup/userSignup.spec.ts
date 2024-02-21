@@ -47,7 +47,7 @@ describe('Signup', async () => {
                 password: 'Password123.',
             })
         ).rejects.toThrow(
-            /Email or username are already taken, please try different ones./
+            'Email or username are already taken. Please, try different ones.'
         );
     });
 

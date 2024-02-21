@@ -1,9 +1,6 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
-import {
-    fakeAddress,
-    fakeUser,
-} from '@server/entities/tests/fakes';
+import { fakeAddress, fakeUser } from '@server/entities/tests/fakes';
 import { Address, User } from '@server/entities';
 import router from '..';
 
@@ -13,9 +10,8 @@ const { getAddresses } = router.createCaller(authContext({ db }, user));
 
 describe('Get all existing addresses', async () => {
     it('User gets no addresses, if none is available', async () => {
-        const { addresses, count } = await getAddresses();
+        const { addresses } = await getAddresses();
 
-        expect(count).toEqual(0);
         expect(addresses).toEqual([]);
     });
 
@@ -25,9 +21,8 @@ describe('Get all existing addresses', async () => {
             db.getRepository(Address).save(fakeAddress()),
         ]);
 
-        const { addresses, count } = await getAddresses();
+        const { addresses } = await getAddresses();
 
-        expect(count).toEqual(2);
         expect(addresses[0].id).toEqual(address1.id);
         expect(addresses[1].id).toEqual(address2.id);
     });

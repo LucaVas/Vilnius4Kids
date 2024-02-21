@@ -1,6 +1,7 @@
 import { Playground, Rating, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import logger from '@server/logger';
 import { ratingInsertSchema } from '../../../entities/rating/schema';
 
 export default authenticatedProcedure
@@ -13,15 +14,19 @@ export default authenticatedProcedure
             ]);
 
             if (!playground) {
+                logger.error(
+                    `Playground with ID [${playgroundId}] does not exist.`
+                );
                 throw new TRPCError({
-                    message: `Playground with ID [${playgroundId}] does not exist.`,
+                    message: `Error while rating playground.`,
                     code: 'NOT_FOUND',
                 });
             }
 
             if (!user) {
+                logger.error(`User with ID [${authUser.id}] does not exist.`);
                 throw new TRPCError({
-                    message: `User with ID [${authUser.id}] does not exist.`,
+                    message: 'Error while rating playground.',
                     code: 'NOT_FOUND',
                 });
             }

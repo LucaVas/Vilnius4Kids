@@ -1,6 +1,7 @@
 import { Playground, User } from '@server/entities';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
+import logger from '@server/logger';
 import { playgroundIdSchema } from '../../../entities/playground/schema';
 
 export default authenticatedProcedure
@@ -19,14 +20,16 @@ export default authenticatedProcedure
         ]);
 
         if (!playground) {
+            logger.error(`Playground with ID [${id}] does not exist.`);
             throw new TRPCError({
-                message: `Playground with ID [${id}] does not exist.`,
+                message: `Error while adding playground to favorites.`,
                 code: 'NOT_FOUND',
             });
         }
         if (!user) {
+            logger.error(`User with ID [${authUser.id}] does not exist.`);
             throw new TRPCError({
-                message: `User with ID [${authUser.id}] does not exist.`,
+                message: `Error while adding playground to favorites.`,
                 code: 'NOT_FOUND',
             });
         }

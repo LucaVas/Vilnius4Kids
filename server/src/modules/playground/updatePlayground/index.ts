@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { Playground } from '@server/entities';
 import { adminProcedure } from '@server/trpc/adminProcedure';
+import logger from '@server/logger';
 import { playgroundUpdateSchema } from '../../../entities/playground/schema';
 
 export default adminProcedure
@@ -16,14 +17,15 @@ export default adminProcedure
             .execute();
 
         if (affected === 0) {
+            logger.error(`Playground with ID [${id}] does not exist.`);
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `Playground with ID [${id}] does not exist.`,
+                message: `Error while updating playground.`,
             });
         }
 
         return {
-            message: `Playground with ID [${id}] updated successfully.`,
+            message: `Playground updated successfully.`,
             playground: raw[0],
         };
     });

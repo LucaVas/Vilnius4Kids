@@ -19,14 +19,12 @@ describe('Delete a report category', async () => {
             id: existingCategory.id,
         });
 
-        expect(message).toEqual(
-            'Report category with ID [1] deleted successfully.'
-        );
+        expect(message).toEqual('Report category deleted successfully.');
     });
 
     it('User cannot delete a non existing report category', async () => {
         await expect(deleteReportCategory({ id: 100 })).rejects.toThrow(
-            'Report category with ID [100] does not exist.'
+            'Error while deleting report category.'
         );
     });
 });

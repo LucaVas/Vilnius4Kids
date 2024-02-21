@@ -52,7 +52,7 @@ describe('User login', async () => {
                 email: 'test@test.com',
                 password: 'test12345',
             })
-        ).rejects.toThrow(/Invalid password./);
+        ).rejects.toThrow('Invalid email or password. Please, try again.');
     });
 
     it('Forbids login if user does not exist', async () => {
@@ -61,6 +61,6 @@ describe('User login', async () => {
                 email: 'user@notexist.com',
                 password: 'test12345',
             })
-        ).rejects.toThrow('User with email user@notexist.com does not exist.');
+        ).rejects.toThrow('Invalid email or password. Please, try again.');
     });
 });

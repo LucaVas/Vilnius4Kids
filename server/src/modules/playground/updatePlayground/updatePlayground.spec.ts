@@ -28,7 +28,7 @@ describe('Update an existing playground', async () => {
 
         expect(playground.is_open).toEqual(false);
         expect(playground.is_private).toEqual(true);
-        expect(message).toEqual('Playground with ID [1] updated successfully.');
+        expect(message).toEqual('Playground updated successfully.');
     });
 
     it('User cannot update a non existing playground', async () => {
@@ -37,7 +37,7 @@ describe('Update an existing playground', async () => {
                 ...fakePlayground(),
                 id: 100,
             })
-        ).rejects.toThrow('Playground with ID [100] does not exist.');
+        ).rejects.toThrow('Error while updating playground.');
     });
 
     it('User can update partially an existing playground', async () => {
@@ -54,7 +54,7 @@ describe('Update an existing playground', async () => {
         expect(playground.is_open).not.toBe(existing.isOpen);
         expect(playground.is_private).toEqual(existing.isPrivate);
         expect(message).toEqual(
-            `Playground with ID [${existing.id}] updated successfully.`
+            `Playground updated successfully.`
         );
     });
 });

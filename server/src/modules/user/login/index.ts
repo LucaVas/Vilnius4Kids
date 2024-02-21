@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '@server/config';
+import logger from '@server/logger';
 import { prepareTokenPayload } from '../tokenPayload';
 import { loginSchema } from './schema';
 
@@ -19,8 +20,9 @@ export default publicProcedure
         })) as Omit<User, 'email'> | undefined;
 
         if (!user) {
+            logger.error(`User with email ${email} does not exist.`);
             throw new TRPCError({
-                message: `User with email ${email} does not exist.`,
+                message: `Invalid email or password. Please, try again.`,
                 code: 'UNAUTHORIZED',
             });
         }
@@ -28,8 +30,9 @@ export default publicProcedure
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
+            logger.error(`Invalid password for user with email ${email}.`);
             throw new TRPCError({
-                message: 'Invalid password, please try again.',
+                message: 'Invalid email or password. Please, try again.',
                 code: 'UNAUTHORIZED',
             });
         }

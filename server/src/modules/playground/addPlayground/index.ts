@@ -1,6 +1,7 @@
 import { Address, Playground } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { adminProcedure } from '@server/trpc/adminProcedure';
+import logger from '@server/logger';
 import { playgroundInsertSchema } from '../../../entities/playground/schema';
 
 export default adminProcedure
@@ -15,8 +16,9 @@ export default adminProcedure
                 .findOneBy({ id: addressId });
 
             if (!address) {
+                logger.error(`Address with ID [${addressId}] does not exist.`);
                 throw new TRPCError({
-                    message: `Address with ID [${addressId}] does not exist.`,
+                    message: `Error while inserting playground.`,
                     code: 'NOT_FOUND',
                 });
             }
