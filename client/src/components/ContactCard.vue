@@ -19,8 +19,8 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
 <template>
   <div class="max-w rounded-lg border border-gray-200 bg-white p-4 shadow sm:p-6 md:p-8">
     <form class="space-y-6" @submit.prevent="subscribe">
-      <h5 class="text-xl font-medium text-black">Get more updates</h5>
-      <p class="text-sm text-gray-500">
+      <h5 class="text-xl font-medium text-black">Stay tuned!</h5>
+      <p class="text-sm font-medium text-gray-500">
         Subscribe to our newsletter and get the latest updates and news.
       </p>
       <div class="flex gap-2 lg:w-1/2">
@@ -75,8 +75,8 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
         {{ errorMessage }}
       </FwbAlert>
 
-      <div class="text-sm font-medium text-gray-500">
-        <p>By subscribing, you agree with ConvertKit's Terms of Service and Privacy Policy.</p>
+      <div class="text-sm text-gray-500">
+        <p>By subscribing, you agree with Vilnius4Kids's Terms of Service and Privacy Policy.</p>
       </div>
     </form>
   </div>

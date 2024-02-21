@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import { Carousel, Slide } from 'vue3-carousel';
 import NewsCard from '@/components/NewsCard.vue';
 
 const breakpoints = {
@@ -12,18 +12,21 @@ const breakpoints = {
 const cards = [
   {
     id: 0,
+    date: '2024-02-20',
     href: '/playgrounds',
     title: 'New demo released',
     description: "Now it's possible to use our application without an account. Try it now!",
   },
   {
     id: 1,
+    date: '2024-02-11',
     href: '/signup',
     title: 'Signup for all features',
     description: "Create an account to get access to all features of our application. It's free!",
   },
   {
     id: 2,
+    date: '2024-02-15',
     href: '#',
     title: 'Google Maps integration',
     description:
@@ -39,6 +42,7 @@ const cards = [
         :href="card.href"
         :title="card.title"
         :description="card.description"
+        :date="card.date"
         class="mr-2 hover:bg-gray-100"
       />
     </Slide>
