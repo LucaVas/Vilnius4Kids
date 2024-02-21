@@ -1,7 +1,7 @@
 import config from '@server/config';
 import logger from '@server/logger';
 import transporter from './transporter';
-import buildMessage, { Message } from './message';
+import buildMessage, { type Message } from './message';
 
 const { smtp, clientPath, env } = config;
 
