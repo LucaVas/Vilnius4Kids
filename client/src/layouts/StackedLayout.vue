@@ -1,10 +1,5 @@
 <script lang="ts" setup>
-import {
-  FwbFooter,
-  FwbFooterCopyright,
-  FwbFooterLink,
-  FwbFooterLinkGroup,
-} from 'flowbite-vue';
+import { FwbFooter, FwbFooterCopyright, FwbFooterLink, FwbFooterLinkGroup } from 'flowbite-vue';
 import Navbar from '@/components/Navbar.vue';
 
 const { links, tag } = defineProps<{
@@ -14,16 +9,13 @@ const { links, tag } = defineProps<{
   }[];
   tag: string;
 }>();
-
 </script>
 
 <template>
   <Navbar :links="links" :tag="tag" />
 
-  <main class="flex w-screen flex-col items-center justify-start p-4">
-    <div class="container h-full w-screen">
-      <RouterView />
-    </div>
+  <main class="flex w-screen flex-col items-center justify-start px-6 py-8">
+    <RouterView />
   </main>
 
   <div>

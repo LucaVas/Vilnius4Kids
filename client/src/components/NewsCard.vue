@@ -19,7 +19,7 @@ const { href, title, description } = defineProps({
   <div
     class="flex flex-col items-start justify-center gap-4 rounded-lg border border-gray-200 bg-white p-8"
   >
-    <a href="#">
+    <a :href="href">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
         {{ title }}
       </h5>

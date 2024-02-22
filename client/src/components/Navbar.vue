@@ -31,7 +31,7 @@ const navigation = computed(() =>
 
 <template>
   <nav
-    class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4"
+    class="flex w-full items-center justify-between border-gray-200 bg-white px-6 py-4 shadow-md"
   >
     <div class="flex gap-6">
       <!-- logo -->

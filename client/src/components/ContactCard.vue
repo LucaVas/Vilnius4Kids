@@ -17,7 +17,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="max-w rounded-lg border-gray-200 bg-white p-8 sm:p-6 md:p-8">
+  <div class="max-w rounded-lg border-gray-200 bg-white p-10 sm:p-6 md:p-8">
     <form class="space-y-8" @submit.prevent="subscribe">
       <h5 class="text-2xl font-medium text-black">Stay tuned!</h5>
       <p class="text-sm font-medium text-gray-500">
