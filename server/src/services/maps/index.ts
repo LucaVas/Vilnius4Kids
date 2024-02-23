@@ -1,7 +1,7 @@
 import {
     Client,
     TravelMode,
-    LatLng,
+    type LatLng,
 } from '@googlemaps/google-maps-services-js';
 import config from '@server/config';
 import logger from '@server/logger';
