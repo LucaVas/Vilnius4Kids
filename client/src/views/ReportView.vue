@@ -51,18 +51,30 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="!pageLoaded">
-    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2"/>
+    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
-  <div v-else class="flex h-full w-full flex-col bg-slate-300 rounded-lg p-4">
-    <form class="mb-6">
+  <div v-else class="flex h-full w-full flex-col rounded-lg bg-white p-6">
+    <form class="mb-8 space-y-6 border border-transparent border-b-gray-200 pb-8">
       <div class="mb-2 flex flex-row justify-between">
         <FwbHeading tag="h5" class="w-full"> Report details </FwbHeading>
-        <FwbHeading tag="h5" class="max-w-max text-slate-500"> # {{ currentReport?.id }} </FwbHeading>
+        <FwbHeading tag="h5" class="max-w-max text-slate-500">
+          # {{ currentReport?.id }}
+        </FwbHeading>
       </div>
-      
+
       <div class="mb-2 flex flex-row justify-between gap-2">
-        <FwbInput class="w-1/2 text-black" :placeholder="currentReport!.category.topic" label="Topic" disabled />
-        <FwbInput class="w-1/2 text-black" :placeholder="currentReport!.category.name" label="Category" disabled />
+        <FwbInput
+          class="w-1/2 text-black"
+          :placeholder="currentReport!.category.topic"
+          label="Topic"
+          disabled
+        />
+        <FwbInput
+          class="w-1/2 text-black"
+          :placeholder="currentReport!.category.name"
+          label="Category"
+          disabled
+        />
       </div>
       <div class="mb-4">
         <FwbInput
@@ -72,7 +84,7 @@ onBeforeMount(async () => {
           disabled
         />
       </div>
-      <div class="flex flex-col sm:flex-row gap-2 justify-between sm:items-center">
+      <div class="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
         <div class="flex items-center gap-2">
           <FwbP class="text-sm">Status</FwbP>
           <FwbBadge v-if="currentReport!.status === 'open'" size="sm" type="green">Open</FwbBadge>
@@ -81,13 +93,15 @@ onBeforeMount(async () => {
           >
           <FwbBadge v-if="currentReport!.status === 'closed'" size="sm" type="red">Closed</FwbBadge>
         </div>
-        <div class="flex gap-2">
-          <FwbP class="text-sm"> Opened: {{ getAge(currentReport!.createdAt) }} days ago | </FwbP>
-          <FwbP class="text-sm"
-            > Last update:
-            {{ getAge(currentReport!.changeLogs[currentReport!.changeLogs.length - 1].changedAt) }}
-            days ago </FwbP
+        <div class="flex flex-col gap-2 sm:flex-row">
+          <FwbP class="border border-transparent p-0 text-sm sm:border-r-black sm:pr-2">
+            Opened: {{ getAge(currentReport!.createdAt) }} days ago</FwbP
           >
+          <FwbP class="border border-transparent text-sm">
+            Last update:
+            {{ getAge(currentReport!.changeLogs[currentReport!.changeLogs.length - 1].changedAt) }}
+            days ago
+          </FwbP>
         </div>
       </div>
     </form>

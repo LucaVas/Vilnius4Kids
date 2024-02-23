@@ -105,10 +105,10 @@ async function removePlaygroundFromFavorites(id: number) {
   <div v-if="!pageLoaded">
     <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
-  <div v-else class="flex h-full w-full flex-col gap-2 p-4" data-testid="playground-view-card">
+  <div v-else class="mb-4 flex h-full w-full flex-col gap-4" data-testid="playground-view-card">
     <FwbCarousel :pictures="pictures" slide :slide-interval="5000" />
-    <div class="mt-2 flex flex-col items-start gap-2 sm:flex-row sm:items-center" id="badges">
-      <div class="flex flex-row justify-evenly">
+    <div class="mt-2 flex flex-col items-start gap-4 sm:flex-row sm:items-center" id="badges">
+      <div class="flex flex-row justify-evenly gap-2">
         <FwbBadge size="sm" type="indigo">{{ currentPlayground.address.district }}</FwbBadge>
         <FwbBadge v-if="currentPlayground.isOpen" class="ml-2" size="sm" type="green"
           >Open</FwbBadge
@@ -173,21 +173,50 @@ async function removePlaygroundFromFavorites(id: number) {
         Playground with high risk of injury.
       </FwbAlert>
     </div>
-    <FwbP v-if="currentPlayground.description" class="text-gray-900 dark:text-gray-400">
-      {{ currentPlayground.description }}
-    </FwbP>
-    <FwbP v-else class="text-gray-900 dark:text-gray-400">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugiat voluptatibus deserunt minus,
-      distinctio voluptas rem, dicta voluptate dignissimos dolore corporis eligendi. Iure maiores
-      facere nisi consequuntur, illum voluptas, neque atque ipsam laborum unde quis? Hic numquam
-      minus vitae vel beatae, dolores animi, ratione recusandae dignissimos esse atque voluptatibus
-      tenetur accusantium aut fugit officia modi eveniet perspiciatis facilis dicta a debitis natus.
-      Odit eligendi cumque eaque, error dolore soluta magni, iste quis amet eum dicta neque sequi
-      velit nihil omnis atque beatae minima quisquam voluptatem aspernatur architecto optio esse
-      adipisci repellendus. Asperiores quia laudantium veritatis reprehenderit quas dolore
-      voluptatem impedit pariatur?
-    </FwbP>
-    <FwbButtonGroup class="my-2 flex justify-between">
+    <div class="mb-4 px-4">
+      <FwbP v-if="currentPlayground.description" class="text-base leading-7 text-gray-900">
+        {{ currentPlayground.description }}
+      </FwbP>
+
+      <div v-else role="status" class="max-w-full animate-pulse space-y-4">
+        <FwbP>No description available.</FwbP>
+        <div class="flex w-full max-w-[15rem] items-center sm:max-w-5xl">
+          <div class="h-2.5 w-32 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div class="ms-2 h-2.5 w-24 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-32 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <div class="flex w-full max-w-[10rem] items-center sm:max-w-lg">
+          <div class="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-24 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-32 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <div class="flex w-full max-w-[13rem] items-center sm:max-w-xl">
+          <div class="h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-80 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <div class="flex w-full max-w-[25rem] items-center sm:max-w-4xl sm:max-w-full">
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-24 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <div class="flex w-full max-w-[12rem] items-center sm:max-w-2xl">
+          <div class="ms-2 h-2.5 w-32 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-24 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        </div>
+        <div class="flex w-full max-w-[18rem] items-center sm:max-w-full">
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="ms-2 h-2.5 w-80 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+          <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+    <FwbButtonGroup class="my-2 flex justify-between gap-2">
       <FwbButton color="dark" outline square @click="$router.go(-1)">Back</FwbButton>
       <FwbButtonGroup class="gap-2">
         <FwbButton
@@ -197,7 +226,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="savePlayground(currentPlayground.id)"
-          ><template #prefix></template>Save<template #suffix></template
+          ><template #prefix></template>Add to favourites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"
@@ -206,7 +235,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="removePlaygroundFromFavorites(currentPlayground.id)"
-          ><template #prefix></template>Unsave<template #suffix></template
+          ><template #prefix></template>Remove from favourites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"

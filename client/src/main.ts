@@ -17,6 +17,8 @@ app.use(VueGoogleMaps, {
   load: {
     key: googleMapsApiKey,
     autobindAllEvents: true,
+    region: 'LT',
+    language: 'en',
   },
 });
 
