@@ -51,7 +51,7 @@ describe('Get verification token', async () => {
         );
 
         await expect(getVerificationToken()).rejects.toThrow(
-            `User with ID ${notSavedUser.id} does not exist`
+            `Error while retrieving verification token.`
         );
     });
 

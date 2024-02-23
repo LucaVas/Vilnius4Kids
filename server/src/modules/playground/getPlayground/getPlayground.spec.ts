@@ -23,7 +23,7 @@ describe('Retrieve an existing playground', async () => {
 
     it('User cannot retrieve a non existing playground', async () => {
         await expect(getPlayground({ id: 100 })).rejects.toThrow(
-            'Playground with ID [100] does not exist.'
+            'Error while retrieving playground.'
         );
     });
 });

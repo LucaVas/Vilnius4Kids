@@ -1,6 +1,7 @@
 import { User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import logger from '@server/logger';
 
 export default authenticatedProcedure
     .query(async ({ ctx: { db, authUser } }) => {
@@ -10,9 +11,10 @@ export default authenticatedProcedure
         });
 
         if (!user) {
+            logger.error(`User with ID [${authUser.id}] does not exist.`)
             throw new TRPCError({
                 code: 'NOT_FOUND',
-                message: `User with ID ${authUser.id} does not exist.`,
+                message: 'Error while retrieving verification token.',
             });
         }
 

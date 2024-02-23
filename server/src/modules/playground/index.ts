@@ -7,7 +7,7 @@ import updatePlayground from './updatePlayground';
 import getPlayground from './getPlayground';
 import getPlaygrounds from './getPlaygrounds';
 import getFavoritePlaygrounds from './getFavoritePlaygrounds';
-
+import getDistance from './getDistance';
 
 export default router({
     addPlayground,
@@ -17,5 +17,6 @@ export default router({
     updatePlayground,
     getPlayground,
     getPlaygrounds,
-    getFavoritePlaygrounds
+    getFavoritePlaygrounds,
+    getDistance,
 });

@@ -51,6 +51,6 @@ describe('Get reports by playground', async () => {
             getReportsByPlayground({
                 id: 100,
             })
-        ).rejects.toThrow('Playground with ID [100] does not exist.');
+        ).rejects.toThrow('Error while retrieving report.');
     });
 });

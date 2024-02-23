@@ -28,6 +28,7 @@ jobs:
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
       CLIENT_PATH: http://localhost:5173
+      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.1.1
@@ -249,7 +250,8 @@ jobs:
                 "SMTP_USERNAME": "${{ secrets.SMTP_USERNAME }}",
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
-                "CLIENT_PATH": "${{ vars.CLIENT_PATH }}"
+                "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
+                "GOOGLE_MAPS_API_KEY": "${{ secrets.GOOGLE_MAPS_API_KEY }}"
               }
             }
           }' > containers.json

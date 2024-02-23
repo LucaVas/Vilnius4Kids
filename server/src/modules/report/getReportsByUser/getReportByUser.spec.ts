@@ -43,6 +43,6 @@ describe('Get reports by user', async () => {
             getReportsByUser({
                 id: 100,
             })
-        ).rejects.toThrow('User with ID [100] does not exist.');
+        ).rejects.toThrow('Error while retrieving reports.');
     });
 });

@@ -69,7 +69,7 @@ describe('Verify token', async () => {
                 email: user.email,
                 token: 'invalid-token',
             })
-        ).rejects.toThrow(/Invalid token/);
+        ).rejects.toThrow('Error while verifying user.');
     });
 
     it('Throws error if user does not exist', async () => {
@@ -86,9 +86,7 @@ describe('Verify token', async () => {
                 email: user.email,
                 token: 'invalid-token',
             })
-        ).rejects.toThrow(
-            `User with email ${user.email} does not exist.`
-        );
+        ).rejects.toThrow('Error while verifying user.');
     });
 
     it('Throws errors if user tries to be verified more than once', async () => {
@@ -113,6 +111,6 @@ describe('Verify token', async () => {
                 email: user.email,
                 token,
             })
-        ).rejects.toThrow(/User has already been verified/);
+        ).rejects.toThrow('Error while verifying user.');
     });
 });

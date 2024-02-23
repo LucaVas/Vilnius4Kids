@@ -1,5 +1,6 @@
 import { Playground, Report } from '@server/entities';
 import { reportIdSchema } from '@server/entities/report/schema';
+import logger from '@server/logger';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { TRPCError } from '@trpc/server';
 
@@ -10,8 +11,9 @@ export default authenticatedProcedure
         const playground = await db.getRepository(Playground).findOneBy({ id });
 
         if (!playground) {
+            logger.error(`Playground with ID [${id}] does not exist.`);
             throw new TRPCError({
-                message: `Playground with ID [${id}] does not exist.`,
+                message: 'Error while retrieving report.',
                 code: 'NOT_FOUND',
             });
         }

@@ -1,6 +1,7 @@
 import { User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import logger from '@server/logger';
 
 export default authenticatedProcedure
     .meta({ description: "Endpoint dedicated to retrieve user's username." })
@@ -11,8 +12,9 @@ export default authenticatedProcedure
         });
 
         if (!user) {
+            logger.error(`User with ID ${authUser.id} does not exist.`);
             throw new TRPCError({
-                message: `User with ID ${authUser.id} does not exist.`,
+                message: `There was an error while retrieving username.`,
                 code: 'NOT_FOUND',
             });
         }

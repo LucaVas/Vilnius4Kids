@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide } from 'vue3-carousel';
+import { Carousel, Pagination, Slide } from 'vue3-carousel';
 import NewsCard from '@/components/NewsCard.vue';
 
 const breakpoints = {
@@ -27,10 +27,10 @@ const cards = [
   {
     id: 2,
     date: '2024-02-15',
-    href: '#',
+    href: '/demo',
     title: 'Google Maps integration',
     description:
-      'We have integrated Google Maps to make it easier to get directions to your any playground.',
+      'Integrated Google Maps to make it easier to get directions to your any playground.',
   },
 ];
 </script>
@@ -46,5 +46,9 @@ const cards = [
         class="mx-2 hover:bg-gray-100"
       />
     </Slide>
+
+    <template #addons>
+      <Pagination />
+    </template>
   </Carousel>
 </template>

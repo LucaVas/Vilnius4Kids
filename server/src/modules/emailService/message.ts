@@ -1,3 +1,9 @@
+export type Message = {
+    from: string;
+    to: string;
+    subject: string;
+    html: string;
+};
 
 export default (
     sender: string,

@@ -78,6 +78,7 @@ const schema = z
         }),
 
         clientPath: z.string(),
+        googleMapsApiKey: z.string(),
     })
     .readonly();
 
@@ -117,6 +118,7 @@ const config = schema.parse({
     },
 
     clientPath: env.CLIENT_PATH,
+    googleMapsApiKey: env.GOOGLE_MAPS_API_KEY,
 });
 
 export default config;

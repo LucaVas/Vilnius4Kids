@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { Playground } from '@server/entities';
 import { adminProcedure } from '@server/trpc/adminProcedure';
+import logger from '@server/logger';
 import { playgroundDeleteSchema } from '../../../entities/playground/schema';
 
 export default adminProcedure
@@ -9,8 +10,9 @@ export default adminProcedure
         const raw = await db.getRepository(Playground).delete({ id });
 
         if (raw.affected === 0) {
+            logger.error(`Playground with ID [${id}] does not exist.`);
             throw new TRPCError({
-                message: `Playground with ID [${id}] does not exist.`,
+                message: `Error while deleting playground.`,
                 code: 'NOT_FOUND',
             });
         }

@@ -21,6 +21,6 @@ describe('Get a report', async () => {
             getReportById({
                 id: 100,
             })
-        ).rejects.toThrow('Report with ID [100] does not exist.');
+        ).rejects.toThrow('Error while retrieving report.');
     });
 });

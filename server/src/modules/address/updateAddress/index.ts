@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import { Address } from '@server/entities';
+import logger from '@server/logger';
 import { addressUpdateSchema } from '../../../entities/address/schema';
 
 export default authenticatedProcedure
@@ -20,14 +21,16 @@ export default authenticatedProcedure
                 .execute();
 
             if (affected === 0) {
+                logger.error(`Address with ID [${id}] does not exist.`);
                 throw new TRPCError({
                     code: 'NOT_FOUND',
-                    message: `Address with ID [${id}] does not exist.`,
+                    message: `Error while updating address.`,
                 });
             }
 
             return {
-                message: `Address with ID [${id}] updated successfully.`,
-                address: raw[0]
+                message: `Address updated successfully.`,
+                address: raw[0],
+            };
         }
-    });
+    );
