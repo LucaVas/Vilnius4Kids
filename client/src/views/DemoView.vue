@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { trpc } from '../trpc';
 import { Address } from '../../../server/src/entities/address/address';
 import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner, FwbAlert, FwbBadge } from 'flowbite-vue';
@@ -19,10 +19,13 @@ type Location = {
 };
 
 const pageLoaded = ref(false);
-const userLocation = ref<Location | undefined>();
+const userLocation = ref<Location>();
+const geolocationAllowed = ref(false);
+const geolocationLoading = ref(false);
 const playgroundLocation = ref<Location | undefined>();
 const playgroundDistance = ref('');
 const distanceRetrieved = ref(false);
+const retrievingDistance = ref(false);
 
 const mapInfo = ref({
   center: {
@@ -78,35 +81,47 @@ function openMarker(id: number | null) {
 }
 
 function getUserLocation() {
+  geolocationLoading.value = true;
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position: GeolocationPosition) => {
-        userLocation.value = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-      },
-      () => {
-        userLocation.value = undefined;
-      }
-    );
-  } else {
-    // Browser doesn't support Geolocation
-    userLocation.value = undefined;
+    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+      userLocation.value = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+      geolocationAllowed.value = true;
+      geolocationLoading.value = false;
+      if (playgroundLocation.value) calculateDistance();
+    }),
+      (error: GeolocationPositionError) => {
+        geolocationAllowed.value = false;
+        geolocationLoading.value = false;
+        console.error(
+          'Geolocation is not supported or not allowed. Allow geolocation to use distance calculation feature.' +
+            error.message
+        );
+      };
   }
 }
 
 const [calculateDistance, errorMessage] = useErrorMessage(async () => {
-  if (playgroundLocation.value && userLocation.value) {
-    playgroundDistance.value = await trpc.playground.getDistance.query({
-      origin: userLocation.value,
-      destination: playgroundLocation.value,
-    });
-    distanceRetrieved.value = true;
+  distanceRetrieved.value = false;
+  retrievingDistance.value = true;
+  if (!geolocationLoading.value) {
+    if (geolocationAllowed.value && playgroundLocation.value && userLocation.value) {
+      playgroundDistance.value = await trpc.playground.getDistance.query({
+        origin: userLocation.value,
+        destination: playgroundLocation.value,
+      });
+      distanceRetrieved.value = true;
+      retrievingDistance.value = false;
+    } else {
+      geolocationAllowed.value = false;
+      retrievingDistance.value = false;
+    }
   }
 });
 
-onMounted(async () => {
+onBeforeMount(async () => {
   pageLoaded.value = false;
   const { playgrounds } = await trpc.playground.getPlaygrounds.query();
   mapInfo.value.markers = playgrounds.map((p) => ({
@@ -117,9 +132,7 @@ onMounted(async () => {
     },
     address: p.address,
   }));
-
   getUserLocation();
-
   pageLoaded.value = true;
 });
 </script>
@@ -163,7 +176,7 @@ onMounted(async () => {
             @click="
               openMarker(m.id);
               playgroundLocation = m.position;
-              userLocation ? calculateDistance() : null;
+              calculateDistance();
             "
           >
             <GMapInfoWindow
@@ -181,23 +194,33 @@ onMounted(async () => {
               }"
             >
               <FwbCard>
-                <div class="flex min-w-fit flex-col gap-6 bg-slate-100 p-6">
+                <div class="flex min-w-fit flex-col gap-6 bg-slate-100 p-4 sm:p-6">
                   <h5
-                    class="text-lg font-bold tracking-tight text-gray-900 dark:text-white"
+                    class="text-lg font-bold tracking-tight text-gray-900"
                     data-testid="infobox-playground-address"
                   >
                     {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
                     {{ m.address.city }}
                   </h5>
 
-                  <FwbBadge v-if="distanceRetrieved" size="sm" type="indigo"
-                    >{{ playgroundDistance }} away from you.</FwbBadge
-                  >
-                  <FwbBadge v-if="errorMessage" size="sm" type="red">{{ errorMessage }}</FwbBadge>
-
-                  <FwbBadge v-if="!distanceRetrieved" size="sm" type="red"
-                    >Geolocation not available</FwbBadge
-                  >
+                  <div class="flex w-full items-center justify-center">
+                    <FwbSpinner
+                      v-if="retrievingDistance && geolocationAllowed"
+                      size="4"
+                      color="purple"
+                    />
+                    <FwbBadge v-if="!geolocationAllowed" size="sm" type="red" class="w-full"
+                      >Geolocation not available</FwbBadge
+                    >
+                    <FwbBadge
+                      v-if="!geolocationLoading && distanceRetrieved"
+                      size="sm"
+                      type="indigo"
+                      class="w-full"
+                      >{{ playgroundDistance }} away from you.</FwbBadge
+                    >
+                    <FwbBadge v-if="errorMessage" size="sm" type="red">{{ errorMessage }}</FwbBadge>
+                  </div>
 
                   <FwbButtonGroup class="flex w-full items-center justify-evenly gap-4">
                     <FwbButton color="dark" outline size="md" class="p-1" square>

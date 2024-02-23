@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { trpc } from '../trpc';
 import { Address } from '../../../server/src/entities/address/address';
-import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner } from 'flowbite-vue';
+import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner, FwbBadge } from 'flowbite-vue';
 import { authUserId } from '../stores/user';
+import useErrorMessage from '../composables/useErrorMessage/index';
 
 type Marker = {
   id: number;
@@ -14,9 +15,20 @@ type Marker = {
     lng: number;
   };
 };
+type Location = {
+  lat: number;
+  lng: number;
+};
 
 const loadingSave = ref(false);
 const pageLoaded = ref(false);
+const userLocation = ref<Location>();
+const geolocationAllowed = ref(false);
+const geolocationLoading = ref(false);
+const playgroundLocation = ref<Location | undefined>();
+const playgroundDistance = ref('');
+const distanceRetrieved = ref(false);
+const retrievingDistance = ref(false);
 
 const mapInfo = ref({
   center: {
@@ -89,7 +101,48 @@ async function unsavePlayground(id: number) {
   }
 }
 
-onMounted(async () => {
+function getUserLocation() {
+  geolocationLoading.value = true;
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+      userLocation.value = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+      geolocationAllowed.value = true;
+      geolocationLoading.value = false;
+      if (playgroundLocation.value) calculateDistance();
+    }),
+      (error: GeolocationPositionError) => {
+        geolocationAllowed.value = false;
+        geolocationLoading.value = false;
+        console.error(
+          'Geolocation is not supported or not allowed. Allow geolocation to use distance calculation feature.' +
+            error.message
+        );
+      };
+  }
+}
+
+const [calculateDistance, errorMessage] = useErrorMessage(async () => {
+  distanceRetrieved.value = false;
+  retrievingDistance.value = true;
+  if (!geolocationLoading.value) {
+    if (geolocationAllowed.value && playgroundLocation.value && userLocation.value) {
+      playgroundDistance.value = await trpc.playground.getDistance.query({
+        origin: userLocation.value,
+        destination: playgroundLocation.value,
+      });
+      distanceRetrieved.value = true;
+      retrievingDistance.value = false;
+    } else {
+      geolocationAllowed.value = false;
+      retrievingDistance.value = false;
+    }
+  }
+});
+
+onBeforeMount(async () => {
   pageLoaded.value = false;
   const { playgrounds } = await trpc.playground.getPlaygrounds.query();
   mapInfo.value.markers = playgrounds.map((p) => ({
@@ -101,7 +154,7 @@ onMounted(async () => {
     address: p.address,
     saved: p.users.some((user) => user.id === authUserId.value),
   }));
-
+  getUserLocation();
   pageLoaded.value = true;
 });
 </script>
@@ -129,7 +182,11 @@ onMounted(async () => {
             scaledSize: { width: 25, height: 25 },
             labelOrigin: { x: 16, y: -10 },
           }"
-          @click="openMarker(m.id)"
+          @click="
+            openMarker(m.id);
+            playgroundLocation = m.position;
+            calculateDistance();
+          "
         >
           <GMapInfoWindow
             data-testid="infobox"
@@ -146,17 +203,40 @@ onMounted(async () => {
             }"
           >
             <FwbCard>
-              <div class="flex max-w-64 flex-col bg-slate-100 p-4">
+              <div class="flex min-w-fit flex-col gap-6 bg-slate-100 p-4 sm:p-6">
                 <h5
-                  class="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white"
+                  class="mb-2 text-lg font-bold tracking-tight text-gray-900"
                   data-testid="infobox-playground-address"
                 >
                   {{ m.address.street }} {{ m.address.number }}, {{ m.address.zipCode }} -
                   {{ m.address.city }}
                 </h5>
-                <FwbButtonGroup class="flex w-full items-center justify-end gap-1">
+
+                <div class="flex w-full items-center justify-center">
+                  <FwbSpinner
+                    v-if="retrievingDistance && geolocationAllowed"
+                    size="4"
+                    color="purple"
+                  />
+                  <FwbBadge v-if="!geolocationAllowed" size="sm" type="red" class="w-full"
+                    >Geolocation not available</FwbBadge
+                  >
+                  <FwbBadge
+                    v-if="!geolocationLoading && distanceRetrieved"
+                    size="sm"
+                    type="indigo"
+                    class="w-full"
+                    >{{ playgroundDistance }} away from you.</FwbBadge
+                  >
+                  <FwbBadge v-if="errorMessage" size="sm" type="red">{{ errorMessage }}</FwbBadge>
+                </div>
+
+                <FwbButtonGroup class="flex w-full items-center justify-evenly gap-4">
                   <FwbButton color="dark" outline size="md" class="p-1" square>
-                    <a :href="getAppUrl(m.position.lat, m.position.lng)" target="_blank" rel="noreferrer"
+                    <a
+                      :href="getAppUrl(m.position.lat, m.position.lng)"
+                      target="_blank"
+                      rel="noreferrer"
                       ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
                     /></a>
                   </FwbButton>
@@ -193,18 +273,7 @@ onMounted(async () => {
                     tag="router-link"
                     :href="{ name: 'Playground', params: { id: m.id } } as any"
                   >
-                    <svg
-                      class="h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
+                    View
                   </FwbButton>
                 </FwbButtonGroup>
               </div>
