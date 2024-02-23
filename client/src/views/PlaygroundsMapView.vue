@@ -231,7 +231,7 @@ onBeforeMount(async () => {
                   <FwbBadge v-if="errorMessage" size="sm" type="red">{{ errorMessage }}</FwbBadge>
                 </div>
 
-                <FwbButtonGroup class="flex w-full items-center justify-evenly gap-4">
+                <FwbButtonGroup class="flex w-full items-center justify-between gap-4">
                   <FwbButton color="dark" outline size="md" class="p-1" square>
                     <a
                       :href="getAppUrl(m.position.lat, m.position.lng)"

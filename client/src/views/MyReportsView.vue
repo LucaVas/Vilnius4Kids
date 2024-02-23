@@ -19,7 +19,7 @@ onBeforeMount(async () => {
   <div v-if="!pageLoaded">
     <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
-  <div v-else class="px-2 py-4">
+  <div v-else class="w-full px-2 py-4">
     <FwbHeading tag="h4" class="mb-4">My reports</FwbHeading>
     <div v-if="userReports.length !== 0">
       <ReportsTable :reports="userReports" />
