@@ -187,7 +187,7 @@ async function removePlaygroundFromFavorites(id: number) {
       adipisci repellendus. Asperiores quia laudantium veritatis reprehenderit quas dolore
       voluptatem impedit pariatur?
     </FwbP>
-    <FwbButtonGroup class="my-2 flex justify-between">
+    <FwbButtonGroup class="my-2 flex justify-between gap-2">
       <FwbButton color="dark" outline square @click="$router.go(-1)">Back</FwbButton>
       <FwbButtonGroup class="gap-2">
         <FwbButton
@@ -197,7 +197,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="savePlayground(currentPlayground.id)"
-          ><template #prefix></template>Save<template #suffix></template
+          ><template #prefix></template>Add to favourites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"
@@ -206,7 +206,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="removePlaygroundFromFavorites(currentPlayground.id)"
-          ><template #prefix></template>Unsave<template #suffix></template
+          ><template #prefix></template>Remove from favourites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"
