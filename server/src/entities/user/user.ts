@@ -69,7 +69,7 @@ export class User {
 
     @OneToOne(
         () => PasswordChangeRequest,
-        (passwordChangeRequest) => passwordChangeRequest.user,
+        (request) => request.user,
         {
             onDelete: 'SET NULL',
         }
