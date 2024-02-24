@@ -61,6 +61,18 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
             >Login
             <template #suffix> </template>
           </FwbButton>
+          <FwbButton
+            class="mt-4 flex items-center justify-center"
+            color="purple"
+            component="RouterLink"
+            tag="router-link"
+            :href="{ name: 'Reset' } as any"
+            data-testid="reset-password-button"
+            outline
+            type="submit"
+            size="xl"
+            >Forgot password?</FwbButton
+          >
         </div>
       </template>
 

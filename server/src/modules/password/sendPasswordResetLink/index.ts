@@ -23,6 +23,15 @@ export default publicProcedure
             });
         }
 
+        if (user.passwordChangeRequest) {
+            await db
+                .createQueryBuilder()
+                .delete()
+                .from(PasswordChangeRequest)
+                .where('id = :id', { id: user.passwordChangeRequest.id })
+                .execute();
+        }
+
         const token = crypto.randomBytes(32).toString('hex');
 
         await db.getRepository(PasswordChangeRequest).save({
