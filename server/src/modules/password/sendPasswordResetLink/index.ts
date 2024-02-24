@@ -37,14 +37,9 @@ export default publicProcedure
         }
 
         const token = crypto.randomBytes(32).toString('hex');
-        const request = db.getRepository(PasswordChangeRequest).create({
+        await db.getRepository(PasswordChangeRequest).save({
             user,
             passwordResetToken: await bcrypt.hash(token, 10),
-        });
-        await db.getRepository(PasswordChangeRequest).save(request);
-        await db.getRepository(User).save({
-            ...user,
-            passwordChangeRequest: request,
         });
 
         try {
