@@ -11,7 +11,6 @@ const { passwordCost } = config.auth;
 export default publicProcedure
     .input(passwordResetSchema)
     .mutation(async ({ input: { email, token, password }, ctx: { db } }) => {
-
         // check if user exists
         const user = await db.getRepository(User).findOne({
             where: { email },
@@ -26,8 +25,10 @@ export default publicProcedure
             });
         }
 
+        logger.info(user);
+
         // check if user has open password change request
-        if (!user.passwordChangeRequest) {
+        if (!user.passwordChangeRequest.passwordResetToken) {
             logger.error(
                 `User with email [${email}] has no open password change request.`
             );
@@ -36,6 +37,8 @@ export default publicProcedure
                 message: 'Error while resetting user password.',
             });
         }
+
+        logger.info(user);
 
         // check if password reset token is valid
         const isMatch = await bcrypt.compare(

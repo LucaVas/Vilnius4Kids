@@ -5,9 +5,9 @@ import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';
 import { passwordChangeRequestValidationSchema } from '@server/entities/password_change_requests/schema';
 import mailSender from '@server/modules/emailService';
-import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
+import { publicProcedure } from '@server/trpc';
 
-export default authenticatedProcedure
+export default publicProcedure
     .input(passwordChangeRequestValidationSchema)
     .mutation(async ({ input: { email }, ctx: { db } }) => {
         const user = await db.getRepository(User).findOne({
@@ -34,9 +34,7 @@ export default authenticatedProcedure
             const sender = mailSender(user.username, user.email);
             sender.sendPasswordResetToken(token);
         } catch (error) {
-            logger.error(
-                `Error while sending password reset token: ${error}`
-            );
+            logger.error(`Error while sending password reset token: ${error}`);
             throw new TRPCError({
                 code: 'INTERNAL_SERVER_ERROR',
                 message: 'Error while sending password reset token.',

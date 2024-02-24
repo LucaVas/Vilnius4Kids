@@ -57,6 +57,12 @@ const router = createRouter({
       props: (route) => ({ email: route.query.email, token: route.query.token }),
     },
     {
+      path: '/resetPassword',
+      name: 'Reset',
+      component: () => import('../views/ResetPasswordView.vue'),
+      props: (route) => ({ email: route.query.email, token: route.query.token }),
+    },
+    {
       path: '/login',
       name: 'Login',
       beforeEnter: [hideForAuth],
