@@ -14,7 +14,9 @@ export default publicProcedure
         // check if user exists
         const user = await db.getRepository(User).findOne({
             where: { email },
-            relations: ['passwordChangeRequest'],
+            relations: {
+                passwordChangeRequest: true,
+            }
         });
 
         if (!user) {
@@ -24,11 +26,9 @@ export default publicProcedure
                 message: 'Error while resetting user password.',
             });
         }
-
-        logger.info(user);
-
+        
         // check if user has open password change request
-        if (!user.passwordChangeRequest.passwordResetToken) {
+        if (!user.passwordChangeRequest) {
             logger.error(
                 `User with email [${email}] has no open password change request.`
             );
