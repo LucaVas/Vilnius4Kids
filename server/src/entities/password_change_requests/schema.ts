@@ -15,12 +15,6 @@ export const passwordChangeRequestValidationSchema = passwordChangeRequestSchema
     .omit({
         id: true,
         createdAt: true,
+        passwordResetToken: true,
     })
     .extend({ email: z.string().email() });
-
-export const passwordChangeRequestSelectSchema =
-    passwordChangeRequestValidationSchema
-        .omit({
-            passwordResetToken: true,
-        })
-        .partial();
