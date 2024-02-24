@@ -49,4 +49,15 @@ export default (username: string | null, recipient: string) => ({
             send(message);
         }
     },
+    sendPasswordResetToken: async (token: string) => {
+        const url = `${clientPath}/resetPassword?email=${recipient}&token=${token}`;
+        const subject = `Vilnius4Kids - Reset your password`;
+        const html = `<header><p>Hi, ${username}</p></header><body><p>We are sending you this email because you have requested to reset your password.<br><br>To reset it now, please click <a href="${url}">here</a>.</p><br><p>If you have not requested it, please ignore this email.</p></body><footer><p>Best regards,</p><p>Vilnius4Kids team</p></footer>`;
+
+        const message = buildMessage(smtp.sender, recipient, subject, html);
+
+        if (env !== 'test') {
+            send(message);
+        }
+    },
 });

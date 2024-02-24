@@ -1,6 +1,6 @@
 import { router } from '@server/trpc';
-import reset from './reset';
+import sendResetToken from './sendResetToken';
 
 export default router({
-    reset,
+    sendResetToken,
 });
