@@ -12,8 +12,12 @@ export default publicProcedure
     .mutation(async ({ input: { email }, ctx: { db } }) => {
         const user = await db.getRepository(User).findOne({
             where: { email },
-            relations: ['passwordChangeRequest'],
+            relations: {
+                passwordChangeRequest: true,
+            },
         });
+
+        logger.info(user);
 
         if (!user) {
             logger.error(`User with email [${email}] does not exist.`);
@@ -33,10 +37,14 @@ export default publicProcedure
         }
 
         const token = crypto.randomBytes(32).toString('hex');
-
-        await db.getRepository(PasswordChangeRequest).save({
+        const request = db.getRepository(PasswordChangeRequest).create({
             user,
             passwordResetToken: await bcrypt.hash(token, 10),
+        });
+        await db.getRepository(PasswordChangeRequest).save(request);
+        await db.getRepository(User).save({
+            ...user,
+            passwordChangeRequest: request,
         });
 
         try {

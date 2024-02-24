@@ -67,9 +67,13 @@ export class User {
     @JoinColumn()
     verificationToken: VerificationToken;
 
-    @OneToOne(() => PasswordChangeRequest, (request) => request.user, {
-        onDelete: 'SET NULL',
-    })
+    @OneToOne(
+        () => PasswordChangeRequest,
+        (passwordChangeRequest) => passwordChangeRequest.user,
+        {
+            onDelete: 'SET NULL',
+        }
+    )
     @JoinColumn()
     passwordChangeRequest: PasswordChangeRequest;
 
