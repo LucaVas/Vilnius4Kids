@@ -17,7 +17,8 @@ export const verificationTokenValidationSchema = verificationTokenSchema
     })
     .extend({ email: z.string().email() });
 
-export const verificationTokenSelectSchema =
-    verificationTokenValidationSchema.omit({
+export const verificationTokenSelectSchema = verificationTokenValidationSchema
+    .omit({
         token: true,
-    }).partial();
+    })
+    .partial();
