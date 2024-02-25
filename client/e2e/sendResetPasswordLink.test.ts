@@ -3,14 +3,14 @@ import { signupNewUser } from './utils/api';
 import { fakeUser } from './utils/fakeData';
 
 /**
- * Created on: 2024-02-25
+ * Created on: 2024-02-24
  * Related issues: #16
  */
 
 const { email, username, password, role } = fakeUser();
 
-test.describe.serial('reset password', () => {
-  test('user can go to reset password page', async ({ page }) => {
+test.describe.serial('send reset password link', () => {
+  test('user can go to user verification page', async ({ page }) => {
     await page.goto('/login');
 
     const resetPasswordButton = page.getByTestId('reset-password-button');
@@ -36,7 +36,7 @@ test.describe.serial('reset password', () => {
     expect(await errorMessage.textContent()).toEqual('Error while resetting user password.');
   });
 
-  test('user can reset password', async ({ page }) => {
+  test('user can send reset password link', async ({ page }) => {
 
     await signupNewUser({ email, username, password, role });
 

@@ -5,6 +5,7 @@ import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 import { trpc } from '../trpc';
+import { TRPCClientError } from '@trpc/client';
 
 const userForm = ref({
   password: '',
@@ -20,6 +21,10 @@ const successMessage = ref('');
 const loading = ref(false);
 
 const [resetPassword, errorMessage] = useErrorMessage(async () => {
+
+  if (userForm.value.password !== repeatedPassword.value) {
+    throw new Error('Passwords do not match');
+  }
 
   loading.value = true;
   const { message } = await trpc.password.reset.mutate({
