@@ -27,7 +27,7 @@ test.describe.serial('send reset password link', () => {
     await page.goto('/reset');
 
     const resetPasswordForm = page.getByRole('form', { name: 'Find account' });
-    expect(resetPasswordForm).not.toBeHidden();
+    await expect(resetPasswordForm).not.toBeHidden();
     await resetPasswordForm.locator('input[type="email"]').fill('non_existing_user@mail.com');
 
     await resetPasswordForm.locator('button[type="submit"]').click();
