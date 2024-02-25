@@ -39,7 +39,7 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
       heading="Reset password"
       formLabel="Reset password"
       @submit="resetPassword"
-      data-testid="resetPasswordForm"
+      data-testid="reset-password-form"
     >
       <template #default>
         <FwbInput
@@ -66,11 +66,11 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
-        <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">
+        <FwbAlert v-if="hasSucceeded" type="success" data-testid="success-message">
           {{ successMessage }}
         </FwbAlert>
 
-        <AlertError icon type="danger" v-if="errorMessage" :message="errorMessage">
+        <AlertError icon type="danger" v-if="errorMessage" :message="errorMessage" data-testid="error-message">
           {{ errorMessage }}
         </AlertError>
 
@@ -95,7 +95,6 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
             tag="router-link"
             :href="{ name: 'Login' } as any"
             outline
-            type="submit"
             size="xl"
             >Back to login
           </FwbButton>
