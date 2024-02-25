@@ -5,7 +5,6 @@ import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 import { trpc } from '../trpc';
-import { TRPCClientError } from '@trpc/client';
 
 const userForm = ref({
   password: '',
@@ -62,7 +61,7 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
         <FwbInput
           placeholder="Repeat password"
           id="repeatPassword"
-          name="password"
+          name="repeatPassword"
           type="password"
           :minlength="8"
           :maxlength="64"
