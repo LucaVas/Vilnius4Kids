@@ -1,7 +1,8 @@
 import { createTestDatabase } from '@tests/utils/database';
-import { User } from '@server/entities';
+import { PasswordChangeRequest, User } from '@server/entities';
 import { fakeUser } from '@server/entities/tests/fakes';
 import { Role } from '@server/entities/user/Role';
+import bcrypt from 'bcrypt';
 import router from '../index';
 
 const db = await createTestDatabase();
@@ -19,6 +20,31 @@ describe('Send password reset link', async () => {
         // THEN
         expect(message).toBe(
             'We have sent an email with a password reset link to your inbox.'
+        );
+    });
+
+    it('Replaces a change request if it already exists', async () => {
+        // Given
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER }));
+
+        const firstChangeRequest = await db
+            .getRepository(PasswordChangeRequest)
+            .save({
+                user,
+                passwordResetToken: await bcrypt.hash('test-token', 10),
+            });
+
+        await sendPasswordResetLink({ email: user.email });
+
+        // THEN
+        const secondChangeRequest = await db
+            .getRepository(PasswordChangeRequest)
+            .findOneBy({ user });
+        expect(firstChangeRequest.id).not.toBe(secondChangeRequest?.id);
+        expect(firstChangeRequest.passwordResetToken).not.toBe(
+            secondChangeRequest?.passwordResetToken
         );
     });
 

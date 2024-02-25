@@ -14,7 +14,7 @@ test.describe.serial('send reset password link', () => {
     await page.goto('/login');
 
     const resetPasswordButton = page.getByTestId('reset-password-button');
-    expect(resetPasswordButton).not.toBeHidden();
+    await expect(resetPasswordButton).not.toBeHidden();
     expect(await resetPasswordButton.textContent()).toEqual('Forgot password?');
 
     await resetPasswordButton.click();
@@ -37,7 +37,6 @@ test.describe.serial('send reset password link', () => {
   });
 
   test('user can send reset password link', async ({ page }) => {
-
     await signupNewUser({ email, username, password, role });
 
     await page.goto('/reset');
