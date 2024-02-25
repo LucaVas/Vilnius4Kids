@@ -3,12 +3,12 @@ import bcrypt from 'bcrypt';
 import { PasswordChangeRequest, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';
-import { passwordChangeRequestValidationSchema } from '@server/entities/password_change_requests/schema';
+import { sendResetLinkSchema } from '@server/entities/password_change_requests/schema';
 import mailSender from '@server/modules/emailService';
 import { publicProcedure } from '@server/trpc';
 
 export default publicProcedure
-    .input(passwordChangeRequestValidationSchema)
+    .input(sendResetLinkSchema)
     .mutation(async ({ input: { email }, ctx: { db } }) => {
         const user = await db.getRepository(User).findOne({
             where: { email },
@@ -16,8 +16,6 @@ export default publicProcedure
                 passwordChangeRequest: true,
             },
         });
-
-        logger.info(user);
 
         if (!user) {
             logger.error(`User with email [${email}] does not exist.`);

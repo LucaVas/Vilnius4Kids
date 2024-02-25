@@ -11,7 +11,7 @@ export const passwordChangeRequestSchema =
         createdAt: z.date(),
     });
 
-export const passwordChangeRequestValidationSchema = passwordChangeRequestSchema
+export const sendResetLinkSchema = passwordChangeRequestSchema
     .omit({
         id: true,
         createdAt: true,

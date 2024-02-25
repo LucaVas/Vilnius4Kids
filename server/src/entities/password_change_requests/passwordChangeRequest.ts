@@ -12,7 +12,7 @@ export class PasswordChangeRequest {
     @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 
-    @OneToOne(() => User, (user) => user.verificationToken, {
+    @OneToOne(() => User, (user) => user.passwordChangeRequest, {
         
         onDelete: 'CASCADE', // When a user is deleted, delete the verification token as well
     })
