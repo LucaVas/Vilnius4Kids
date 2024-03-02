@@ -11,7 +11,7 @@ import {
 import { Address } from '../address/address';
 import { Playground } from '../playground/playground';
 import { Report } from '../report/report';
-import { Rating } from '..';
+import { PasswordChangeRequest, Rating } from '..';
 import { VerificationToken } from '../verification_token/verificationToken';
 import { Subscription } from '../subscription/subscription';
 import { Role } from './Role';
@@ -66,6 +66,16 @@ export class User {
     )
     @JoinColumn()
     verificationToken: VerificationToken;
+
+    @OneToOne(
+        () => PasswordChangeRequest,
+        (passwordChangeRequest) => passwordChangeRequest.user,
+        {
+            onDelete: 'SET NULL',
+        }
+    )
+    @JoinColumn()
+    passwordChangeRequest: PasswordChangeRequest;
 
     @OneToOne(() => Subscription, (subscription) => subscription.user)
     @JoinColumn()
