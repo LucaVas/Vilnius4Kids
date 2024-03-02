@@ -74,7 +74,7 @@ const navigation = computed(() =>
 
     <!-- links -->
     <div
-      class="font-md text-md hidden border bg-slate-100 opacity-95 lg:block lg:border-0"
+      class="hidden border bg-slate-100 opacity-95 lg:block lg:border-0"
       :id="showNavbar ? 'show-navbar' : ''"
     >
       <!-- closing button -->
@@ -113,6 +113,7 @@ const navigation = computed(() =>
           class="max-w-fit"
         >
           <FwbNavbarLink
+            class="text-lg text-gray-500 hover:text-gray-900 md:text-base"
             :is-active="route.name === link.name"
             @click="
               router.push({ name: link.name });
