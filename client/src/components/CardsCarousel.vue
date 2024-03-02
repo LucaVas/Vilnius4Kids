@@ -22,7 +22,8 @@ const cards = [
     date: '2024-02-11',
     href: '/signup',
     title: 'Signup for all features',
-    description: "Create an account to get access to all features of our application. It's free!",
+    description:
+      "Create an account now to get access to all features of our application. It's free!",
   },
   {
     id: 2,
@@ -36,14 +37,21 @@ const cards = [
 </script>
 
 <template>
-  <Carousel :wrap-around="true" :autoplay="5000" :breakpoints="breakpoints">
+  <Carousel
+    :wrap-around="true"
+    :autoplay="5000"
+    :breakpoints="breakpoints"
+    :items-to-scroll="1"
+    :touch-drag="true"
+    :pause-autoplay-on-hover="true"
+  >
     <Slide v-for="card in cards" :key="card.id">
       <NewsCard
         :href="card.href"
         :title="card.title"
         :description="card.description"
         :date="card.date"
-        class="mx-2 hover:bg-gray-100"
+        class="hover:bg-gray-100"
       />
     </Slide>
 
@@ -52,3 +60,9 @@ const cards = [
     </template>
   </Carousel>
 </template>
+
+<style scoped>
+.carousel__slide {
+  padding: 0.2rem;
+}
+</style>
