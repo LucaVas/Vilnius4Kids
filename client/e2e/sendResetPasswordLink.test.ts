@@ -20,7 +20,7 @@ test.describe.serial('send reset password link', () => {
     await resetPasswordButton.click();
 
     const resetPasswordForm = page.getByRole('form', { name: 'Find account' });
-    expect(resetPasswordForm).not.toBeHidden();
+    await expect(resetPasswordForm).not.toBeHidden();
   });
 
   test('user cannot reset password if email does not exist', async ({ page }) => {
