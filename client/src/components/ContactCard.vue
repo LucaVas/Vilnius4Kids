@@ -17,7 +17,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="max-w rounded-lg border-gray-200 bg-white p-10 sm:p-6 md:p-8">
+  <div class="max-w-screen mx-2 rounded-lg border-gray-200 bg-white p-8 sm:m-0 sm:p-12 md:p-12">
     <form class="space-y-8" @submit.prevent="subscribe">
       <h5 class="text-2xl font-medium text-black">Stay tuned!</h5>
       <p class="text-sm font-medium text-gray-500">
@@ -44,7 +44,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
           <input
             type="text"
             v-model="email"
-            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 p-3 ps-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 ps-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500"
             placeholder="your@email.com"
           />
         </div>

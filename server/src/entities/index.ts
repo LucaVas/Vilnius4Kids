@@ -8,3 +8,4 @@ export { ReportStatusChangeLog } from './report_status_change_log/reportStatusCh
 export { User } from './user/user';
 export { VerificationToken } from './verification_token/verificationToken';
 export { Subscription } from './subscription/subscription';
+export { PasswordChangeRequest } from './password_change_requests/passwordChangeRequest';

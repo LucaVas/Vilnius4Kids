@@ -17,7 +17,26 @@ export const verificationTokenValidationSchema = verificationTokenSchema
     })
     .extend({ email: z.string().email() });
 
-export const verificationTokenSelectSchema =
-    verificationTokenValidationSchema.omit({
+export const verificationTokenSelectSchema = verificationTokenValidationSchema
+    .omit({
         token: true,
-    }).partial();
+    })
+    .partial();
+
+export const passwordResetSchema = verificationTokenSchema
+    .omit({
+        id: true,
+        createdAt: true,
+    })
+    .extend({
+        email: z.string().email(),
+        password: z.coerce
+            .string()
+            .regex(
+                /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                'Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter and one number'
+            )
+            .max(64, 'Password must be at most 64 characters long')
+            .trim()
+            .describe('User password'),
+    });

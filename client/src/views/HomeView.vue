@@ -7,7 +7,7 @@ import CardsCarousel from '@/components/CardsCarousel.vue';
 <template>
   <div class="flex flex-col gap-8">
     <div
-      class="items-center rounded-lg bg-white px-16 py-20 lg:flex"
+      class="w-full items-center rounded-lg bg-white p-8 py-20 sm:p-12 md:p-12 lg:flex"
       data-testid="homepage-hero-section"
     >
       <div class="space-y-6 lg:w-1/2">

@@ -248,18 +248,23 @@ onBeforeMount(async () => {
           <div v-if="showTopics">
             <FwbButtonGroup class="flex h-full w-full flex-col gap-5">
               <FwbButton
-                v-for="category in availableCategories"
-                :key="category.id"
+                v-for="topic in availableCategories?.reduce((acc: string[], curr) => {
+                  if (!acc.includes(curr.topic)) {
+                    acc.push(curr.topic);
+                  }
+                  return acc;
+                }, []) || []"
+                :key="topic"
                 @click="
-                  reportInfo.topic = category.topic;
+                  reportInfo.topic = topic;
                   showCategories = true;
                   showTopics = false;
-                  getCategoriesByTopic(category.topic);
+                  getCategoriesByTopic(topic);
                 "
                 color="purple"
                 outline
                 class="w-full"
-                >{{ category.topic }}</FwbButton
+                >{{ topic }}</FwbButton
               >
             </FwbButtonGroup>
           </div>

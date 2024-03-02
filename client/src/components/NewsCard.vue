@@ -17,7 +17,7 @@ const { href, title, description } = defineProps({
 
 <template>
   <div
-    class="flex flex-col items-start justify-center gap-4 rounded-lg border border-gray-200 bg-white p-8"
+    class="flex flex-col items-start justify-center gap-4 rounded-lg border border-gray-200 bg-white p-10"
   >
     <a :href="href">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
@@ -27,7 +27,7 @@ const { href, title, description } = defineProps({
     <p class="mb-3 text-start font-normal text-gray-700">
       {{ description }}
     </p>
-    <div class="flex items-center justify-between gap-4">
+    <div class="flex w-full items-center justify-between gap-4">
       <p class="text-sm italic text-gray-400">{{ date }}</p>
       <a
         :href="href"

@@ -53,8 +53,22 @@ const router = createRouter({
     {
       path: '/verify',
       name: 'Verify',
+      beforeEnter: [hideForAuth],
       component: () => import('../views/VerifyTokenView.vue'),
       props: (route) => ({ email: route.query.email, token: route.query.token }),
+    },
+    {
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      beforeEnter: [hideForAuth],
+      component: () => import('../views/ResetPasswordView.vue'),
+      props: (route) => ({ email: route.query.email, token: route.query.token }),
+    },
+    {
+      path: '/reset',
+      name: 'Reset',
+      beforeEnter: [hideForAuth],
+      component: () => import('../views/SendResetPasswordLinkView.vue'),
     },
     {
       path: '/login',
