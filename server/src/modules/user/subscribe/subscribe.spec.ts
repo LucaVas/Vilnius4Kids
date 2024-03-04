@@ -33,6 +33,6 @@ describe('Subscribe', async () => {
             subscribe({
                 email: 'test@test.com',
             })
-        ).rejects.toThrow(/duplicate/);
+        ).rejects.toThrow('User already subscribed.');
     });
 });
