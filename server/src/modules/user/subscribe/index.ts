@@ -5,14 +5,26 @@ import { subscriptionInsertSchema } from '@server/entities/subscription/schema';
 import mailSender from '@server/modules/emailService';
 import logger from '@server/logger';
 
-
 export default publicProcedure
     .meta({ description: 'Endpoint dedicated for subscription.' })
     .input(subscriptionInsertSchema)
     .mutation(async ({ input: { email }, ctx: { db } }) => {
-        const user = await db.getRepository(User).findOne({
-            where: { email },
-        });
+        const [previousSubscription, user] = await Promise.all([
+            db.getRepository(Subscription).findOne({
+                where: { email },
+            }),
+            db.getRepository(User).findOne({
+                where: { email },
+            }),
+        ]);
+
+        if (previousSubscription) {
+            logger.error(`User is already subscribed with email ${email}`);
+            throw new TRPCError({
+                message: `User already subscribed.`,
+                code: 'BAD_REQUEST',
+            });
+        }
 
         const sender = mailSender(null, email);
         try {
