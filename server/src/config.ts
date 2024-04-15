@@ -44,6 +44,21 @@ const schema = z
             }),
         }),
 
+        rabbitMq: z.object({
+            user: z.string().default(''),
+            password: z.string().default(''),
+            host: z.string().default('localhost'),
+            queues: z.array(
+                z.object({
+                    name: z.string(),
+                    queueName: z.string(),
+                    options: z.object({
+                        durable: z.boolean().default(true),
+                    }),
+                })
+            ),
+        }),
+
         database: z.object({
             type: z
                 .enum([
@@ -91,6 +106,35 @@ const config = schema.parse({
         tokenKey: env.TOKEN_KEY,
         expiresIn: env.TOKEN_EXPIRES_IN,
         passwordCost: env.PASSWORD_COST,
+    },
+
+    rabbitMq: {
+        user: env.RABBIT_MQ_USER,
+        password: env.RABBIT_MQ_PASSWORD,
+        host: env.RABBIT_MQ_HOST,
+        queues: [
+            {
+                name: 'subscriptions',
+                queueName: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_DURABLE,
+                },
+            },
+            {
+                name: 'reports',
+                queueName: env.RABBIT_MQ_REPORTS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_REPORTS_QUEUE_DURABLE,
+                },
+            },
+            {
+                name: 'password-resets',
+                queueName: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_DURABLE,
+                },
+            },
+        ],
     },
 
     database: {

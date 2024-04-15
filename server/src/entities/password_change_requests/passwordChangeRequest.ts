@@ -13,7 +13,6 @@ export class PasswordChangeRequest {
     createdAt: Date;
 
     @OneToOne(() => User, (user) => user.passwordChangeRequest, {
-        
         onDelete: 'CASCADE', // When a user is deleted, delete the verification token as well
     })
     user: User;
