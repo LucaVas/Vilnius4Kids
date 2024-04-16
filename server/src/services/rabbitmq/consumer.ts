@@ -44,10 +44,12 @@ class RabbitMQConnection {
     }
 
     private async consume(queue: string, options: QueueOptions) {
+        // makes sure the queue is declared before attempting to consume from it
         await this.channel.assertQueue(queue, {
             durable: options.durable,
         });
 
+        this.channel.prefetch(1) // make sure only one task is processed at a time
         this.channel.consume(
             queue,
             (msg) => {

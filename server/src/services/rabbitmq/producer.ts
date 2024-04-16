@@ -70,7 +70,10 @@ class RabbitMQConnection {
 
             this.channel.sendToQueue(
                 queue,
-                Buffer.from(JSON.stringify(message))
+                Buffer.from(JSON.stringify(message)),
+                {
+                    persistent: true
+                }
             );
         } catch (error) {
             logger.error(
