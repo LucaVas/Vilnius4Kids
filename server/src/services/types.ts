@@ -2,7 +2,7 @@ import { Playground, Report, ReportCategory, User } from '@server/entities';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
 
 export type SubscriptionContent = { email: string };
-export type ResetPasswordContent = { email: string };
+export type PasswordResetContent = { user: User };
 export type ReportContent = {
     description: string;
     playground: Playground;
@@ -24,7 +24,7 @@ export type ActionMessage = {
         | 'updateReport';
     content:
         | SubscriptionContent
-        | ResetPasswordContent
+        | PasswordResetContent
         | ReportContent
         | UpdateReportContent;
     timestamp: Date;

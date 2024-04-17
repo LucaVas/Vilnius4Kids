@@ -29,7 +29,7 @@ export class MqConsumerFactory {
         passwordResetService: RabbitMqService
     ): RabbitMqConsumerI {
         return new RabbitMqConsumer(
-            this.mqProperties.getResetPasswordQueueProperties(),
+            this.mqProperties.getPasswordResetQueueProperties(),
             new ChannelFactory(),
             passwordResetService
         );

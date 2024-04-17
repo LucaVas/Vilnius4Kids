@@ -1,6 +1,7 @@
 import buildSubscriptionService from '@server/services/subscription';
 import buildEmailService from '@server/services/email';
 import buildReportService from '@server/services/report';
+import buildPasswordResetService from '@server/services/passwordReset';
 import createApp from './app';
 import { createDatabase } from './database';
 import config from './config';
@@ -21,10 +22,17 @@ const subscriptionConsumer =
 const reportService = buildReportService(emailService, database);
 const reportConsumer = consumerFactory.getReportsConsumer(reportService);
 
+// password reset
+const passwordResetService = buildPasswordResetService(emailService, database);
+const passwordResetConsumer =
+    consumerFactory.getPasswordResetConsumer(passwordResetService);
+
 database.initialize().then(() => {
     const app = createApp(database);
+
     subscriptionConsumer.poll();
     reportConsumer.poll();
+    passwordResetConsumer.poll();
 
     app.listen(config.port, () => {
         // eslint-disable-next-line no-console

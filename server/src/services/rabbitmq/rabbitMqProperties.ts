@@ -79,9 +79,9 @@ export class MqProperties {
         return queue;
     }
 
-    getResetPasswordQueueProperties(): QueueProperties {
+    getPasswordResetQueueProperties(): QueueProperties {
         const queue = this.queues.find((q) => q.name === 'reset-password');
-        if (!queue) throw new Error('Reset password queue not found');
+        if (!queue) throw new Error('Password reset queue not found');
         return queue;
     }
 }

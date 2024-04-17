@@ -20,9 +20,9 @@ export class MqProducerFactory {
         );
     }
 
-    getResetPasswordProducer(): RabbitMqProducerI {
+    getPasswordResetProducer(): RabbitMqProducerI {
         return new RabbitMqProducer(
-            this.mqProperties.getResetPasswordQueueProperties(),
+            this.mqProperties.getPasswordResetQueueProperties(),
             new ChannelFactory()
         );
     }
