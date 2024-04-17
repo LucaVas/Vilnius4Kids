@@ -4,7 +4,7 @@ import { PasswordChangeRequest, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';
 import { sendResetLinkSchema } from '@server/entities/password_change_requests/schema';
-import mailSender from '@server/modules/emailService';
+import mailSender from '@server/services/email';
 import { publicProcedure } from '@server/trpc';
 
 export default publicProcedure

@@ -7,7 +7,7 @@ import {
 } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
-import mailSender from '@server/modules/emailService';
+import mailSender from '@server/services/email';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import logger from '@server/logger';
 import { reportInsertSchema } from '../../../entities/report/schema';

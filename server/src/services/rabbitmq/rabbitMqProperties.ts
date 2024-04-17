@@ -68,7 +68,7 @@ export class MqProperties {
     }
 
     getSubscriptionQueueProperties(): QueueProperties {
-        const queue = this.queues.find((q) => q.name === 'subscription');
+        const queue = this.queues.find((q) => q.name === 'subscriptions');
         if (!queue) throw new Error('Subscription queue not found');
         return queue;
     }

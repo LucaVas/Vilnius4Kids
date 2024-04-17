@@ -1,10 +1,10 @@
 import logger from '@server/logger';
 import { Channel } from 'amqplib';
 import { MqProperties } from './rabbitMqProperties';
-import type { ConnectionFactory } from './connectionFactory';
+import { ConnectionFactory } from './connectionFactory';
 
 export class ChannelFactory {
-    private ConnectionFactory: ConnectionFactory;
+    private connectionFactory: ConnectionFactory;
 
     private retryDelays: number;
 
@@ -12,8 +12,10 @@ export class ChannelFactory {
 
     constructor() {
         const properties = new MqProperties();
+        const connectionFactory = new ConnectionFactory();
         this.retryDelays = properties.getChannelRetryPolicy().retryDelays;
         this.maxRetries = properties.getChannelRetryPolicy().maxRetries;
+        this.connectionFactory = connectionFactory;
     }
 
     async provideChannel(
@@ -23,7 +25,7 @@ export class ChannelFactory {
         if (!queueName) throw new Error('Queue name cannot be empty.');
 
         try {
-            const conn = await this.ConnectionFactory.getConnection();
+            const conn = await this.connectionFactory.getConnection();
             return await conn.createChannel();
         } catch (e) {
             logger.error(`Error while getting a channel. Retrying... ${e}`);

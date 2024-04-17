@@ -45,6 +45,7 @@ jobs:
       RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME: password-resets-queue
       RABBIT_MQ_PASSWORD_RESETS_QUEUE_DURABLE: true
       RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT: true
+      LOG_LEVEL: trace
 
     steps:
       - name: Check out repository
@@ -156,6 +157,7 @@ jobs:
     if: github.ref == 'refs/heads/prod'
     env:
       NODE_ENV: production
+      LOG_LEVEL: trace
       TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
       TOKEN_EXPIRES_IN: ${{ vars.TOKEN_EXPIRATION }}
       SMTP_SERVICE: ${{ vars.SMTP_SERVICE }}
@@ -268,6 +270,7 @@ jobs:
               },
               "environment": {
                 "NODE_ENV": "production",
+                "LOG_LEVEL": "trace",
                 "DB_SSL": "true",
                 "DB_SYNC": "true",
                 "DB_HOST": "${{ secrets.PROD_DB_HOST }}",

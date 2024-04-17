@@ -2,7 +2,7 @@ import logger from '@server/logger';
 import { Channel } from 'amqplib';
 import { ChannelFactory } from '../channelFactory';
 import type { QueueProperties } from '../rabbitMqProperties';
-import { RabbitMqProducerI } from './rabbitMqProducerI';
+import { ActionMessage, RabbitMqProducerI } from './rabbitMqProducerI';
 
 export class RabbitMqProducer implements RabbitMqProducerI {
     private queueName: string;
@@ -19,7 +19,7 @@ export class RabbitMqProducer implements RabbitMqProducerI {
         this.channelFactory = channelFactory;
     }
 
-    async push(msg: string): Promise<boolean> {
+    async push(msg: ActionMessage): Promise<boolean> {
         try {
             // makes sure the queue is declared before attempting to produce from it
             if (!this.channel) {

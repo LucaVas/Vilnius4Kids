@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { Report, ReportStatusChangeLog, User } from '@server/entities';
-import mailSender from '@server/modules/emailService';
+import mailSender from '@server/services/email';
 import { adminProcedure } from '@server/trpc/adminProcedure';
 import logger from '@server/logger';
 import { reportUpdateSchema } from '../../../entities/report/schema';

@@ -5,7 +5,7 @@ import { User, VerificationToken } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import config from '@server/config';
 import { Role } from '@server/entities/user/Role';
-import mailSender from '@server/modules/emailService';
+import mailSender from '@server/services/email';
 import logger from '@server/logger';
 import { signupSchema } from './schema';
 

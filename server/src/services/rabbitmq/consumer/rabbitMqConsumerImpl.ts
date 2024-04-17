@@ -1,16 +1,21 @@
 import logger from '@server/logger';
 import { Channel, Message } from 'amqplib';
+import { RabbitMqService } from '@server/services/types';
+import type { ActionMessage } from '@server/services/types';
 import { ChannelFactory } from '../channelFactory';
 import type { QueueProperties } from '../rabbitMqProperties';
 import { RabbitMqConsumerI } from './rabbitMqConsumerI';
 
-const handleIncomingNotification = (msg: string) => {
+const handleIncomingMessage = (msg: string): ActionMessage => {
     try {
-        const parsedMessage = JSON.parse(msg);
-        logger.info(`Received Notification`, parsedMessage);
-        // TODO: do something
+        const parsedMessage = JSON.parse(msg) as ActionMessage;
+        logger.info(`Received new message: ${msg}`);
+        return parsedMessage;
     } catch (error) {
-        logger.error(`Error While Parsing the message`);
+        logger.error(
+            `Error while parsing action message: ${msg}; Error: ${error}`
+        );
+        throw new Error(`Error while parsing action message`);
     }
 };
 
@@ -23,12 +28,23 @@ export class RabbitMqConsumer implements RabbitMqConsumerI {
 
     private channelFactory: ChannelFactory;
 
-    constructor(properties: QueueProperties, channelFactory: ChannelFactory) {
+    private service: RabbitMqService;
+
+    constructor(
+        properties: QueueProperties,
+        channelFactory: ChannelFactory,
+        service: RabbitMqService
+    ) {
         this.properties = properties;
+        this.queueName = properties.queueName;
         this.channelFactory = channelFactory;
+        this.service = service;
     }
 
-    async poll() {
+    async poll(): Promise<void> {
+        logger.info(
+            `Consumer for ${this.properties.name} starting to poll queue ${this.queueName}`
+        );
         // makes sure the queue is declared before attempting to consume from it
         if (!this.channel) {
             await this.getChannel();
@@ -43,10 +59,11 @@ export class RabbitMqConsumer implements RabbitMqConsumerI {
             this.queueName,
             (msg) => {
                 if (msg) {
-                    handleIncomingNotification(msg?.content?.toString());
+                    const parsedMessage = handleIncomingMessage(
+                        msg.content.toString()
+                    );
+                    this.service.processCommand(parsedMessage);
                     this.channel.ack(msg);
-                } else {
-                    logger.error(`Invalid incoming message`);
                 }
             },
             {

@@ -18,6 +18,8 @@ const schema = z
         isCi: z.coerce.boolean().default(false),
         port: z.coerce.number().default(3000),
 
+        logLevel: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
+
         auth: z.object({
             tokenKey: z.string().default(() => {
                 if (isDevTest) {
@@ -106,6 +108,7 @@ const config = schema.parse({
     env: env.NODE_ENV,
     port: env.PORT,
     isCi: env.CI,
+    logLevel: env.LOG_LEVEL,
 
     auth: {
         tokenKey: env.TOKEN_KEY,
