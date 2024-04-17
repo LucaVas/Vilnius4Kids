@@ -1,19 +1,22 @@
 import logger from '@server/logger';
-import { Connection } from 'amqplib';
+import client, { Connection } from 'amqplib';
+import { MqProperties } from './rabbitMqProperties';
 
 export class ConnectionFactory {
     private retryDelays: number;
 
-    private client: any;
+    private client: typeof client;
 
     private host: string;
 
     private maxRetries: number;
 
-    constructor(retryDelays: number, maxRetries: number, client: any) {
-        this.retryDelays = Math.abs(retryDelays); // avoid negative argument
-        this.maxRetries = Math.abs(maxRetries); // avoid negative argument
+    constructor() {
+        const properties = new MqProperties();
         this.client = client;
+        this.retryDelays = properties.getConnectionRetryPolicy().retryDelays;
+        this.maxRetries = properties.getConnectionRetryPolicy().maxRetries;
+        this.host = properties.getHost();
     }
 
     newConnection(host: string): Promise<Connection> {

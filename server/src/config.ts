@@ -48,12 +48,17 @@ const schema = z
             user: z.string().default(''),
             password: z.string().default(''),
             host: z.string().default('localhost'),
+            mqChannelRetryDelays: z.coerce.number().default(10),
+            mqChannelMaxRetries: z.coerce.number().default(5),
+            mqConnectionRetryDelays: z.coerce.number().default(10),
+            mqConnectionMaxRetries: z.coerce.number().default(5),
             queues: z.array(
                 z.object({
                     name: z.string(),
                     queueName: z.string(),
                     options: z.object({
                         durable: z.boolean().default(true),
+                        persistent: z.boolean().default(true),
                     }),
                 })
             ),
@@ -112,12 +117,17 @@ const config = schema.parse({
         user: env.RABBIT_MQ_USER,
         password: env.RABBIT_MQ_PASSWORD,
         host: env.RABBIT_MQ_HOST,
+        mqChannelRetryDelays: env.RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS,
+        mqChannelMaxRetries: env.RABBIT_MQ_CHANNEL_MAX_RETRIES,
+        mqConnectionRetryDelays: env.RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS,
+        mqConnectionMaxRetries: env.RABBIT_MQ_CONNECTION_MAX_RETRIES,
         queues: [
             {
                 name: 'subscriptions',
                 queueName: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME,
                 options: {
                     durable: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_PERSISTENT,
                 },
             },
             {
@@ -125,6 +135,7 @@ const config = schema.parse({
                 queueName: env.RABBIT_MQ_REPORTS_QUEUE_NAME,
                 options: {
                     durable: env.RABBIT_MQ_REPORTS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_REPORTS_QUEUE_PERSISTENT,
                 },
             },
             {
@@ -132,6 +143,7 @@ const config = schema.parse({
                 queueName: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME,
                 options: {
                     durable: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT,
                 },
             },
         ],
