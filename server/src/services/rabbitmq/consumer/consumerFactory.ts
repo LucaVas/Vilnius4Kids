@@ -1,5 +1,5 @@
 import { ChannelFactory } from '../channelFactory';
-import { MqProperties } from '../RabbitMqProperties';
+import { MqProperties } from '../rabbitMqProperties';
 import { RabbitMqConsumer } from './rabbitMqConsumerImpl';
 import { RabbitMqConsumerI } from './rabbitMqConsumerI';
 

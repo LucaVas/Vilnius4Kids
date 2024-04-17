@@ -1,7 +1,7 @@
 import logger from '@server/logger';
 import { Channel } from 'amqplib';
-import { ConnectionFactory } from './ConnectionFactory';
-import { MqProperties } from './RabbitMqProperties';
+import { ConnectionFactory } from './connectionFactory';
+import { MqProperties } from './rabbitMqProperties';
 
 export class ChannelFactory {
     private ConnectionFactory: ConnectionFactory;
