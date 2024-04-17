@@ -53,8 +53,6 @@ describe('Update an existing playground', async () => {
 
         expect(playground.is_open).not.toBe(existing.isOpen);
         expect(playground.is_private).toEqual(existing.isPrivate);
-        expect(message).toEqual(
-            `Playground updated successfully.`
-        );
+        expect(message).toEqual(`Playground updated successfully.`);
     });
 });

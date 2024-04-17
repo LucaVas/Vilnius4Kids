@@ -17,7 +17,7 @@ describe('Subscribe', async () => {
 
         expect(message).toBe('Thank you for subscribing!');
         expect(email).toBe('test@test.com');
-        expect(subscription).not.toBeNull()
+        expect(subscription).not.toBeNull();
     });
 
     it('Throws error with invalid email', async () => {

@@ -1,9 +1,6 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { authContext } from '@tests/utils/context';
-import {
-    fakePlayground,
-    fakeUser,
-} from '@server/entities/tests/fakes';
+import { fakePlayground, fakeUser } from '@server/entities/tests/fakes';
 import { Playground, User } from '@server/entities';
 import router from '..';
 
@@ -24,7 +21,7 @@ describe('Get all existing playgrounds', async () => {
             db.getRepository(Playground).save(fakePlayground()),
             db.getRepository(Playground).save(fakePlayground()),
         ]);
-        
+
         const { playgrounds, count } = await getPlaygrounds();
 
         expect(count).toEqual(2);

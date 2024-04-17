@@ -29,7 +29,7 @@ export class BoostratpPlaygrounds1705755908980 implements MigrationInterface {
 
         if (playgrounds.length > 0) {
             playgrounds.map(async (p) => {
-                const [ { id } ] = await queryRunner.query(
+                const [{ id }] = await queryRunner.query(
                     `INSERT INTO "addresses" (street, number, city, zip_code, district) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
                     [
                         p.address.street,

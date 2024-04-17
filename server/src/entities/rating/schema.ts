@@ -6,7 +6,11 @@ export type BareRating = Omit<Rating, 'playground' | 'user'>;
 
 export const ratingSchema = validates<BareRating>().with({
     id: z.number().int().positive(),
-    rating: z.number().positive({ message: 'Rating must be positive.' }).max(5).describe('Single rating of playground.'),
+    rating: z
+        .number()
+        .positive({ message: 'Rating must be positive.' })
+        .max(5)
+        .describe('Single rating of playground.'),
     createdAt: z.date(),
     updatedAt: z.date(),
 });

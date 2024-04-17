@@ -3,7 +3,16 @@ import { validates } from '@vilnius4kids/server/src/utils/validation';
 import { User } from './user';
 import { Role } from './Role';
 
-export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports' | 'ratings' | 'verificationToken' | 'subscription' | 'passwordChangeRequest'>;
+export type BareUser = Omit<
+    User,
+    | 'address'
+    | 'playgrounds'
+    | 'reports'
+    | 'ratings'
+    | 'verificationToken'
+    | 'subscription'
+    | 'passwordChangeRequest'
+>;
 export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role'>;
 
 export const userSchema = validates<BareUser>().with({

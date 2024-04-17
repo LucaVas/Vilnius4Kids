@@ -20,6 +20,6 @@ export default authenticatedProcedure
         }
 
         return {
-            username: user.username
+            username: user.username,
         };
     });

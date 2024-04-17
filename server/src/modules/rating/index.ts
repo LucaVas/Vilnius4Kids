@@ -4,5 +4,5 @@ import getRating from './getRating';
 
 export default router({
     rate,
-    getRating
+    getRating,
 });

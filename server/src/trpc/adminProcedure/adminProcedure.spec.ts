@@ -17,7 +17,9 @@ vi.mock('jsonwebtoken', () => ({
         verify: (token: string) => {
             if (token !== VALID_TOKEN) throw new Error('Invalid token');
 
-            return { user: { id: 2, username: 'username-test', role: 'admin' } };
+            return {
+                user: { id: 2, username: 'username-test', role: 'admin' },
+            };
         },
     },
 }));

@@ -6,5 +6,5 @@ import getReportCategories from './getReportCategories';
 export default router({
     addReportCategory,
     deleteReportCategory,
-    getReportCategories
+    getReportCategories,
 });

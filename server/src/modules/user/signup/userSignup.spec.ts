@@ -32,13 +32,11 @@ describe('Signup', async () => {
     });
 
     it('Throws error if email already exists', async () => {
-        await db
-            .getRepository(User)
-            .save({
-                username: 'some-username-2',
-                email: 'newtest@test.com',
-                password: 'test123456',
-            });
+        await db.getRepository(User).save({
+            username: 'some-username-2',
+            email: 'newtest@test.com',
+            password: 'test123456',
+        });
 
         await expect(
             signup({
