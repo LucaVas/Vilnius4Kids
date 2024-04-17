@@ -1,5 +1,6 @@
 import buildSubscriptionService from '@server/services/subscription';
 import buildEmailService from '@server/services/email';
+import buildReportService from '@server/services/report';
 import createApp from './app';
 import { createDatabase } from './database';
 import config from './config';
@@ -16,9 +17,14 @@ const subscriptionService = buildSubscriptionService(emailService, database);
 const subscriptionConsumer =
     consumerFactory.getSubscriptionsConsumer(subscriptionService);
 
+// report
+const reportService = buildReportService(emailService, database);
+const reportConsumer = consumerFactory.getReportsConsumer(reportService);
+
 database.initialize().then(() => {
     const app = createApp(database);
     subscriptionConsumer.poll();
+    reportConsumer.poll();
 
     app.listen(config.port, () => {
         // eslint-disable-next-line no-console

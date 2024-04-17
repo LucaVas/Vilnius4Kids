@@ -16,7 +16,11 @@ export default (
         logger.info(`Processing message: ${msg.command}`);
         switch (msg.command) {
             case 'registerSubscription':
-                await subscribeUser(mailService, database, msg.content);
+                await subscribeUser(
+                    mailService,
+                    database,
+                    msg.content as SubscriptionContent
+                );
                 break;
             default:
                 logger.error(`Unknown command: ${msg.command}`);
