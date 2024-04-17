@@ -57,8 +57,8 @@ const schema = z
                     name: z.string(),
                     queueName: z.string(),
                     options: z.object({
-                        durable: z.boolean().default(true),
-                        persistent: z.boolean().default(true),
+                        durable: z.coerce.boolean().default(true),
+                        persistent: z.coerce.boolean().default(true),
                     }),
                 })
             ),
