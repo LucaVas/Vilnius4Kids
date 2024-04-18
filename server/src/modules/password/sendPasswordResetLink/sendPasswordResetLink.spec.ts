@@ -19,7 +19,7 @@ describe('Send password reset link', async () => {
 
         // THEN
         expect(message).toBe(
-            'We have sent an email with a password reset link to your inbox.'
+            'Thank you! We will send an email with a password reset link to your inbox.'
         );
     });
 

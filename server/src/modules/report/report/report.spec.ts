@@ -30,18 +30,17 @@ describe('Report a new issue', async () => {
             .getRepository(ReportCategory)
             .save(fakeReportCategory());
 
-        const { message, newReport } = await report({
+        const { message } = await report({
             playgroundId: playground.id,
             description: 'Test report description',
             reportCategoryId: reportCategory.id,
         });
 
-        expect(message).toEqual('Report added successfully.');
-        expect(newReport.description).toEqual('Test report description');
+        expect(message).toEqual('Thank you for submitting your report!');
 
         const logs = await db
             .getRepository(ReportStatusChangeLog)
-            .findBy({ report: newReport });
+            .findOne({ where: { playground } })
         expect(logs).toHaveLength(1);
     });
 

@@ -11,12 +11,12 @@ describe('Subscribe', async () => {
             email: 'test@test.com',
         });
 
+        expect(message).toBe('Thank you for subscribing!');
+        expect(email).toBe('test@test.com');
+
         const subscription = await db
             .getRepository(Subscription)
             .findOneBy({ email: 'test@test.com' });
-
-        expect(message).toBe('Thank you for subscribing!');
-        expect(email).toBe('test@test.com');
         expect(subscription).not.toBeNull();
     });
 

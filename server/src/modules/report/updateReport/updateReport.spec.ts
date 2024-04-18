@@ -16,13 +16,17 @@ describe('Update an existing report', async () => {
         const { updateReport } = router.createCaller(authContext({ db }, user));
 
         const existing = await db.getRepository(Report).save(fakeReport());
-        const { message, report } = await updateReport({
+        const { message } = await updateReport({
             id: existing.id,
             description: 'description',
             status: getStatusFromString('in progress')!,
         });
 
-        expect(message).toEqual('Report updated successfully.');
+        expect(message).toEqual('Thank you for updating this report!');
+
+        const report = await db
+            .getRepository(Report)
+            .findOneByOrFail({ id: existing.id });
         expect(report.description).toEqual('description');
         expect(report.status).toEqual('in progress');
     });
