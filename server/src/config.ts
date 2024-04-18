@@ -149,6 +149,14 @@ const config = schema.parse({
                     persistent: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT,
                 },
             },
+            {
+                name: 'account-verifications',
+                queueName: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
+                },
+            },
         ],
     },
 

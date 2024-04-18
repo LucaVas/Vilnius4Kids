@@ -3,6 +3,7 @@ import { ReportStatus } from '@server/entities/report/ReportStatus';
 
 export type SubscriptionContent = { email: string };
 export type PasswordResetContent = { user: User };
+export type AccountVerificationContent = { user: User };
 export type ReportContent = {
     description: string;
     playground: Playground;
@@ -21,12 +22,14 @@ export type ActionMessage = {
         | 'registerSubscription'
         | 'resetPassword'
         | 'registerReport'
-        | 'updateReport';
+        | 'updateReport'
+        | 'verifyAccount';
     content:
         | SubscriptionContent
         | PasswordResetContent
         | ReportContent
-        | UpdateReportContent;
+        | UpdateReportContent
+        | AccountVerificationContent;
     timestamp: Date;
 };
 
@@ -46,7 +49,7 @@ export interface MailService {
         recipient: string,
         username: string
     ): Promise<void>;
-    sendToken(
+    sendVerificationToken(
         token: string,
         recipient: string,
         username: string

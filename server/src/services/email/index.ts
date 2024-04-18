@@ -33,7 +33,7 @@ export default (): MailService => ({
             send(message);
         }
     },
-    sendToken: async (token: string, recipient: string, username: string) => {
+    sendVerificationToken: async (token: string, recipient: string, username: string) => {
         const url = `${clientPath}/verify?email=${recipient}&token=${token}`;
         const subject = `Vilnius4Kids - Verify your account`;
         const html = `<header><p>Hi, ${username}</p></header><body><p>Thank you for signing up for Vilnius4Kids!.<br><br>To verify your account, please click <a href="${url}">here</a>.</p></body><footer><p>Best regards,</p><p>Vilnius4Kids team</p></footer>`;

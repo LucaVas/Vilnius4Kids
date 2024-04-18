@@ -80,8 +80,16 @@ export class MqProperties {
     }
 
     getPasswordResetQueueProperties(): QueueProperties {
-        const queue = this.queues.find((q) => q.name === 'reset-password');
+        const queue = this.queues.find((q) => q.name === 'password-resets');
         if (!queue) throw new Error('Password reset queue not found');
+        return queue;
+    }
+
+    getAccountVerificationQueueProperties(): QueueProperties {
+        const queue = this.queues.find(
+            (q) => q.name === 'account-verifications'
+        );
+        if (!queue) throw new Error('Account verification queue not found');
         return queue;
     }
 }

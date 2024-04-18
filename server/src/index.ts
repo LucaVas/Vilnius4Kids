@@ -2,6 +2,7 @@ import buildSubscriptionService from '@server/services/subscription';
 import buildEmailService from '@server/services/email';
 import buildReportService from '@server/services/report';
 import buildPasswordResetService from '@server/services/passwordReset';
+import buildAccountVerificationService from '@server/services/accountVerification';
 import createApp from './app';
 import { createDatabase } from './database';
 import config from './config';
@@ -27,12 +28,21 @@ const passwordResetService = buildPasswordResetService(emailService, database);
 const passwordResetConsumer =
     consumerFactory.getPasswordResetConsumer(passwordResetService);
 
+// account verification
+const accountVerificationService = buildAccountVerificationService(
+    emailService,
+    database
+);
+const accountVerificationConsumer =
+    consumerFactory.getAccountVerificationConsumer(accountVerificationService);
+
 database.initialize().then(() => {
     const app = createApp(database);
 
     subscriptionConsumer.poll();
     reportConsumer.poll();
     passwordResetConsumer.poll();
+    accountVerificationConsumer.poll();
 
     app.listen(config.port, () => {
         // eslint-disable-next-line no-console

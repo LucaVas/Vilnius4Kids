@@ -34,4 +34,14 @@ export class MqConsumerFactory {
             passwordResetService
         );
     }
+
+    getAccountVerificationConsumer(
+        accountVerificationService: RabbitMqService
+    ): RabbitMqConsumerI {
+        return new RabbitMqConsumer(
+            this.mqProperties.getAccountVerificationQueueProperties(),
+            new ChannelFactory(),
+            accountVerificationService
+        );
+    }
 }

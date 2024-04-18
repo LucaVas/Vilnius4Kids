@@ -26,4 +26,11 @@ export class MqProducerFactory {
             new ChannelFactory()
         );
     }
+
+    getAccountVerificationProducer(): RabbitMqProducerI {
+        return new RabbitMqProducer(
+            this.mqProperties.getAccountVerificationQueueProperties(),
+            new ChannelFactory()
+        );
+    }
 }
