@@ -5,19 +5,20 @@ import {
     fakeReportCategory,
     fakeUser,
 } from '@server/entities/tests/fakes';
-import {
-    Playground,
-    ReportCategory,
-    ReportStatusChangeLog,
-    User,
-} from '@server/entities';
+import { Playground, ReportCategory, User } from '@server/entities';
 import { Role } from '@server/entities/user/Role';
 import router from '..';
+import { reportProducer } from '.';
 
 const db = await createTestDatabase();
 
 describe('Report a new issue', async () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
     it('User can report an issue', async () => {
+        const spy = vi.spyOn(reportProducer, 'push');
+
         const user = await db
             .getRepository(User)
             .save(fakeUser({ role: Role.USER, isRegistered: true }));
@@ -38,10 +39,7 @@ describe('Report a new issue', async () => {
 
         expect(message).toEqual('Thank you for submitting your report!');
 
-        const logs = await db
-            .getRepository(ReportStatusChangeLog)
-            .findOne({ where: { playground } })
-        expect(logs).toHaveLength(1);
+        expect(spy).toBeCalledTimes(1);
     });
 
     it('User cannot report if playground does not exist', async () => {
@@ -107,6 +105,33 @@ describe('Report a new issue', async () => {
             })
         ).rejects.toThrow(
             /Report description should be at least 5 characters long./
+        );
+    });
+
+    it('Throws error if RabbitMq producer fails', async () => {
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER, isRegistered: true }));
+        const { report } = router.createCaller(authContext({ db }, user));
+
+        const playground = await db
+            .getRepository(Playground)
+            .save(fakePlayground());
+        const reportCategory = await db
+            .getRepository(ReportCategory)
+            .save(fakeReportCategory());
+
+        const spy = vi.spyOn(reportProducer, 'push');
+        spy.mockRejectedValue(new Error('RabbitMQ error'));
+
+        await expect(
+            report({
+                playgroundId: playground.id,
+                description: 'Test report description',
+                reportCategoryId: reportCategory.id,
+            })
+        ).rejects.toThrow(
+            /Error while submitting report. Please try again later/
         );
     });
 });

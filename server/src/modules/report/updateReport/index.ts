@@ -32,7 +32,7 @@ export default adminProcedure
             }
 
             try {
-                reportProducer.push({
+                await reportProducer.push({
                     command: 'updateReport',
                     content: {
                         description,

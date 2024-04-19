@@ -1,11 +1,16 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { User } from '@server/entities';
 import userRouter from '..';
+import { accountVerificationProducer } from '.';
 
 const db = await createTestDatabase();
 const { signup } = userRouter.createCaller({ db } as any);
 
 describe('Signup', async () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('Signs user up with valid credentials', async () => {
         const user = await signup({
             username: 'some-username',
@@ -80,18 +85,21 @@ describe('Signup', async () => {
     });
 
     it('Verification token is created at signup and user is unregistered', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+
         const user = await signup({
             username: 'some-username-5',
             email: 'TEST@TESTINGMAIL1.COM',
             password: 'Password123.',
         });
 
-        const signedUpUser = await db.getRepository(User).findOne({
-            where: { id: user.id },
-            relations: ['verificationToken'],
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        const signedUpUser = await db.getRepository(User).findOneBy({
+            id: user.id,
         });
 
-        expect(signedUpUser?.verificationToken.token).not.toBe(null);
-        expect(signedUpUser?.isRegistered).toBe(false);
+        expect(signedUpUser).not.toBe(null);
+        expect(signedUpUser!.isRegistered).toBe(false);
     });
 });

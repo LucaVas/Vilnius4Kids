@@ -28,7 +28,7 @@ export default publicProcedure
         }
 
         try {
-            passwordResetProducer.push({
+            await passwordResetProducer.push({
                 command: 'resetPassword',
                 content: {
                     user,

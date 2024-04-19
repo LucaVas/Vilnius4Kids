@@ -6,7 +6,7 @@ import logger from '@server/logger';
 import { MqProducerFactory } from '@server/services/rabbitmq/producer/producerFactory';
 
 const producerFactory = new MqProducerFactory();
-const subscriptionsProducer = producerFactory.getSubscriptionsProducer();
+export const subscriptionsProducer = producerFactory.getSubscriptionsProducer();
 
 export default publicProcedure
     .meta({ description: 'Endpoint dedicated for subscription.' })

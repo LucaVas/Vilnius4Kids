@@ -54,7 +54,7 @@ export default authenticatedProcedure
             }
 
             try {
-                reportProducer.push({
+                await reportProducer.push({
                     command: 'registerReport',
                     content: {
                         description,
@@ -67,7 +67,7 @@ export default authenticatedProcedure
             } catch (e) {
                 logger.error(`Error while sending report to RabbitMQ: ${e}`);
                 throw new TRPCError({
-                    message: `Error while sending report email. Please try again later.`,
+                    message: `Error while submitting report. Please try again later.`,
                     code: 'INTERNAL_SERVER_ERROR',
                 });
             }
