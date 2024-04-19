@@ -1,5 +1,5 @@
 import logger from '@server/logger';
-import { Channel } from 'amqplib';
+import type { Channel } from 'amqplib';
 import { MqProperties } from '../rabbitMqProperties';
 import { ConnectionFactory } from './connectionFactory';
 

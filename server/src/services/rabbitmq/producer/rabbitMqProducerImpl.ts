@@ -1,9 +1,9 @@
 import logger from '@server/logger';
-import { Channel } from 'amqplib';
-import { ActionMessage } from '@server/services/types';
+import type { Channel } from 'amqplib';
+import type { ActionMessage } from '@server/services/types';
 import { ChannelFactory } from '../factories/channelFactory';
 import type { QueueProperties } from '../rabbitMqProperties';
-import { RabbitMqProducerI } from './rabbitMqProducerI';
+import type { RabbitMqProducerI } from './rabbitMqProducerI';
 
 export class RabbitMqProducer implements RabbitMqProducerI {
     private queueName: string;

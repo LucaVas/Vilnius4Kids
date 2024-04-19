@@ -1,7 +1,7 @@
 import { ChannelFactory } from '../factories/channelFactory';
 import { MqProperties } from '../rabbitMqProperties';
 import { RabbitMqProducer } from './rabbitMqProducerImpl';
-import { RabbitMqProducerI } from './rabbitMqProducerI';
+import type { RabbitMqProducerI } from './rabbitMqProducerI';
 
 export class MqProducerFactory {
     private mqProperties = new MqProperties();

@@ -1,5 +1,5 @@
 import logger from '@server/logger';
-import client, { Connection } from 'amqplib';
+import client, { type Connection } from 'amqplib';
 import { MqProperties } from '../rabbitMqProperties';
 
 export class ConnectionFactory {
