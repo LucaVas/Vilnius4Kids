@@ -5,7 +5,7 @@ import {
 } from '@server/services/types';
 import logger from '@server/logger';
 import { Subscription } from '@server/entities';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryFailedError } from 'typeorm';
 import { RabbitMqService } from '../types';
 
 export default (
@@ -36,19 +36,27 @@ async function subscribeUser(
     database: DataSource,
     content: SubscriptionContent
 ) {
-    // save subscription
-    const subscription = database.getRepository(Subscription).create({
-        email: content.email,
-        isUser: false,
-        isContacted: false,
-    });
-
     try {
+        // save subscription
+        const subscription = database.getRepository(Subscription).create({
+            email: content.email,
+            isUser: false,
+            isContacted: false,
+        });
         await mailService.sendSubscriptionEmail(content.email);
-    } catch (error) {
-        logger.error(`Error while sending subscription email: ${error}`);
-    }
 
-    subscription.isContacted = true;
-    await database.getRepository(Subscription).save(subscription);
+        subscription.isContacted = true;
+        await database.getRepository(Subscription).save(subscription);
+    } catch (e) {
+        if (e instanceof QueryFailedError) {
+            logger.error(`Error while saving subscription in database: ${e}`);
+            return;
+        }
+
+        if (e instanceof Error) {
+            if (e.message.includes('Error while sending email'))
+                logger.error(`Error while sending subscription email: ${e}`);
+            else logger.error(`Error during subscription: ${e}`);
+        }
+    }
 }

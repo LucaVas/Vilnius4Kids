@@ -6,7 +6,7 @@ import {
 } from '@server/services/types';
 import logger from '@server/logger';
 import { Report, ReportStatusChangeLog } from '@server/entities';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryFailedError } from 'typeorm';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
 import { RabbitMqService } from '../types';
 
@@ -82,27 +82,36 @@ async function registerReport(
     database: DataSource,
     content: ReportContent
 ) {
-    const newReport = await database.getRepository(Report).save({
-        description: content.description,
-        playground: content.playground,
-        category: content.category,
-        user: content.user,
-    });
-
-    await database.getRepository(ReportStatusChangeLog).insert({
-        report: newReport,
-        playground: content.playground,
-        status: ReportStatus.OPEN,
-        changeStatusMessage: content.description,
-    });
-
     try {
+        const newReport = await database.getRepository(Report).save({
+            description: content.description,
+            playground: content.playground,
+            category: content.category,
+            user: content.user,
+        });
+
+        await database.getRepository(ReportStatusChangeLog).insert({
+            report: newReport,
+            playground: content.playground,
+            status: ReportStatus.OPEN,
+            changeStatusMessage: content.description,
+        });
+
         await mailService.sendReport(
             newReport.id,
             content.user.email,
             content.user.username
         );
-    } catch (error) {
-        logger.error(`Error while sending report email: ${error}`);
+    } catch (e) {
+        if (e instanceof QueryFailedError) {
+            logger.error(`Error while saving report in database: ${e}`);
+            return;
+        }
+
+        if (e instanceof Error) {
+            if (e.message.includes('Error while sending email'))
+                logger.error(`Error while sending report email: ${e}`);
+            else logger.error(`Error while registering report: ${e}`);
+        }
     }
 }

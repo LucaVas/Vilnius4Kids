@@ -6,7 +6,7 @@ import {
 } from '@server/services/types';
 import logger from '@server/logger';
 import { VerificationToken } from '@server/entities';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryFailedError } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { Role } from '@server/entities/user/Role';
 import { RabbitMqService } from '../types';
@@ -41,22 +41,33 @@ async function verifyAccount(
 ) {
     const token = crypto.randomBytes(32).toString('hex');
 
-    if (content.user.role === Role.USER) {
-        await database.getRepository(VerificationToken).save({
-            user: content.user,
-            token: await bcrypt.hash(token, 10),
-        });
+    try {
+        if (content.user.role === Role.USER) {
+            await database.getRepository(VerificationToken).save({
+                user: content.user,
+                token: await bcrypt.hash(token, 10),
+            });
 
-        try {
             await mailService.sendVerificationToken(
                 token,
                 content.user.email,
                 content.user.username
             );
-        } catch (error) {
+        }
+    } catch (e) {
+        if (e instanceof QueryFailedError) {
             logger.error(
-                `Error while sending account verification token email: ${error}`
+                `Error while executing resetting password transactions in database: ${e}`
             );
+            return;
+        }
+
+        if (e instanceof Error) {
+            if (e.message.includes('Error while sending email'))
+                logger.error(
+                    `Error while sending account verification token email: ${e}`
+                );
+            else logger.error(`Error during account verification: ${e}`);
         }
     }
 }
