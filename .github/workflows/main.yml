@@ -102,6 +102,9 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
+          RABBIT_MQ_USER: testuser
+          RABBIT_MQ_PASSWORD: testpassword
+          RABBIT_MQ_HOST: localhost
 
       - name: Run migrations
         run: npm run migration:run -w=server
@@ -112,9 +115,6 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
-          RABBIT_MQ_USER: testuser
-          RABBIT_MQ_PASSWORD: testpassword
-          RABBIT_MQ_HOST: localhost
 
       - name: Build front end for E2E tests
         run: npm run build -w=client
