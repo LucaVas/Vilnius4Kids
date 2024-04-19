@@ -1,5 +1,7 @@
 import config from '@server/config';
 
+const { env } = config;
+
 const {
     user,
     password,
@@ -50,6 +52,7 @@ export class MqProperties {
     }
 
     getHost() {
+        if (env === 'development' || env === 'test') return `amqp://${this.host}`;
         return `amqps://${this.user}:${this.password}@${this.host}/${this.user}`;
     }
 
