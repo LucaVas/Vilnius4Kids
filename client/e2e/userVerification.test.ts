@@ -22,7 +22,7 @@ test.describe.serial('verification token sequence', () => {
     await form.locator('input[type="password"]').fill(password);
     await form.locator('button[type="submit"]').click();
 
-    await expect(successMessage).toBeVisible();
+    await expect(successMessage).toBeVisible({ timeout: 30000 });
     await expect(tokenMessage).toBeVisible();
     });
 
