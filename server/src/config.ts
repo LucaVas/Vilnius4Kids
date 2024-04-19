@@ -154,7 +154,8 @@ const config = schema.parse({
                 queueName: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME,
                 options: {
                     durable: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE,
-                    persistent: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
+                    persistent:
+                        env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
                 },
             },
         ],

@@ -1,8 +1,4 @@
-import {
-    Playground,
-    ReportCategory,
-    User,
-} from '@server/entities';
+import { Playground, ReportCategory, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import logger from '@server/logger';

@@ -44,7 +44,7 @@ describe('Send password reset link', async () => {
     it('Replaces a change request if it already exists', async () => {
         const spy = vi.spyOn(passwordResetProducer, 'push');
         spy.mockImplementationOnce(() => Promise.resolve(true));
-        
+
         // Given
         const user = await db
             .getRepository(User)

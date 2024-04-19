@@ -10,8 +10,7 @@ import router from '../index';
 const db = await createTestDatabase();
 
 describe('Get verification token', async () => {
-
-    it('Get a token generated for user', async () => {        
+    it('Get a token generated for user', async () => {
         // Given
         const user = await db
             .getRepository(User)

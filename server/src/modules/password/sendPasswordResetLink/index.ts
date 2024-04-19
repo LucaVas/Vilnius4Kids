@@ -1,4 +1,3 @@
-
 import { User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';

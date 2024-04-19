@@ -14,6 +14,15 @@ jobs:
           POSTGRES_DB: testdb
         ports:
           - 5432:5432
+
+      rabbitmq:
+        image: rabbitmq:3.13-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: testuser
+          RABBITMQ_DEFAULT_PASS: testpassword
+        ports:
+          - 5672:5672
+
     env:
       NODE_ENV: test
       TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
@@ -29,9 +38,6 @@ jobs:
       VITE_API_PATH: /api/v1/trpc
       CLIENT_PATH: http://localhost:5173
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      RABBIT_MQ_USER: ${{ secrets.RABBIT_MQ_USER }}
-      RABBIT_MQ_PASSWORD: ${{ secrets.RABBIT_MQ_PASSWORD }}
-      RABBIT_MQ_HOST: ${{ secrets.RABBIT_MQ_HOST }}
       RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS: 1000
       RABBIT_MQ_CHANNEL_MAX_RETRIES: 5
       RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS: 1000
@@ -106,6 +112,9 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
+          RABBIT_MQ_USER: testuser
+          RABBIT_MQ_PASSWORD: testpassword
+          RABBIT_MQ_HOST: localhost
 
       - name: Build front end for E2E tests
         run: npm run build -w=client

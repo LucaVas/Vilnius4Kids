@@ -14,7 +14,7 @@ describe('Signup', async () => {
     it('Signs user up with valid credentials', async () => {
         const spy = vi.spyOn(accountVerificationProducer, 'push');
         spy.mockImplementationOnce(() => Promise.resolve(true));
-        
+
         const user = await signup({
             username: 'some-username',
             email: 'test@test.com',
