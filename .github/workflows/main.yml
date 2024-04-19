@@ -104,7 +104,7 @@ jobs:
           PORT: 3000
           RABBIT_MQ_USER: testuser
           RABBIT_MQ_PASSWORD: testpassword
-          RABBIT_MQ_HOST: localhost
+          RABBIT_MQ_HOST: amqp://localhost
 
       - name: Run migrations
         run: npm run migration:run -w=server
