@@ -12,6 +12,9 @@ describe('Signup', async () => {
     });
 
     it('Signs user up with valid credentials', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+        
         const user = await signup({
             username: 'some-username',
             email: 'test@test.com',
@@ -55,6 +58,9 @@ describe('Signup', async () => {
     });
 
     it('Throws error with invalid password', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         await expect(
             signup({
                 username: 'some-username',
@@ -65,6 +71,9 @@ describe('Signup', async () => {
     });
 
     it('Signup if email has trailing spaces', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username-3',
             email: ' \t test@testmail.com\t   \t',
@@ -75,6 +84,9 @@ describe('Signup', async () => {
     });
 
     it('Signup if email if uppercase', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username-4',
             email: 'TEST@TESTINGMAIL.COM',
@@ -86,6 +98,7 @@ describe('Signup', async () => {
 
     it('Verification token is created at signup and user is unregistered', async () => {
         const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await signup({
             username: 'some-username-5',

@@ -16,6 +16,7 @@ describe('Update an existing report', async () => {
 
     it('User can update an existing report', async () => {
         const spy = vi.spyOn(reportProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await db
             .getRepository(User)

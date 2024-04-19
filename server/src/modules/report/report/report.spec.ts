@@ -18,6 +18,7 @@ describe('Report a new issue', async () => {
     });
     it('User can report an issue', async () => {
         const spy = vi.spyOn(reportProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await db
             .getRepository(User)

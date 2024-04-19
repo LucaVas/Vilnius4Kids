@@ -25,6 +25,8 @@ describe('Send password reset link', async () => {
     });
     it('Send a link for user', async () => {
         const spy = vi.spyOn(passwordResetProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         // Given
         const user = await db
             .getRepository(User)
@@ -40,6 +42,9 @@ describe('Send password reset link', async () => {
     });
 
     it('Replaces a change request if it already exists', async () => {
+        const spy = vi.spyOn(passwordResetProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+        
         // Given
         const user = await db
             .getRepository(User)
@@ -89,8 +94,8 @@ describe('Send password reset link', async () => {
         const spy = vi.spyOn(passwordResetProducer, 'push');
         spy.mockRejectedValue(new Error('RabbitMQ error'));
 
-        await expect(sendPasswordResetLink({ email: user.email })).rejects.toThrow(
-            `Error while sending password reset token.`
-        );
+        await expect(
+            sendPasswordResetLink({ email: user.email })
+        ).rejects.toThrow(`Error while sending password reset token.`);
     });
 });
