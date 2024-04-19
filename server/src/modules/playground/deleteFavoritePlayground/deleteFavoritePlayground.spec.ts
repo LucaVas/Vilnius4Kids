@@ -55,5 +55,5 @@ describe('Delete a playground from favorites', async () => {
         await expect(deleteFavoritePlayground({ id: 1 })).rejects.toThrow(
             `Error while deleting playground from favorites.`
         );
-    })
+    });
 });

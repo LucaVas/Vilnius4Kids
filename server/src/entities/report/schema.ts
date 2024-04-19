@@ -46,7 +46,7 @@ export const reportUpdateSchema = reportSchema.omit({
 export const reportOptionalIdSchema = reportSchema
     .pick({ id: true })
     .optional();
-export const reportIdSchema = reportSchema.pick({ id: true })
+export const reportIdSchema = reportSchema.pick({ id: true });
 
 export type ReportSelect = z.infer<typeof reportSchema>;
 export type ReportInsert = z.infer<typeof reportInsertSchema>;

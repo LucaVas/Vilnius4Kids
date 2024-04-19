@@ -7,7 +7,6 @@ import { TRPCError } from '@trpc/server';
 export default authenticatedProcedure
     .input(reportIdSchema)
     .query(async ({ input: { id }, ctx: { db } }) => {
-
         const playground = await db.getRepository(Playground).findOneBy({ id });
 
         if (!playground) {

@@ -29,7 +29,7 @@ test.describe.serial('rate playgrounds', () => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
-    await expect(map).not.toBeHidden({ timeout: 5000 });
+    await expect(map).not.toBeHidden();
 
     await page.locator('div[role="button"]').nth(5).click();
     const infoBox = page.getByTestId('infobox');
@@ -37,10 +37,10 @@ test.describe.serial('rate playgrounds', () => {
 
     const goToBtn = page.getByTestId('go-to-playground-button');
     await expect(goToBtn).not.toBeHidden();
-    await goToBtn.click({ timeout: 5000 });
+    await goToBtn.click();
 
     const playgroundViewCard = page.getByTestId('playground-view-card');
-    await expect(playgroundViewCard).not.toBeHidden({ timeout: 5000 });
+    await expect(playgroundViewCard).not.toBeHidden();
 
     const ratingStars = page.getByTestId('rating-stars');
     await expect(ratingStars).not.toBeHidden();

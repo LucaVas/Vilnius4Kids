@@ -8,12 +8,13 @@ import router from '../index';
 const db = await createTestDatabase();
 const { verify } = router.createCaller({ db } as any);
 
-
 describe('Verify token', async () => {
     it('Verify a user if token is valid', async () => {
-        
         // Given
-        const token = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 10);
+        const token = await bcrypt.hash(
+            crypto.randomBytes(32).toString('hex'),
+            10
+        );
         const user = await db.getRepository(User).save(fakeUser());
         await db.getRepository(VerificationToken).save({
             user,
@@ -29,7 +30,7 @@ describe('Verify token', async () => {
         });
 
         // THEN
-        const verifiedUser = await db.getRepository(User).findOneBy({ id: 1 })
+        const verifiedUser = await db.getRepository(User).findOneBy({ id: 1 });
         expect(message).toBe('User has been successfully verified.');
         expect(userId).toBe(user.id);
         expect(verifiedUser?.isRegistered).toBe(true);
@@ -103,8 +104,10 @@ describe('Verify token', async () => {
             token,
         });
 
-        const verifiedUser = await db.getRepository(User).findOneBy({ id: user.id });
-        expect(verifiedUser?.isRegistered).toBe(true)
+        const verifiedUser = await db
+            .getRepository(User)
+            .findOneBy({ id: user.id });
+        expect(verifiedUser?.isRegistered).toBe(true);
 
         await expect(
             verify({

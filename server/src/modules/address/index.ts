@@ -8,5 +8,5 @@ export default router({
     addAddress,
     updateAddress,
     deleteAddress,
-    getAddresses
+    getAddresses,
 });

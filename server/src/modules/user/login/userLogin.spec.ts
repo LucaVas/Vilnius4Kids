@@ -24,7 +24,7 @@ describe('User login', async () => {
         });
 
         expect(id).toBe(1);
-        expect(username).toBe('test-username')
+        expect(username).toBe('test-username');
         expect(token.slice(0, 3)).toEqual('eyJ');
     });
 

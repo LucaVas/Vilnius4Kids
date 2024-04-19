@@ -18,6 +18,8 @@ const schema = z
         isCi: z.coerce.boolean().default(false),
         port: z.coerce.number().default(3000),
 
+        logLevel: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
+
         auth: z.object({
             tokenKey: z.string().default(() => {
                 if (isDevTest) {
@@ -42,6 +44,26 @@ const schema = z
                 user: z.string().email().default(''),
                 pass: z.string().default(''),
             }),
+        }),
+
+        rabbitMq: z.object({
+            user: z.string().default(''),
+            password: z.string().default(''),
+            host: z.string().default('localhost'),
+            mqChannelRetryDelays: z.coerce.number().default(10),
+            mqChannelMaxRetries: z.coerce.number().default(5),
+            mqConnectionRetryDelays: z.coerce.number().default(10),
+            mqConnectionMaxRetries: z.coerce.number().default(5),
+            queues: z.array(
+                z.object({
+                    name: z.string(),
+                    queueName: z.string(),
+                    options: z.object({
+                        durable: z.coerce.boolean().default(true),
+                        persistent: z.coerce.boolean().default(true),
+                    }),
+                })
+            ),
         }),
 
         database: z.object({
@@ -86,11 +108,57 @@ const config = schema.parse({
     env: env.NODE_ENV,
     port: env.PORT,
     isCi: env.CI,
+    logLevel: env.LOG_LEVEL,
 
     auth: {
         tokenKey: env.TOKEN_KEY,
         expiresIn: env.TOKEN_EXPIRES_IN,
         passwordCost: env.PASSWORD_COST,
+    },
+
+    rabbitMq: {
+        user: env.RABBIT_MQ_USER,
+        password: env.RABBIT_MQ_PASSWORD,
+        host: env.RABBIT_MQ_HOST,
+        mqChannelRetryDelays: env.RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS,
+        mqChannelMaxRetries: env.RABBIT_MQ_CHANNEL_MAX_RETRIES,
+        mqConnectionRetryDelays: env.RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS,
+        mqConnectionMaxRetries: env.RABBIT_MQ_CONNECTION_MAX_RETRIES,
+        queues: [
+            {
+                name: 'subscriptions',
+                queueName: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'reports',
+                queueName: env.RABBIT_MQ_REPORTS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_REPORTS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_REPORTS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'password-resets',
+                queueName: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'account-verifications',
+                queueName: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE,
+                    persistent:
+                        env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
+                },
+            },
+        ],
     },
 
     database: {

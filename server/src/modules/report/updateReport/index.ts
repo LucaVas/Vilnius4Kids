@@ -1,9 +1,9 @@
 import { TRPCError } from '@trpc/server';
-import { Report, ReportStatusChangeLog, User } from '@server/entities';
-import mailSender from '@server/modules/emailService';
+import { Report, User } from '@server/entities';
 import { adminProcedure } from '@server/trpc/adminProcedure';
 import logger from '@server/logger';
 import { reportUpdateSchema } from '../../../entities/report/schema';
+import { reportProducer } from '../report';
 
 export default adminProcedure
     .input(reportUpdateSchema)
@@ -12,18 +12,10 @@ export default adminProcedure
             input: { id, description, status },
             ctx: { db, authUser },
         }) => {
-            const [{ affected, raw }, user] = await Promise.all([
-                db
-                    .getRepository(Report)
-                    .createQueryBuilder()
-                    .update()
-                    .set({ description, status })
-                    .where('id = :id', { id })
-                    .returning('*')
-                    .execute(),
+            const [user, report] = await Promise.all([
                 db.getRepository(User).findOneBy({ id: authUser.id }),
+                db.getRepository(Report).findOneBy({ id }),
             ]);
-
             if (!user) {
                 logger.error(`User with ID [${authUser.id}] does not exist.`);
                 throw new TRPCError({
@@ -31,8 +23,7 @@ export default adminProcedure
                     message: `Error while updating report.`,
                 });
             }
-
-            if (affected === 0) {
+            if (!report) {
                 logger.error(`Report with ID [${id}] does not exist.`);
                 throw new TRPCError({
                     code: 'NOT_FOUND',
@@ -40,19 +31,29 @@ export default adminProcedure
                 });
             }
 
-            await db.getRepository(ReportStatusChangeLog).insert({
-                report: raw[0],
-                playground: raw[0].playground,
-                status,
-                changeStatusMessage: description,
-            });
-
-            const sender = mailSender(user.username, user.email);
-            sender.sendReport(raw[0].id);
+            try {
+                await reportProducer.push({
+                    command: 'updateReport',
+                    content: {
+                        description,
+                        status,
+                        report,
+                        user,
+                    },
+                    timestamp: new Date(),
+                });
+            } catch (e) {
+                logger.error(
+                    `Error while sending update report command to RabbitMQ: ${e}`
+                );
+                throw new TRPCError({
+                    message: `Error while updating report. Please try again later.`,
+                    code: 'INTERNAL_SERVER_ERROR',
+                });
+            }
 
             return {
-                message: `Report updated successfully.`,
-                report: raw[0],
+                message: `Thank you for updating this report!`,
             };
         }
     );

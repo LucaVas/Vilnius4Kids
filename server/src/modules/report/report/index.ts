@@ -1,16 +1,12 @@
-import {
-    Playground,
-    Report,
-    ReportCategory,
-    ReportStatusChangeLog,
-    User,
-} from '@server/entities';
+import { Playground, ReportCategory, User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
-import { ReportStatus } from '@server/entities/report/ReportStatus';
-import mailSender from '@server/modules/emailService';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import logger from '@server/logger';
+import { MqProducerFactory } from '@server/services/rabbitmq/producer/producerFactory';
 import { reportInsertSchema } from '../../../entities/report/schema';
+
+const producerFactory = new MqProducerFactory();
+export const reportProducer = producerFactory.getReportsProducer();
 
 export default authenticatedProcedure
     .input(reportInsertSchema)
@@ -53,33 +49,27 @@ export default authenticatedProcedure
                 });
             }
 
-            const newReport = await db.getRepository(Report).save({
-                description,
-                playground,
-                category: reportCategory,
-                user,
-            });
-
-            await db.getRepository(ReportStatusChangeLog).insert({
-                report: newReport,
-                playground,
-                status: ReportStatus.OPEN,
-                changeStatusMessage: description,
-            });
-
-            const sender = mailSender(user.username, user.email);
             try {
-                await sender.sendReport(newReport.id);
-                return {
-                    newReport,
-                    message: 'Report added successfully.',
-                };
-            } catch (error) {
-                logger.error(`Error while sending report email: ${error}`);
+                await reportProducer.push({
+                    command: 'registerReport',
+                    content: {
+                        description,
+                        playground,
+                        category: reportCategory,
+                        user,
+                    },
+                    timestamp: new Date(),
+                });
+            } catch (e) {
+                logger.error(`Error while sending report to RabbitMQ: ${e}`);
                 throw new TRPCError({
-                    message: `Error while sending report email.`,
+                    message: `Error while submitting report. Please try again later.`,
                     code: 'INTERNAL_SERVER_ERROR',
                 });
             }
+
+            return {
+                message: 'Thank you for submitting your report!',
+            };
         }
     );

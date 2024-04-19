@@ -29,9 +29,9 @@ test.describe.serial('see playground page', () => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
-    await expect(map).not.toBeHidden({ timeout: 5000 });
+    await expect(map).not.toBeHidden();
 
-    await page.locator('div[role="button"]').nth(5).click({ timeout: 50000 });
+    await page.locator('div[role="button"]').nth(5).click();
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 
@@ -41,7 +41,7 @@ test.describe.serial('see playground page', () => {
 
     const goToPlaygroundBtn = page.getByTestId('go-to-playground-button');
     await expect(goToPlaygroundBtn).not.toBeHidden();
-    await goToPlaygroundBtn.click({ timeout: 5000 });
+    await goToPlaygroundBtn.click();
 
     const playgroundAddressLocator = page.getByTestId('playground-address');
     const playgroundAddress = await playgroundAddressLocator.innerText();

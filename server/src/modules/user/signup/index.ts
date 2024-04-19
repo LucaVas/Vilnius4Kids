@@ -1,22 +1,23 @@
-import crypto from 'crypto';
 import { publicProcedure } from '@server/trpc';
 import bcrypt from 'bcrypt';
-import { User, VerificationToken } from '@server/entities';
+import { User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import config from '@server/config';
 import { Role } from '@server/entities/user/Role';
-import mailSender from '@server/modules/emailService';
 import logger from '@server/logger';
+import { MqProducerFactory } from '@server/services/rabbitmq/producer/producerFactory';
 import { signupSchema } from './schema';
 
 const { passwordCost } = config.auth;
+const producerFactory = new MqProducerFactory();
+export const accountVerificationProducer =
+    producerFactory.getAccountVerificationProducer();
 
 export default publicProcedure
     .input(signupSchema)
     .mutation(
         async ({ input: { email, username, password, role }, ctx: { db } }) => {
             const hashedPassword = await bcrypt.hash(password, passwordCost);
-            const token = crypto.randomBytes(32).toString('hex');
 
             try {
                 const user = await db.getRepository(User).save({
@@ -26,14 +27,19 @@ export default publicProcedure
                     role: role ?? Role.USER,
                 });
 
-                if (user.role === Role.USER) {
-                    await db.getRepository(VerificationToken).save({
-                        user,
-                        token: await bcrypt.hash(token, 10),
+                try {
+                    accountVerificationProducer.push({
+                        command: 'verifyAccount',
+                        content: {
+                            user,
+                        },
+                        timestamp: new Date(),
                     });
-
-                    const sender = mailSender(user.username, user.email);
-                    sender.sendToken(token);
+                } catch (e) {
+                    logger.error(
+                        `Error while sending account verification message to RabbitMQ: ${e}`
+                    );
+                    // don't throw errors as we want the user to signup
                 }
 
                 return {

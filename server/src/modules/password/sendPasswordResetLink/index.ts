@@ -1,11 +1,12 @@
-import crypto from 'crypto';
-import bcrypt from 'bcrypt';
-import { PasswordChangeRequest, User } from '@server/entities';
+import { User } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';
 import { sendResetLinkSchema } from '@server/entities/password_change_requests/schema';
-import mailSender from '@server/modules/emailService';
 import { publicProcedure } from '@server/trpc';
+import { MqProducerFactory } from '@server/services/rabbitmq/producer/producerFactory';
+
+const producerFactory = new MqProducerFactory();
+export const passwordResetProducer = producerFactory.getPasswordResetProducer();
 
 export default publicProcedure
     .input(sendResetLinkSchema)
@@ -25,24 +26,14 @@ export default publicProcedure
             });
         }
 
-        if (user.passwordChangeRequest) {
-            await db
-                .createQueryBuilder()
-                .delete()
-                .from(PasswordChangeRequest)
-                .where('id = :id', { id: user.passwordChangeRequest.id })
-                .execute();
-        }
-
-        const token = crypto.randomBytes(32).toString('hex');
-        await db.getRepository(PasswordChangeRequest).save({
-            user,
-            passwordResetToken: await bcrypt.hash(token, 10),
-        });
-
         try {
-            const sender = mailSender(user.username, user.email);
-            sender.sendPasswordResetToken(token);
+            await passwordResetProducer.push({
+                command: 'resetPassword',
+                content: {
+                    user,
+                },
+                timestamp: new Date(),
+            });
         } catch (error) {
             logger.error(`Error while sending password reset token: ${error}`);
             throw new TRPCError({
@@ -53,6 +44,6 @@ export default publicProcedure
 
         return {
             message:
-                'We have sent an email with a password reset link to your inbox.',
+                'Thank you! We will send an email with a password reset link to your inbox.',
         };
     });

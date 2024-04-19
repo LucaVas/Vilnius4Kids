@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "scripts": {
+    "dev": "npm run dev -ws -d"
+  },
   "workspaces": [
     "client",
     "server"

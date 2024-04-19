@@ -23,7 +23,7 @@ test.describe.serial('username tag in navbar', () => {
     await form.locator('button[type="submit"]').click();
 
     const usernameTag = page.getByTestId('username-tag');
-    await expect(usernameTag).toBeVisible({ timeout: 10000 });
+    await expect(usernameTag).toBeVisible();
     await expect(usernameTag).toHaveText(username.toLowerCase());
 
     const logoutLink = page.getByRole('link', { name: 'Logout' });

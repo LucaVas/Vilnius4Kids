@@ -35,7 +35,7 @@ export class BootstrapReportCategories1706084861535
                         [c.topic, sc.name, sc.description]
                     );
                 });
-            })
+            });
         }
     }
 

@@ -10,5 +10,5 @@ export default router({
     signup,
     getUsername,
     isUserVerified,
-    subscribe
+    subscribe,
 });
