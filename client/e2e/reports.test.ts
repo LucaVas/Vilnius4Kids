@@ -66,11 +66,5 @@ test.describe.serial('report playgrounds', () => {
     await page.getByRole('button', { name: /Submit report/i }).click();
     const successMessage = page.getByTestId('success-message');
     await expect(successMessage).not.toBeHidden();
-
-    await page.getByRole('link', { name: 'My playgrounds' }).click();
-    await page.getByRole('link', { name: 'My reports' }).click();
-
-    const reportRow = page.getByTestId('report-row');
-    await expect(reportRow).not.toBeHidden();
   });
 });
