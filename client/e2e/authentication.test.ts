@@ -20,7 +20,7 @@ test.describe.serial('signup and login sequence', () => {
     await form.locator('input[type="password"]').fill(password);
     await form.locator('button[type="submit"]').click();
 
-    await expect(successMessage).toBeVisible({ timeout: 5000 });
+    await expect(successMessage).toBeVisible();
   });
 
   test('visitor can not access his homepage before login', async ({ page }) => {
@@ -61,7 +61,7 @@ test('visitor can log out', async ({ page }) => {
 
   await page.goto('/myHome');
   const logoutButton = page.getByTestId('logoutButton');
-  await logoutButton.click({ timeout: 30000 });
+  await logoutButton.click();
 
   await expect(logoutButton).toBeHidden();
 

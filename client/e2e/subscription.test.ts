@@ -21,7 +21,7 @@ test.describe.serial('user subscription process', () => {
 
     await page.locator('button[type="submit"]').click();
 
-    await expect(successMessage).toBeVisible({ timeout: 15000 });
+    await expect(successMessage).toBeVisible();
   });
 
   test('visitor cannot subscribe twice', async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe.serial('user subscription process', () => {
 
     await page.locator('button[type="submit"]').click();
 
-    await expect(errorMessage).toBeVisible({ timeout: 15000 });
-    await expect(successMessage).not.toBeVisible({ timeout: 15000 });
+    await expect(errorMessage).toBeVisible();
+    await expect(successMessage).not.toBeVisible();
   });
 });
