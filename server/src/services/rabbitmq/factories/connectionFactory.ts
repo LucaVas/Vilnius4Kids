@@ -1,6 +1,6 @@
 import logger from '@server/logger';
 import client, { Connection } from 'amqplib';
-import { MqProperties } from './rabbitMqProperties';
+import { MqProperties } from '../rabbitMqProperties';
 
 export class ConnectionFactory {
     private retryDelays: number;

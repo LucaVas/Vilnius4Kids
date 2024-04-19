@@ -1,5 +1,5 @@
 import { RabbitMqService } from '@server/services/types';
-import { ChannelFactory } from '../channelFactory';
+import { ChannelFactory } from '../factories/channelFactory';
 import { MqProperties } from '../rabbitMqProperties';
 import { RabbitMqConsumer } from './rabbitMqConsumerImpl';
 import { RabbitMqConsumerI } from './rabbitMqConsumerI';

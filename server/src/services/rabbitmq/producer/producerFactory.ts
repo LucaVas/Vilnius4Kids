@@ -1,4 +1,4 @@
-import { ChannelFactory } from '../channelFactory';
+import { ChannelFactory } from '../factories/channelFactory';
 import { MqProperties } from '../rabbitMqProperties';
 import { RabbitMqProducer } from './rabbitMqProducerImpl';
 import { RabbitMqProducerI } from './rabbitMqProducerI';

@@ -2,7 +2,7 @@ import logger from '@server/logger';
 import { Channel, Message } from 'amqplib';
 import { RabbitMqService } from '@server/services/types';
 import type { ActionMessage } from '@server/services/types';
-import { ChannelFactory } from '../channelFactory';
+import { ChannelFactory } from '../factories/channelFactory';
 import type { QueueProperties } from '../rabbitMqProperties';
 import { RabbitMqConsumerI } from './rabbitMqConsumerI';
 
