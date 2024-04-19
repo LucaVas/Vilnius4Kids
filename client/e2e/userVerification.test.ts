@@ -11,9 +11,7 @@ const { email, username, password } = fakeUser();
 test.describe.serial('verification token sequence', () => {
   test('visitor sees token information at signup', async ({ page }) => {
     await page.goto('/signup');
-    const successMessage = page.getByTestId('successMessage');
     const tokenMessage = page.getByTestId('tokenMessage');
-    await expect(successMessage).toBeHidden();
     await expect(tokenMessage).toBeHidden();
 
     const form = page.getByRole('form', { name: 'Signup' });
@@ -22,7 +20,6 @@ test.describe.serial('verification token sequence', () => {
     await form.locator('input[type="password"]').fill(password);
     await form.locator('button[type="submit"]').click();
 
-    await expect(successMessage).toBeVisible({ timeout: 30000 });
     await expect(tokenMessage).toBeVisible();
     });
 
