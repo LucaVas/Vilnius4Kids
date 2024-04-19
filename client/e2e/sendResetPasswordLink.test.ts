@@ -48,7 +48,7 @@ test.describe.serial('send reset password link', () => {
 
     const successMessage = page.getByTestId('success-message');
     expect(await successMessage.textContent()).toEqual(
-      'We have sent an email with a password reset link to your inbox.'
+      'Thank you! We will send an email with a password reset link to your inbox.'
     );
   });
 });
