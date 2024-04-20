@@ -46,6 +46,15 @@ const schema = z
             }),
         }),
 
+        s3: z.object({
+            accessKeyId: z.string(),
+            secretAccessKey: z.string(),
+            region: z.string(),
+            bucket: z.string(),
+            imageSize: z.coerce.number().default(5000000),
+            imageUploadTimeout: z.coerce.number().default(30),
+        }),
+
         rabbitMq: z.object({
             user: z.string().default(''),
             password: z.string().default(''),
@@ -114,6 +123,15 @@ const config = schema.parse({
         tokenKey: env.TOKEN_KEY,
         expiresIn: env.TOKEN_EXPIRES_IN,
         passwordCost: env.PASSWORD_COST,
+    },
+
+    s3: {
+        accessKeyId: env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+        region: env.AWS_S3_REGION,
+        bucket: env.AWS_S3_BUCKET_NAME,
+        imageSize: env.AWS_S3_IMAGE_SIZE_MAX_IN_BYTES,
+        imageUploadTimeout: env.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS,
     },
 
     rabbitMq: {

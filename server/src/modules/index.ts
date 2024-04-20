@@ -7,6 +7,7 @@ import report from './report';
 import reportCategory from './reportCategory';
 import verificationToken from './verificationToken';
 import password from './password';
+import s3_images from './s3_images';
 
 export const appRouter = router({
     user,
@@ -17,6 +18,7 @@ export const appRouter = router({
     reportCategory,
     verificationToken,
     password,
+    s3_images,
 });
 
 export type AppRouter = typeof appRouter;

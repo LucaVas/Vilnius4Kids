@@ -24,6 +24,7 @@ import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
+import fs from 'fs';
 
 const router = useRouter();
 const route = useRoute();
@@ -49,7 +50,7 @@ const reportInfo = ref({
 const reportSent = ref(false);
 const errorMessage = ref('');
 const isUserVerified = ref(true);
-const files = ref<Array<File[]>>([]);
+const files = ref<File[]>([]);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -117,6 +118,17 @@ function goBack() {
 
 function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
+}
+
+async function uploadImage() {
+  // console.log(files.value.flatMap((file) => file));
+  // const formData = new FormData();
+  // files.value.forEach((file) => {
+  //   formData.append('files', file);
+  // });
+
+  const signedUrl = await trpc.s3_images.query();
+  console.log(signedUrl);
 }
 
 async function submitReport() {
@@ -307,20 +319,28 @@ onBeforeMount(async () => {
                     </p>
                     <FwbFileInput
                       class="w-full"
-                      @update:model-value="(file) => files.push(file)"
+                      @update:model-value="(file) => files.push(file[0])"
                       multiple
+                      accept="image/png, image/jpeg, image/jpg"
                     >
                       <div
                         v-if="files.length !== 0"
                         class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm"
                       >
+                        {{ console.log(files) }}
                         <div
                           v-for="file in files"
-                          :key="file[0].name"
+                          :key="file.name"
                           class="flex w-full items-center justify-between border border-transparent border-b-violet-200"
                         >
-                          {{ file[0].name }}
-                          <FwbButton size="sm" color="purple" outline @click="files.splice(files.indexOf(file), 1)">X</FwbButton>
+                          {{ file.name }}
+                          <FwbButton
+                            size="sm"
+                            color="purple"
+                            outline
+                            @click="files.splice(files.indexOf(file), 1)"
+                            >X</FwbButton
+                          >
                         </div>
                       </div>
                     </FwbFileInput>

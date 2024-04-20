@@ -26,6 +26,7 @@ export const reportSchema = validates<BareReport>().with({
     updatedAt: z.date(),
 });
 
+
 export const reportInsertSchema = reportSchema
     .omit({
         id: true,
