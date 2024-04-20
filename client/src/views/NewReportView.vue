@@ -49,7 +49,7 @@ const reportInfo = ref({
 const reportSent = ref(false);
 const errorMessage = ref('');
 const isUserVerified = ref(true);
-const files = ref([])
+const files = ref<Array<File[]>>([]);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -301,21 +301,29 @@ onBeforeMount(async () => {
                 placeholder="What is the nature of this report?"
               >
                 <template #footer>
-                  <div class="flex items-center justify-end">
-                    <FwbFileInput v-model="files" label="Upload file" multiple />
-                    <div
-                      v-if="files.length !== 0"
-                      class="mt-4 rounded-md border-[1px] border-gray-300 p-2"
+                  <div class="flex w-full flex-col items-start">
+                    <p class="min-w-fit text-sm text-gray-500 dark:text-gray-300">
+                      JPEG | JPG | PNG
+                    </p>
+                    <FwbFileInput
+                      class="w-full"
+                      @update:model-value="(file) => files.push(file)"
+                      multiple
                     >
-                      <div v-for="file in files" :key="file">
-                        {{ file }}
+                      <div
+                        v-if="files.length !== 0"
+                        class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm"
+                      >
+                        <div
+                          v-for="file in files"
+                          :key="file[0].name"
+                          class="flex w-full items-center justify-between border border-transparent border-b-violet-200"
+                        >
+                          {{ file[0].name }}
+                          <FwbButton size="sm" color="purple" outline @click="files.splice(files.indexOf(file), 1)">X</FwbButton>
+                        </div>
                       </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                      <p class="mt-1 text-sm text-gray-500" id="file_input_help">
-                        PNG | JPEG | JPG
-                      </p>
-                    </div>
+                    </FwbFileInput>
                   </div>
                 </template>
               </FwbTextarea>
