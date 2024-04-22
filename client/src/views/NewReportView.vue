@@ -124,7 +124,7 @@ async function uploadImages() {
     console.log(`Uploading file ${file.name}`);
 
     // get secure url from server
-    const { url } = await trpc.s3_images.query();
+    const { url } = await trpc.s3Images.getSignedUrl.query();
     console.log(url);
     // const data = {
     //   ...fields,
