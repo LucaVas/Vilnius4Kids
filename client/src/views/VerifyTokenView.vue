@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { FwbAlert, FwbSpinner } from 'flowbite-vue';
-import { trpc } from '../trpc';
+import { trpc } from '@/trpc';
 import { TRPCClientError } from '@trpc/client';
-import { DEFAULT_SERVER_ERROR } from '../consts';
+import { DEFAULT_SERVER_ERROR } from '@/constants';
 import { logout } from '@/stores/user';
 
 const props = defineProps<{

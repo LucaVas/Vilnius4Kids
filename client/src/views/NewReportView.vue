@@ -15,7 +15,7 @@ import {
   FwbTableCell,
   FwbFileInput,
 } from 'flowbite-vue';
-import { trpc } from '../trpc';
+import { trpc } from '@/trpc';
 import { ref, onBeforeMount } from 'vue';
 import { type ReportCategorySelect } from '../../../server/src/entities/report_category/schema';
 import { useRouter, useRoute } from 'vue-router';
@@ -23,7 +23,7 @@ import { Playground } from '../../../server/src/entities/playground/playground';
 import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
-import { DEFAULT_SERVER_ERROR } from '../consts';
+import { DEFAULT_SERVER_ERROR } from '@/constants';
 import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
 
 const router = useRouter();
@@ -53,7 +53,6 @@ const errorMessage = ref('');
 const infoMessage = ref('');
 const isUserVerified = ref(true);
 const files = ref<File[]>([]);
-const invalidFiles = ref(false);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -126,7 +125,6 @@ function getCategoriesByTopic(topic: string) {
 const allowedTypes = filesTypesAllowed.split(',').map((t) => t.trim());
 const allowedSize = Number(maxFileSizeAllowed);
 function isValidFiles(files: File[]): boolean {
-
   for (const file of files) {
     if (allowedTypes.every((type) => !type.includes(file.type))) {
       errorMessage.value = 'One or more file types are not allowed.';

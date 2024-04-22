@@ -1,4 +1,4 @@
-import { DEFAULT_SERVER_ERROR, DEFAULT_TRPC_CLIENT_ERROR } from '@/consts';
+import { DEFAULT_SERVER_ERROR, DEFAULT_TRPC_CLIENT_ERROR } from '@/constants';
 import { TRPCClientError } from '@trpc/client'
 import type { Ref } from 'vue'
 
