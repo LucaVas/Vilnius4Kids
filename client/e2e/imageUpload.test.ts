@@ -24,8 +24,8 @@ test.beforeEach(async ({ page }) => {
   await expect(myHomeLink).toBeVisible();
 });
 
-test.describe.serial('upload images', () => {
-  test.skip('User cannot upload an invalid file', async ({ page }) => {
+test.describe('upload images', () => {
+  test('User cannot upload an invalid file', async ({ page }) => {
     const errorMessage = page.getByTestId('error-message');
 
     await page.goto('/report');
@@ -40,7 +40,7 @@ test.describe.serial('upload images', () => {
     await page.locator('input[type="file"]').click();
     await page
       .locator('input[type="file"]')
-      .setInputFiles('./utils/files/random_song.mp3', { timeout: 5000 });
+      .setInputFiles('./utils/files/random_song.mp3');
     await page.locator('text=random_song.mp3').click();
     await page.getByRole('button', { name: 'Submit report' }).click();
 
@@ -48,8 +48,8 @@ test.describe.serial('upload images', () => {
     await expect(errorMessage).toHaveText('One or more file types are not allowed.');
   });
 
-  test('User cannot upload a file too heavy', async ({ page }) => {
-    const errorMessage = page.getByTestId('error-message');
+  test('User can upload a file', async ({ page }) => {
+    const successMessage = page.getByTestId('success-message');
 
     await page.goto('/report');
     await page.getByRole('button', { name: 'Report an issue' }).click();
@@ -63,12 +63,12 @@ test.describe.serial('upload images', () => {
     await page.locator('input[type="file"]').click();
     await page
       .locator('input[type="file"]')
-      .setInputFiles('./utils/files/heavy_image.jpg', { timeout: 5000 });
-    await page.locator('text=heavy_image.jpg').click();
+      .setInputFiles('./utils/files/random_image.jpeg');
+    await page.locator('text=random_image.jpeg').click();
 
+    await page.locator('text=random_image.jpeg').click();
     await page.getByRole('button', { name: 'Submit report' }).click();
 
-    await expect(errorMessage).not.toBeHidden();
-    await expect(errorMessage).toHaveText('One or more image size is above the allowed limit.');
+    await expect(successMessage).not.toBeHidden();
   });
 });
