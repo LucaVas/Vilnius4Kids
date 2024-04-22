@@ -124,10 +124,12 @@ function getCategoriesByTopic(topic: string) {
 async function uploadImages() {
   const imagesInfo = [];
   for (const file of files.value) {
-    console.log(file.type)
-    if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+    if (
+      (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') ||
+      file.size > 5000000
+    ) {
       infoMessage.value =
-        'One or more file types are not allowed. Such files will not be uploaded.';
+        'One or more file types are not allowed, or the image size is above the limit of 5MB. Such files will not be uploaded.';
       continue;
     }
 
@@ -154,7 +156,7 @@ async function uploadImages() {
     }
   }
 
-  return imagesInfo
+  return imagesInfo;
 }
 
 async function submitReport() {
@@ -353,14 +355,14 @@ onBeforeMount(async () => {
                 <template #footer>
                   <div class="flex w-full flex-col items-start">
                     <p class="min-w-fit text-sm text-gray-500 dark:text-gray-300">
-                      JPEG | JPG | PNG
+                      JPEG | JPG | PNG (Max 5MB)
                     </p>
                     <FwbFileInput
                       class="w-full"
                       @update:model-value="(file) => files.push(file[0])"
                       multiple
                       :disabled="sendingReport"
-                      accept="image/png, image/jpeg, image/jpg"
+                      accept="image/png, image/jpg"
                     >
                       <div
                         v-if="files.length !== 0"
@@ -369,7 +371,15 @@ onBeforeMount(async () => {
                         <div
                           v-for="file in files"
                           :key="file.name"
-                          class="flex w-full items-center justify-between border border-transparent border-b-violet-200"
+                          class="flex w-full items-center justify-between border border-transparent border-b-violet-200 p-2"
+                          :class="
+                            (file.type !== 'image/png' &&
+                              file.type !== 'image/jpg' &&
+                              file.type !== 'image/jpeg') ||
+                            file.size > 5000000
+                              ? 'rounded-md bg-red-300'
+                              : 'bg-transparent'
+                          "
                         >
                           {{ file.name }}
                           <FwbButton
