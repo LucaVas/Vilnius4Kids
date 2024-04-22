@@ -47,7 +47,9 @@ const reportInfo = ref({
   message: '',
 });
 const reportSent = ref(false);
+const sendingReport = ref(false);
 const errorMessage = ref('');
+const infoMessage = ref('');
 const isUserVerified = ref(true);
 const files = ref<File[]>([]);
 
@@ -121,26 +123,17 @@ function getCategoriesByTopic(topic: string) {
 
 async function uploadImages() {
   for (const file of files.value) {
-    console.log(`Uploading file ${file.name}`);
-
-    // get secure url from server
-    const { url } = await trpc.s3Images.getSignedUrl.query();
-    console.log(url);
-    // const data = {
-    //   ...fields,
-    //   'Content-Type': file.type,
-    //   file,
-    // };
-
-    // const formData = new FormData();
-    // for (const key in data) {
-    //   formData.append(key, data[key as keyof typeof data]);
-    // }
-
-    // post image to s3 bucket
+    if (!file.type.includes('image/png') || !file.type.includes('image/jpeg')) {
+      infoMessage.value =
+        'One or more file types are not allowed. Such files will not be uploaded.';
+      continue;
+    }
 
     try {
-      const res = await fetch(url, {
+      // get secure url from server
+      const { url } = await trpc.s3Images.getSignedUrl.query();
+      // post image to s3 bucket
+      await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -148,23 +141,28 @@ async function uploadImages() {
         body: file,
       });
     } catch (e) {
-      console.error(e);
+      // if error while uploading, do continue report process, but inform user
+      errorMessage.value =
+        'There was an issue while uploading your images. The report is submitted, but images might not be uploaded.';
     }
-
-    const imageUrl = url.split('?')[0];
-    console.log(imageUrl);
   }
-
-  // post request to server to store report data
 }
 
 async function submitReport() {
+  if (reportInfo.value.message.trim().length < 5) {
+    errorMessage.value = 'Report description must be at least 5 characters long.';
+    return;
+  }
+  sendingReport.value = true;
+
   try {
+    await uploadImages();
     await trpc.report.report.mutate({
       description: reportInfo.value.message,
       reportCategoryId: reportInfo.value.categoryId,
       playgroundId: reportInfo.value.playgroundId,
     });
+    errorMessage.value = ''
     reportSent.value = true;
   } catch (error) {
     if (error instanceof TRPCClientError) {
@@ -177,6 +175,8 @@ async function submitReport() {
     } else {
       errorMessage.value = DEFAULT_SERVER_ERROR;
     }
+  } finally {
+    sendingReport.value = false;
   }
 }
 
@@ -336,6 +336,7 @@ onBeforeMount(async () => {
                 v-model="reportInfo.message"
                 :rows="5"
                 custom
+                minlength="5"
                 label="Write a description of your issue"
                 placeholder="What is the nature of this report?"
               >
@@ -348,13 +349,13 @@ onBeforeMount(async () => {
                       class="w-full"
                       @update:model-value="(file) => files.push(file[0])"
                       multiple
+                      :disabled="sendingReport"
                       accept="image/png, image/jpeg, image/jpg"
                     >
                       <div
                         v-if="files.length !== 0"
                         class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm"
                       >
-                        {{ console.log(files) }}
                         <div
                           v-for="file in files"
                           :key="file.name"
@@ -365,11 +366,9 @@ onBeforeMount(async () => {
                             size="sm"
                             color="purple"
                             outline
+                            :disabled="sendingReport || reportSent"
                             @click="files.splice(files.indexOf(file), 1)"
                             >X</FwbButton
-                          >
-                          <FwbButton size="sm" color="purple" outline @click="uploadImages()"
-                            >Upload</FwbButton
                           >
                         </div>
                       </div>
@@ -385,19 +384,32 @@ onBeforeMount(async () => {
           </div>
         </Transition>
       </div>
-      <div class="mb-4">
-        <FwbAlert v-if="reportSent" type="success" data-testid="success-message">
-          Report sent successfully! Thank you for your contribution.
-        </FwbAlert>
-        <AlertError :message="errorMessage">
-          {{ errorMessage }}
-        </AlertError>
+      <div class="mb-4 flex flex-col gap-2">
+        <AlertError
+          v-if="reportSent"
+          :type="'success'"
+          data-testid="success-message"
+          :message="'Report sent successfully! Thank you for your contribution.'"
+        />
+        <AlertError
+          v-if="infoMessage"
+          :type="'info'"
+          data-testid="info-message"
+          :message="infoMessage"
+        />
+        <AlertError
+          v-if="errorMessage"
+          :type="'danger'"
+          data-testid="error-message"
+          :message="errorMessage"
+        />
       </div>
       <FwbButtonGroup class="flex w-full justify-between">
         <FwbButton v-if="!reportSent" color="dark" outline square @click="goBack"> Back </FwbButton>
         <FwbButton
           v-if="showForm && !reportSent"
-          :disabled="reportSent"
+          :disabled="reportSent || sendingReport"
+          :loading="sendingReport"
           square
           color="purple"
           @click="submitReport"
