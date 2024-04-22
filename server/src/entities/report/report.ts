@@ -37,10 +37,10 @@ export class Report {
     })
     category: ReportCategory;
 
-    @ManyToOne(() => ReportImage, (image) => image.report, {
-        cascade: true,
+    @OneToMany(() => ReportImage, (images) => images.report, {
+        eager: true
     })
-    images: ReportImage;
+    images: ReportImage[];
 
     @ManyToOne(() => User, (user) => user.reports, {
         onDelete: 'CASCADE', // When a user is deleted, delete the report as well
