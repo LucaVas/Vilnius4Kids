@@ -367,6 +367,7 @@ onBeforeMount(async () => {
                       JPEG | JPG | PNG (Max 5MB)
                     </p>
                     <FwbFileInput
+                      label="Files upload"
                       class="w-full"
                       @update:model-value="(file) => files.push(file[0])"
                       multiple
