@@ -143,7 +143,7 @@ async function uploadImages() {
   for (const file of files.value) {
     try {
       // get secure url from server
-      const { url } = await trpc.s3Images.getSignedUrl.query();
+      const { url, imageName } = await trpc.s3Images.getSignedUrl.query();
       // post image to s3 bucket
       await fetch(url, {
         method: 'PUT',
@@ -156,6 +156,7 @@ async function uploadImages() {
         url: url.split('?')[0],
         type: file.type,
         name: file.name,
+        key: imageName
       });
     } catch (e) {
       // if error while uploading, do continue report process, but inform user

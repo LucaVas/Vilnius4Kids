@@ -40,6 +40,7 @@ export const reportInsertSchema = reportSchema
                 url: z.string(),
                 type: z.string(),
                 name: z.string(),
+                key: z.string(),
             })
         ),
     });

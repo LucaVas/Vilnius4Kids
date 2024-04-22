@@ -9,6 +9,9 @@ export class ReportImage {
     @Column('varchar', { length: 500, nullable: false })
     name: string;
 
+    @Column('varchar', { length: 32, nullable: false, unique: true })
+    key: string;
+
     @Column('varchar', { length: 50, nullable: false })
     type: string;
 

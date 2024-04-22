@@ -16,15 +16,14 @@ describe('Get a signed url', async () => {
 
         const { getSignedUrl } = router.createCaller(authContext({ db }));
 
-        const { url } = await getSignedUrl();
+        const { url, imageName } = await getSignedUrl();
 
         expect(url).toEqual('fake-url');
+        expect(imageName).toHaveLength(32);
         expect(spy).toBeCalledTimes(1);
     });
 
-
     it('Throws error if aws client fails', async () => {
-
         const { getSignedUrl } = router.createCaller(authContext({ db }));
 
         const spy = vi.spyOn(s3client, 'getSignedUrlPromise');

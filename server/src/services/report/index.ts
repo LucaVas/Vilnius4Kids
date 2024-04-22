@@ -106,6 +106,7 @@ async function registerReport(
                 name: image.name,
                 type: image.type,
                 report: newReport,
+                key: image.key,
             };
         });
         await database.getRepository(ReportImage).insert(images);

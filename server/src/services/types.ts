@@ -13,6 +13,7 @@ export type ReportContent = {
         url: string;
         type: string;
         name: string;
+        key: string;
     }[];
 };
 export type UpdateReportContent = {
