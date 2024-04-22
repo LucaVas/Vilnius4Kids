@@ -9,6 +9,11 @@ export type ReportContent = {
     playground: Playground;
     category: ReportCategory;
     user: User;
+    images: {
+        url: string;
+        type: string;
+        name: string;
+    }[];
 };
 export type UpdateReportContent = {
     description: string;

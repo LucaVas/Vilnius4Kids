@@ -9,6 +9,7 @@ import { User } from '../user/user';
 import { Playground } from '../playground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
 import { ReportCategory } from '../report_category/reportCategory';
+import { ReportImage } from '../report_images/reportImage';
 import { ReportStatus } from './ReportStatus';
 
 @Entity('reports')
@@ -35,6 +36,11 @@ export class Report {
         cascade: true,
     })
     category: ReportCategory;
+
+    @ManyToOne(() => ReportImage, (image) => image.report, {
+        cascade: true,
+    })
+    images: ReportImage;
 
     @ManyToOne(() => User, (user) => user.reports, {
         onDelete: 'CASCADE', // When a user is deleted, delete the report as well

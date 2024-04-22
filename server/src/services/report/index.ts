@@ -8,6 +8,7 @@ import logger from '@server/logger';
 import { Report, ReportStatusChangeLog } from '@server/entities';
 import { DataSource, QueryFailedError } from 'typeorm';
 import { ReportStatus } from '@server/entities/report/ReportStatus';
+import { ReportImage } from '@server/entities/report_images/reportImage';
 import { RabbitMqService } from '../types';
 
 export default (
@@ -96,6 +97,18 @@ async function registerReport(
             status: ReportStatus.OPEN,
             changeStatusMessage: content.description,
         });
+
+        const images = content.images.map((image) => {
+            const i = new ReportImage();
+            return {
+                ...i,
+                url: image.url,
+                name: image.name,
+                type: image.type,
+                report: newReport,
+            };
+        });
+        await database.getRepository(ReportImage).insert(images);
 
         await mailService.sendReport(
             newReport.id,

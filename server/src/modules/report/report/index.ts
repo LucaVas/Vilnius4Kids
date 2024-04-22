@@ -3,7 +3,6 @@ import { TRPCError } from '@trpc/server';
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure';
 import logger from '@server/logger';
 import { MqProducerFactory } from '@server/services/rabbitmq/producer/producerFactory';
-import multer from 'multer';
 import { reportInsertSchema } from '../../../entities/report/schema';
 
 const producerFactory = new MqProducerFactory();
@@ -13,10 +12,9 @@ export default authenticatedProcedure
     .input(reportInsertSchema)
     .mutation(
         async ({
-            input: { playgroundId, reportCategoryId, description },
+            input: { playgroundId, reportCategoryId, description, imagesInfo },
             ctx: { db, authUser },
         }) => {
-            multer({ dest: 'uploads/' }).array('files', 10);
             const [playground, reportCategory, user] = await Promise.all([
                 db.getRepository(Playground).findOneBy({ id: playgroundId }),
                 db
@@ -59,6 +57,7 @@ export default authenticatedProcedure
                         playground,
                         category: reportCategory,
                         user,
+                        images: imagesInfo,
                     },
                     timestamp: new Date(),
                 });

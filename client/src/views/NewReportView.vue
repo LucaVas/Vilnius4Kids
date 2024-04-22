@@ -122,8 +122,10 @@ function getCategoriesByTopic(topic: string) {
 }
 
 async function uploadImages() {
+  const imagesInfo = [];
   for (const file of files.value) {
-    if (!file.type.includes('image/png') || !file.type.includes('image/jpeg')) {
+    console.log(file.type)
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
       infoMessage.value =
         'One or more file types are not allowed. Such files will not be uploaded.';
       continue;
@@ -140,12 +142,19 @@ async function uploadImages() {
         },
         body: file,
       });
+      imagesInfo.push({
+        url: url.split('?')[0],
+        type: file.type,
+        name: file.name,
+      });
     } catch (e) {
       // if error while uploading, do continue report process, but inform user
       errorMessage.value =
         'There was an issue while uploading your images. The report is submitted, but images might not be uploaded.';
     }
   }
+
+  return imagesInfo
 }
 
 async function submitReport() {
@@ -156,13 +165,14 @@ async function submitReport() {
   sendingReport.value = true;
 
   try {
-    await uploadImages();
+    const imagesInfo = await uploadImages();
     await trpc.report.report.mutate({
       description: reportInfo.value.message,
       reportCategoryId: reportInfo.value.categoryId,
       playgroundId: reportInfo.value.playgroundId,
+      imagesInfo,
     });
-    errorMessage.value = ''
+    errorMessage.value = '';
     reportSent.value = true;
   } catch (error) {
     if (error instanceof TRPCClientError) {
