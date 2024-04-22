@@ -73,4 +73,18 @@ export default (): MailService => ({
             send(message);
         }
     },
+    sendUserDeletionEmail: async (recipient: string, username: string) => {
+        const subject = `Vilnius4Kids - User deletion`;
+        const html =
+            `<header><p>Hi, ${username}</p></header><body><p>We are sending you this email to let you know ` +
+            `that we have deleted your user and all related information from our database.<br>` +
+            `<br>Thank you so much for our journey together.</p><br><p>We hope to see you back!</p></body>` +
+            `<footer><p>Best regards,</p><p>Vilnius4Kids team</p></footer>`;
+
+        const message = buildMessage(smtp.sender, recipient, subject, html);
+
+        if (env !== 'test') {
+            send(message);
+        }
+    },
 });

@@ -22,6 +22,7 @@ export type UpdateReportContent = {
     report: Report;
     user: User;
 };
+export type UserDeletionContent = { user: User };
 
 export type ActionMessage = {
     command:
@@ -29,13 +30,15 @@ export type ActionMessage = {
         | 'resetPassword'
         | 'registerReport'
         | 'updateReport'
-        | 'verifyAccount';
+        | 'verifyAccount'
+        | 'deleteUser';
     content:
         | SubscriptionContent
         | PasswordResetContent
         | ReportContent
         | UpdateReportContent
-        | AccountVerificationContent;
+        | AccountVerificationContent
+        | UserDeletionContent;
     timestamp: Date;
 };
 
@@ -60,4 +63,5 @@ export interface MailService {
         recipient: string,
         username: string
     ): Promise<void>;
+    sendUserDeletionEmail(recipient: string, username: string): Promise<void>;
 }
