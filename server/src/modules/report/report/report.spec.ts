@@ -36,6 +36,7 @@ describe('Report a new issue', async () => {
             playgroundId: playground.id,
             description: 'Test report description',
             reportCategoryId: reportCategory.id,
+            imagesInfo: [],
         });
 
         expect(message).toEqual('Thank you for submitting your report!');
@@ -54,6 +55,7 @@ describe('Report a new issue', async () => {
                 playgroundId: 100,
                 description: 'Test report description',
                 reportCategoryId: 1,
+                imagesInfo: [],
             })
         ).rejects.toThrow('Error while creating report.');
     });
@@ -69,6 +71,7 @@ describe('Report a new issue', async () => {
                 playgroundId: 1,
                 description: 'Test report description',
                 reportCategoryId: 100,
+                imagesInfo: [],
             })
         ).rejects.toThrow('Error while creating report.');
     });
@@ -84,6 +87,7 @@ describe('Report a new issue', async () => {
                 playgroundId: 1,
                 description: 'Test report description',
                 reportCategoryId: 1,
+                imagesInfo: [],
             })
         ).rejects.toThrow(`Error while creating report.`);
     });
@@ -103,6 +107,7 @@ describe('Report a new issue', async () => {
                 playgroundId: playground.id,
                 description: '',
                 reportCategoryId: 1,
+                imagesInfo: [],
             })
         ).rejects.toThrow(
             /Report description should be at least 5 characters long./
@@ -130,6 +135,7 @@ describe('Report a new issue', async () => {
                 playgroundId: playground.id,
                 description: 'Test report description',
                 reportCategoryId: reportCategory.id,
+                imagesInfo: []
             })
         ).rejects.toThrow(
             /Error while submitting report. Please try again later/

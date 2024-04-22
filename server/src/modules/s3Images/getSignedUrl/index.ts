@@ -7,20 +7,10 @@ import {
     s3client,
     s3imageUploadTimeout,
 } from '@server/services/s3';
-import { User } from '@server/entities';
 
 export default authenticatedProcedure.query(
-    async ({ ctx: { db, authUser } }) => {
+    async () => {
         logger.debug('Received request for signed url to upload image to S3.');
-
-        const user = db.getRepository(User).findOneBy({ id: authUser.id });
-        if (!user) {
-            logger.error(`User with ID ${authUser.id} not found`);
-            throw new TRPCError({
-                message: 'User not found',
-                code: 'BAD_REQUEST',
-            });
-        }
 
         const rawBytes = randomBytes(16);
         const imageName = rawBytes.toString('hex'); // 32 hex chars string
