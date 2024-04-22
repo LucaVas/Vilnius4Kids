@@ -24,6 +24,7 @@ import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
+import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
 
 const router = useRouter();
 const route = useRoute();
@@ -52,6 +53,7 @@ const errorMessage = ref('');
 const infoMessage = ref('');
 const isUserVerified = ref(true);
 const files = ref<File[]>([]);
+const invalidFiles = ref(false);
 
 function removeDiacritics(text: string) {
   var output = '';
@@ -121,18 +123,26 @@ function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
 }
 
+const allowedTypes = filesTypesAllowed.split(',').map((t) => t.trim());
+const allowedSize = Number(maxFileSizeAllowed);
+function isValidFiles(files: File[]): boolean {
+
+  for (const file of files) {
+    if (allowedTypes.every((type) => !type.includes(file.type))) {
+      errorMessage.value = 'One or more file types are not allowed.';
+      return false;
+    }
+    if (file.size > allowedSize) {
+      errorMessage.value = 'One or more image size is above the allowed limit.';
+      return false;
+    }
+  }
+  return true;
+}
+
 async function uploadImages() {
   const imagesInfo = [];
   for (const file of files.value) {
-    if (
-      (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/jpg') ||
-      file.size > 5000000
-    ) {
-      infoMessage.value =
-        'One or more file types are not allowed, or the image size is above the limit of 5MB. Such files will not be uploaded.';
-      continue;
-    }
-
     try {
       // get secure url from server
       const { url } = await trpc.s3Images.getSignedUrl.query();
@@ -164,6 +174,8 @@ async function submitReport() {
     errorMessage.value = 'Report description must be at least 5 characters long.';
     return;
   }
+  if (!isValidFiles(files.value)) return;
+
   sendingReport.value = true;
 
   try {
@@ -172,13 +184,12 @@ async function submitReport() {
       description: reportInfo.value.message,
       reportCategoryId: reportInfo.value.categoryId,
       playgroundId: reportInfo.value.playgroundId,
-      imagesInfo,
+      imagesInfo: imagesInfo ?? [],
     });
     errorMessage.value = '';
     reportSent.value = true;
   } catch (error) {
     if (error instanceof TRPCClientError) {
-      console.log(error.data.httpStatus);
       if (error.data.httpStatus === 403) {
         errorMessage.value = 'You need to verify your email to report on a playground';
         return;
@@ -373,10 +384,8 @@ onBeforeMount(async () => {
                           :key="file.name"
                           class="flex w-full items-center justify-between border border-transparent border-b-violet-200 p-2"
                           :class="
-                            (file.type !== 'image/png' &&
-                              file.type !== 'image/jpg' &&
-                              file.type !== 'image/jpeg') ||
-                            file.size > 5000000
+                            allowedTypes.every((type) => !type.includes(file.type)) ||
+                            file.size > allowedSize
                               ? 'rounded-md bg-red-300'
                               : 'bg-transparent'
                           "
@@ -416,6 +425,7 @@ onBeforeMount(async () => {
           :type="'info'"
           data-testid="info-message"
           :message="infoMessage"
+          :closable="true"
         />
         <AlertError
           v-if="errorMessage"
