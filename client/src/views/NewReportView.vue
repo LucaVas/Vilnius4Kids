@@ -24,7 +24,6 @@ import { FwbAlert } from 'flowbite-vue';
 import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '../consts';
-import fs from 'fs';
 
 const router = useRouter();
 const route = useRoute();
@@ -120,15 +119,43 @@ function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
 }
 
-async function uploadImage() {
-  // console.log(files.value.flatMap((file) => file));
-  // const formData = new FormData();
-  // files.value.forEach((file) => {
-  //   formData.append('files', file);
-  // });
+async function uploadImages() {
+  for (const file of files.value) {
+    console.log(`Uploading file ${file.name}`);
 
-  const signedUrl = await trpc.s3_images.query();
-  console.log(signedUrl);
+    // get secure url from server
+    const { url } = await trpc.s3_images.query();
+    console.log(url);
+    // const data = {
+    //   ...fields,
+    //   'Content-Type': file.type,
+    //   file,
+    // };
+
+    // const formData = new FormData();
+    // for (const key in data) {
+    //   formData.append(key, data[key as keyof typeof data]);
+    // }
+
+    // post image to s3 bucket
+
+    try {
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: file,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
+    const imageUrl = url.split('?')[0];
+    console.log(imageUrl);
+  }
+
+  // post request to server to store report data
 }
 
 async function submitReport() {
@@ -340,6 +367,9 @@ onBeforeMount(async () => {
                             outline
                             @click="files.splice(files.indexOf(file), 1)"
                             >X</FwbButton
+                          >
+                          <FwbButton size="sm" color="purple" outline @click="uploadImages()"
+                            >Upload</FwbButton
                           >
                         </div>
                       </div>

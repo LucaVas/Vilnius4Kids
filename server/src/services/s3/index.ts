@@ -1,5 +1,5 @@
-import { S3Client } from '@aws-sdk/client-s3';
 import config from '@server/config';
+import aws from 'aws-sdk';
 
 const {
     accessKeyId,
@@ -10,12 +10,11 @@ const {
     imageUploadTimeout,
 } = config.s3;
 
-export const s3client = new S3Client({
-    credentials: {
-        accessKeyId,
-        secretAccessKey,
-    },
+export const s3client = new aws.S3({
+    accessKeyId,
+    secretAccessKey,
     region,
+    signatureVersion: 'v4'
 });
 
 export const s3bucket = bucket;

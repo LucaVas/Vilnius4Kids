@@ -59,6 +59,7 @@
         "@types/multer": "^1.4.11",
         "@types/nodemailer": "^6.4.14",
         "amqplib": "^0.10.4",
+        "aws-sdk": "^2.1603.0",
         "bcrypt": "^5.1.1",
         "better-sqlite3": "^8.0.0",
         "chance": "^1.1.11",
