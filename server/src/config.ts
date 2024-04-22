@@ -176,6 +176,15 @@ const config = schema.parse({
                         env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
                 },
             },
+            {
+                name: 'user-deletions',
+                queueName: env.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE,
+                    persistent:
+                        env.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT,
+                },
+            },
         ],
     },
 

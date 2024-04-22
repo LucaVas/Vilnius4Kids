@@ -95,4 +95,10 @@ export class MqProperties {
         if (!queue) throw new Error('Account verification queue not found');
         return queue;
     }
+
+    getUserDeletionQueueProperties(): QueueProperties {
+        const queue = this.queues.find((q) => q.name === 'user-deletions');
+        if (!queue) throw new Error('User deletion queue not found');
+        return queue;
+    }
 }
