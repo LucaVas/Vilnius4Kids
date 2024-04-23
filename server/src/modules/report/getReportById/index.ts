@@ -14,6 +14,7 @@ export default authenticatedProcedure
             .leftJoinAndSelect('playground.address', 'address')
             .leftJoinAndSelect('report.category', 'category')
             .leftJoinAndSelect('report.changeLogs', 'changeLogs')
+            .leftJoinAndSelect('report.images', 'images')
             .where('report.id = :id', { id })
             .getOne();
 

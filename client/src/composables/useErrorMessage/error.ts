@@ -1,6 +1,6 @@
-import { DEFAULT_SERVER_ERROR, DEFAULT_TRPC_CLIENT_ERROR } from '@/consts';
-import { TRPCClientError } from '@trpc/client'
-import type { Ref } from 'vue'
+import { DEFAULT_SERVER_ERROR, DEFAULT_TRPC_CLIENT_ERROR } from '@/constants';
+import { TRPCClientError } from '@trpc/client';
+import type { Ref } from 'vue';
 
 /**
  * Calls the provided function and handles any errors that may occur.
@@ -14,16 +14,16 @@ import type { Ref } from 'vue'
  */
 export async function handleError(errorMessage: Ref<string>, fn: Function, doRethrow = false) {
   try {
-    const result = await fn()
+    const result = await fn();
 
     // clear error message
-    errorMessage.value = ''
+    errorMessage.value = '';
 
-    return result
+    return result;
   } catch (error) {
-    errorMessage.value = getErrorMessage(error)
+    errorMessage.value = getErrorMessage(error);
 
-    if (doRethrow) throw error
+    if (doRethrow) throw error;
   }
 }
 
@@ -36,18 +36,17 @@ export function withError<Args extends any[], Return, T extends (...args: Args) 
   fn: T,
   doRethrow = false
 ): T {
-  return ((...args: Args) => handleError(errorMessage, () => fn(...args), doRethrow)) as T
+  return ((...args: Args) => handleError(errorMessage, () => fn(...args), doRethrow)) as T;
 }
 
 function getErrorMessage(error: unknown) {
-
   if (!(error instanceof Error)) {
-    return DEFAULT_SERVER_ERROR
+    return DEFAULT_SERVER_ERROR;
   }
 
   if (!(error instanceof TRPCClientError)) {
     return error.message ?? DEFAULT_TRPC_CLIENT_ERROR;
   }
 
-  return error.data.message || error.message
+  return error.data.message || error.message;
 }

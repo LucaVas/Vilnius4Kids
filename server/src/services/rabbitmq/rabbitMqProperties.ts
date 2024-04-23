@@ -52,7 +52,7 @@ export class MqProperties {
     }
 
     getHost() {
-        if (env === 'development' || env === 'test') return `amqp://${this.host}`;
+        if (env === 'test') return `amqp://${this.host}`;
         return `amqps://${this.user}:${this.password}@${this.host}/${this.user}`;
     }
 
@@ -93,6 +93,12 @@ export class MqProperties {
             (q) => q.name === 'account-verifications'
         );
         if (!queue) throw new Error('Account verification queue not found');
+        return queue;
+    }
+
+    getUserDeletionQueueProperties(): QueueProperties {
+        const queue = this.queues.find((q) => q.name === 'user-deletions');
+        if (!queue) throw new Error('User deletion queue not found');
         return queue;
     }
 }

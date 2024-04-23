@@ -1,4 +1,5 @@
 /* eslint-disable import/export */
+export { ReportImage } from './report_images/reportImage';
 export { Address } from './address/address';
 export { Playground } from './playground/playground';
 export { Rating } from './rating/rating';

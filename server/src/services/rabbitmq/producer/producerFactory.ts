@@ -33,4 +33,11 @@ export class MqProducerFactory {
             new ChannelFactory()
         );
     }
+
+    getUserDeletionProducer(): RabbitMqProducerI {
+        return new RabbitMqProducer(
+            this.mqProperties.getUserDeletionQueueProperties(),
+            new ChannelFactory()
+        );
+    }
 }

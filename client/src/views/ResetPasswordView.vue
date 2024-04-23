@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import PageForm from '@/components/PageForm.vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
-import AlertError from '@/components/AlertError.vue';
+import AlertMessage from '@/components/AlertMessage.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 import { trpc } from '../trpc';
 
@@ -20,7 +20,6 @@ const successMessage = ref('');
 const loading = ref(false);
 
 const [resetPassword, errorMessage] = useErrorMessage(async () => {
-
   if (userForm.value.password !== repeatedPassword.value) {
     throw new Error('Passwords do not match');
   }
@@ -74,9 +73,15 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           {{ successMessage }}
         </FwbAlert>
 
-        <AlertError icon type="danger" v-if="errorMessage" :message="errorMessage" data-testid="error-message">
+        <AlertMessage
+          icon
+          type="danger"
+          v-if="errorMessage"
+          :message="errorMessage"
+          data-testid="error-message"
+        >
           {{ errorMessage }}
-        </AlertError>
+        </AlertMessage>
 
         <div class="grid gap-2">
           <FwbButton

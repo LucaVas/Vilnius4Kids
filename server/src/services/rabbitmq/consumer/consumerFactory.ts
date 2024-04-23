@@ -44,4 +44,14 @@ export class MqConsumerFactory {
             accountVerificationService
         );
     }
+
+    getUserDeletionConsumer(
+        userDeletionService: RabbitMqService
+    ): RabbitMqConsumerI {
+        return new RabbitMqConsumer(
+            this.mqProperties.getUserDeletionQueueProperties(),
+            new ChannelFactory(),
+            userDeletionService
+        );
+    }
 }

@@ -12,7 +12,7 @@ export default authenticatedProcedure
     .input(reportInsertSchema)
     .mutation(
         async ({
-            input: { playgroundId, reportCategoryId, description },
+            input: { playgroundId, reportCategoryId, description, imagesInfo },
             ctx: { db, authUser },
         }) => {
             const [playground, reportCategory, user] = await Promise.all([
@@ -57,6 +57,7 @@ export default authenticatedProcedure
                         playground,
                         category: reportCategory,
                         user,
+                        images: imagesInfo,
                     },
                     timestamp: new Date(),
                 });

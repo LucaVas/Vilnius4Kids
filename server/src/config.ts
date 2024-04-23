@@ -46,6 +46,15 @@ const schema = z
             }),
         }),
 
+        s3: z.object({
+            accessKeyId: z.string(),
+            secretAccessKey: z.string(),
+            region: z.string(),
+            bucket: z.string(),
+            imageSize: z.coerce.number().default(5000000),
+            imageUploadTimeout: z.coerce.number().default(30),
+        }),
+
         rabbitMq: z.object({
             user: z.string().default(''),
             password: z.string().default(''),
@@ -116,6 +125,15 @@ const config = schema.parse({
         passwordCost: env.PASSWORD_COST,
     },
 
+    s3: {
+        accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
+        region: env.AWS_S3_REGION,
+        bucket: env.AWS_S3_BUCKET_NAME,
+        imageSize: env.AWS_S3_FILE_SIZE_MAX_IN_BYTES,
+        imageUploadTimeout: env.AWS_S3_FILE_UPLOAD_TIMEOUT_IN_SECONDS,
+    },
+
     rabbitMq: {
         user: env.RABBIT_MQ_USER,
         password: env.RABBIT_MQ_PASSWORD,
@@ -156,6 +174,14 @@ const config = schema.parse({
                     durable: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE,
                     persistent:
                         env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'user-deletions',
+                queueName: env.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT,
                 },
             },
         ],

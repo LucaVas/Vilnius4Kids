@@ -3,6 +3,7 @@ import buildEmailService from '@server/services/email';
 import buildReportService from '@server/services/report';
 import buildPasswordResetService from '@server/services/passwordReset';
 import buildAccountVerificationService from '@server/services/accountVerification';
+import buildUserDeletionService from '@server/services/userDeletion';
 import createApp from './app';
 import { createDatabase } from './database';
 import config from './config';
@@ -36,6 +37,11 @@ const accountVerificationService = buildAccountVerificationService(
 const accountVerificationConsumer =
     consumerFactory.getAccountVerificationConsumer(accountVerificationService);
 
+// user deletion
+const userDeletionService = buildUserDeletionService(emailService, database);
+const userDeletionConsumer =
+    consumerFactory.getUserDeletionConsumer(userDeletionService);
+
 database.initialize().then(() => {
     const app = createApp(database);
 
@@ -43,6 +49,7 @@ database.initialize().then(() => {
     reportConsumer.poll();
     passwordResetConsumer.poll();
     accountVerificationConsumer.poll();
+    userDeletionConsumer.poll();
 
     app.listen(config.port, () => {
         // eslint-disable-next-line no-console

@@ -38,6 +38,12 @@ jobs:
       VITE_API_PATH: /api/v1/trpc
       CLIENT_PATH: http://localhost:5173
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+      AWS_S3_ACCESS_KEY_ID: ${{ vars.AWS_S3_ACCESS_KEY_ID }}
+      AWS_S3_BUCKET_NAME: ${{ vars.AWS_S3_BUCKET_NAME }}
+      AWS_S3_SECRET_ACCESS_KEY: ${{ vars.AWS_S3_SECRET_ACCESS_KEY }}
+      AWS_S3_REGION: ${{ vars.AWS_S3_REGION }}
+      AWS_S3_FILE_UPLOAD_TIMEOUT_IN_SECONDS: 30
+      AWS_S3_FILE_SIZE_MAX_IN_BYTES: 1000000
       RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS: 1000
       RABBIT_MQ_CHANNEL_MAX_RETRIES: 5
       RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS: 1000
@@ -54,6 +60,9 @@ jobs:
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE }}
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT }}
       LOG_LEVEL: trace
 
     steps:
@@ -122,6 +131,8 @@ jobs:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          VITE_AWS_S3_FILE_TYPES_ALLOWED: image/jpeg
+          VITE_AWS_S3_FILE_SIZE_MAX_IN_BYTES: 1000000
 
       - name: Health probe
         uses: Jtalk/url-health-check-action@v4
@@ -184,6 +195,8 @@ jobs:
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: ${{ vars.API_PATH }}
       API_PROXY_PASS: ${{ vars.API_PROXY_PASS }}
+      FILE_TYPES_ALLOWED: s{{ vars.AWS_S3_FILE_TYPES_ALLOWED }}
+      MAX_FILE_SIZE_ALLOWED_IN_BYTES: s{{ vars.AWS_S3_FILE_SIZE_MAX_IN_BYTES }}
       AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
@@ -206,6 +219,9 @@ jobs:
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE }}
       RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -224,8 +240,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
 
       - name: Build server image
         run: >-
@@ -302,6 +318,13 @@ jobs:
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
                 "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
+                "AWS_S3_ACCESS_KEY_ID": "${{ vars.AWS_S3_ACCESS_KEY_ID }}",
+                "AWS_S3_BUCKET_NAME": "${{ vars.AWS_S3_BUCKET_NAME }}",
+                "AWS_S3_SECRET_ACCESS_KEY": "${{ vars.AWS_S3_SECRET_ACCESS_KEY }}",
+                "AWS_REGION": "${{ vars.AWS_REGION }}",
+                "AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS": "${{ vars.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS }}",
+                "FILE_TYPES_ALLOWED": "${{ vars.AWS_S3_FILE_TYPES_ALLOWED }}",
+                "MAX_FILE_SIZE_ALLOWED_IN_BYTES": "${{ vars.AWS_S3_FILE_SIZE_MAX_IN_BYTES }}",
                 "GOOGLE_MAPS_API_KEY": "${{ secrets.GOOGLE_MAPS_API_KEY }}",
                 "RABBIT_MQ_USER": "${{ secrets.RABBIT_MQ_USER }}",
                 "RABBIT_MQ_PASSWORD": "${{ secrets.RABBIT_MQ_PASSWORD }}",
@@ -321,7 +344,10 @@ jobs:
                 "RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT": "${{ vars.RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT }}",
                 "RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME": "${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}",
                 "RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE": "${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE }}",
-                "RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT": ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT }}
+                "RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT": "${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT }}",
+                "RABBIT_MQ_USER_DELETIONS_QUEUE_NAME": "${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}",
+                "RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE": "${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE }}",
+                "RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT": "${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT }}"
               }
             }
           }' > containers.json

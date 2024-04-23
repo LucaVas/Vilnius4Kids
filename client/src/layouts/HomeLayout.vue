@@ -5,7 +5,6 @@ const links = [
   { label: 'Login', name: 'Login' },
   { label: 'Signup', name: 'Signup' },
 ];
-
 </script>
 
 <template>
