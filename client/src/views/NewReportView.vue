@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  FwbA,
-  FwbButton,
-  FwbButtonGroup,
-  FwbHeading,
-  FwbP,
-  FwbTextarea,
-  FwbFileInput,
-} from 'flowbite-vue';
+import { FwbButton, FwbButtonGroup, FwbHeading, FwbP } from 'flowbite-vue';
 import { trpc } from '@/trpc';
 import { ref, onBeforeMount } from 'vue';
 import { type ReportCategorySelect } from '../../../server/src/entities/report_category/schema';
@@ -21,6 +13,8 @@ import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
 import TopicsTransition from '@/components/report/new_report/TopicsTransition.vue';
 import CategoriesTransition from '@/components/report/new_report/CategoriesTransition.vue';
 import PlaygroundsListTransition from '@/components/report/new_report/PlaygroundsListTransition.vue';
+import ReportContentTransition from '@/components/report/new_report/ReportContentTransition.vue';
+import ReportSentConfirmation from '@/components/report/new_report/ReportSentConfirmation.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -39,14 +33,12 @@ const reportInfo = ref({
   topic: '',
   categoryId: 0,
   playgroundId: 0,
-  message: '',
 });
 const reportSent = ref(false);
 const sendingReport = ref(false);
 const errorMessage = ref('');
 const infoMessage = ref('');
 const isUserVerified = ref(true);
-const files = ref<File[]>([]);
 
 function goBack() {
   if (playgroundId) {
@@ -88,9 +80,9 @@ function isValidFiles(files: File[]): boolean {
   return true;
 }
 
-async function uploadImages() {
+async function uploadImages(files: File[]) {
   const imagesInfo = [];
-  for (const file of files.value) {
+  for (const file of files) {
     try {
       // get secure url from server
       const { url, imageName } = await trpc.s3Images.getSignedUrl.query();
@@ -118,25 +110,31 @@ async function uploadImages() {
   return imagesInfo;
 }
 
-async function submitReport() {
-  if (reportInfo.value.message.trim().length < 5) {
+async function submitReport(
+  description: string,
+  categoryId: number,
+  playgroundId: number,
+  files: File[]
+) {
+  if (description.trim().length < 5) {
     errorMessage.value = 'Report description must be at least 5 characters long.';
     return;
   }
-  if (!isValidFiles(files.value)) return;
+  if (!isValidFiles(files)) return;
 
   sendingReport.value = true;
 
   try {
-    const imagesInfo = await uploadImages();
+    const imagesInfo = await uploadImages(files);
     await trpc.report.report.mutate({
-      description: reportInfo.value.message,
-      reportCategoryId: reportInfo.value.categoryId,
-      playgroundId: reportInfo.value.playgroundId,
+      description: description,
+      reportCategoryId: categoryId,
+      playgroundId: playgroundId,
       imagesInfo: imagesInfo ?? [],
     });
     errorMessage.value = '';
     reportSent.value = true;
+    showForm.value = false
   } catch (error) {
     if (error instanceof TRPCClientError) {
       if (error.data.httpStatus === 403) {
@@ -181,14 +179,16 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="pageLoaded" class="flex h-full w-full flex-col justify-between p-6">
-    <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
-    <FwbP class="mb-12 font-light">
-      A public playground for kids can be a wonderful place for children to play, socialize, and
-      develop important skills. However, there are potential issues that may arise, and it's crucial
-      to address them to ensure the safety and well-being of the children.</FwbP
-    >
+    <div v-if="!reportSent">
+      <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
+      <FwbP class="mb-12 font-light">
+        A public playground for kids can be a wonderful place for children to play, socialize, and
+        develop important skills. However, there are potential issues that may arise, and it's
+        crucial to address them to ensure the safety and well-being of the children.</FwbP
+      >
+    </div>
     <div v-if="isUserVerified">
-      <div class="mb-4">
+      <div class="mb-4" id="transitions-container">
         <PlaygroundsListTransition
           :showPlaygroundSearch="showPlaygroundSearch"
           :availablePlaygrounds="availablePlaygrounds"
@@ -203,6 +203,7 @@ onBeforeMount(async () => {
         <TopicsTransition
           :showTopics="showTopics"
           :availableCategories="availableCategories"
+          @back="goBack()"
           @getCategoriesByTopic="
             (topic) => {
               reportInfo.topic = topic;
@@ -215,6 +216,7 @@ onBeforeMount(async () => {
         <CategoriesTransition
           :categories="subCategories"
           :showCategories="showCategories"
+          @back="goBack()"
           @select-category="
             (category) => {
               reportInfo.categoryId = category.id;
@@ -223,75 +225,24 @@ onBeforeMount(async () => {
             }
           "
         />
-        <Transition>
-          <div v-if="showForm">
-            <form @submit.prevent="null">
-              <FwbTextarea
-                v-model="reportInfo.message"
-                :rows="5"
-                custom
-                minlength="5"
-                label="Write a description of your issue"
-                placeholder="What is the nature of this report?"
-              >
-                <template #footer>
-                  <div class="flex w-full flex-col items-start">
-                    <FwbFileInput
-                      label="Files upload"
-                      class="w-full"
-                      v-model="files"
-                      multiple
-                      :disabled="sendingReport"
-                      accept="image/png, image/jpg"
-                    >
-                      <p class="mt-3 min-w-fit text-sm text-gray-500 dark:text-gray-300">
-                        JPEG | JPG | PNG (Max 5MB)
-                      </p>
-                      <div
-                        v-if="files.length !== 0"
-                        class="mt-4 flex max-h-[14rem] flex-col gap-3 overflow-y-auto rounded-md border-[1px] border-gray-300 p-2 text-sm"
-                      >
-                        <div
-                          v-for="file in files"
-                          :key="file.name"
-                          class="flex w-full items-center justify-between border border-transparent border-b-violet-200 p-2"
-                          :class="
-                            allowedTypes.every((type) => !type.includes(file.type)) ||
-                            file.size > allowedSize
-                              ? 'rounded-md bg-red-300'
-                              : 'bg-transparent'
-                          "
-                        >
-                          {{ file.name }}
-                          <FwbButton
-                            size="sm"
-                            color="purple"
-                            outline
-                            :disabled="sendingReport || reportSent"
-                            @click="files.splice(files.indexOf(file), 1)"
-                            >X</FwbButton
-                          >
-                        </div>
-                      </div>
-                    </FwbFileInput>
-                  </div>
-                </template>
-              </FwbTextarea>
-            </form>
-            <p class="ml-auto text-xs text-gray-500 dark:text-gray-400">
-              Remember, reporting an issue should follow our
-              <FwbA href="#">Community Guidelines</FwbA>.
-            </p>
-          </div>
-        </Transition>
-      </div>
-      <div class="mb-4 flex flex-col gap-2">
-        <AlertError
-          v-if="reportSent"
-          :type="'success'"
-          data-testid="success-message"
-          :message="'Report sent successfully! Thank you for your contribution.'"
+        <ReportContentTransition
+          :showForm="showForm"
+          :sendingReport="sendingReport"
+          :reportSent="reportSent"
+          @back="goBack()"
+          @submitReport="
+            (report) =>
+              submitReport(
+                report.description,
+                reportInfo.categoryId,
+                reportInfo.playgroundId,
+                report.files
+              )
+          "
         />
+      </div>
+      <ReportSentConfirmation :reportSent="reportSent" @goHome="router.push({ name: 'Home' })" />
+      <div class="mb-4 flex flex-col gap-2" id="alerts-container">
         <AlertError
           v-if="infoMessage"
           :type="'info'"
@@ -306,28 +257,7 @@ onBeforeMount(async () => {
           :message="errorMessage"
         />
       </div>
-      <FwbButtonGroup class="flex w-full justify-between">
-        <FwbButton v-if="!reportSent" color="dark" outline square @click="goBack"> Back </FwbButton>
-        <FwbButton
-          v-if="showForm && !reportSent"
-          :disabled="reportSent || sendingReport"
-          :loading="sendingReport"
-          square
-          color="purple"
-          @click="submitReport"
-        >
-          Submit report
-        </FwbButton>
-        <FwbButton
-          v-if="reportSent"
-          square
-          color="purple"
-          component="RouterLink"
-          tag="router-link"
-          :href="{ name: 'MyHome' } as any"
-        >
-          Back to my home
-        </FwbButton>
+      <FwbButtonGroup class="flex w-full justify-end" v-if="!reportSent">
         <FwbButton
           v-if="!showTopics && !showCategories && !showForm && !showPlaygroundSearch"
           @click="showPlaygroundSearch = true"

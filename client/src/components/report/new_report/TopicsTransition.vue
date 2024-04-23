@@ -1,6 +1,6 @@
 <template>
   <Transition>
-    <div v-if="showTopics">
+    <div v-if="showTopics" class="flex flex-col gap-5">
       <FwbButtonGroup class="grid h-full w-full grid-cols-1 gap-5 md:grid-cols-2">
         <FwbButton
           v-for="topic in getTopics(availableCategories)"
@@ -11,6 +11,9 @@
           @click="$emit('getCategoriesByTopic', topic)"
           >{{ topic }}</FwbButton
         >
+      </FwbButtonGroup>
+      <FwbButtonGroup class="flex w-full justify-between">
+        <FwbButton color="dark" outline square @click="$emit('back')"> Back </FwbButton>
       </FwbButtonGroup>
     </div>
   </Transition>
@@ -37,5 +40,6 @@ const { showTopics, availableCategories } = defineProps<{
 
 defineEmits<{
   (event: 'getCategoriesByTopic', topic: string): void;
+  (event: 'back'): void;
 }>();
 </script>
