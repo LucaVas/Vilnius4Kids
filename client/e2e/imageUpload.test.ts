@@ -25,22 +25,23 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('upload images', () => {
-  test.skip('User cannot upload an invalid file', async ({ page }) => {
+  test('User cannot upload an invalid file', async ({ page }) => {
     const errorMessage = page.getByTestId('error-message');
 
     await page.goto('/report');
     await page.getByRole('button', { name: 'Report an issue' }).click();
     await page
-      .getByRole('row', { name: 'Pavilnys Vandens g. 9 7 Report' })
+      .getByRole('textbox', { name: 'Enter a playground name' })
+      .pressSequentially('antakalnis', { delay: 100 });
+    await page
+      .getByRole('row', { name: 'Antakalnis Antakalnio g. 120' })
       .getByRole('button')
       .click();
     await page.getByRole('button', { name: 'Safety Hazards' }).click();
     await page.getByRole('button', { name: 'Unsafe equipment' }).click();
     await page.getByPlaceholder('What is the nature of this').fill('Test report');
     await page.locator('input[type="file"]').click();
-    await page
-      .locator('input[type="file"]')
-      .setInputFiles('./utils/files/random_song.mp3');
+    await page.locator('input[type="file"]').setInputFiles('./utils/files/random_song.mp3');
     await page.locator('text=random_song.mp3').click();
     await page.getByRole('button', { name: 'Submit report' }).click();
 
@@ -54,16 +55,17 @@ test.describe('upload images', () => {
     await page.goto('/report');
     await page.getByRole('button', { name: 'Report an issue' }).click();
     await page
-      .getByRole('row', { name: 'Pavilnys Vandens g. 9 7 Report' })
+      .getByRole('textbox', { name: 'Enter a playground name' })
+      .pressSequentially('antakalnis', { delay: 100 });
+    await page
+      .getByRole('row', { name: 'Antakalnis Antakalnio g. 120' })
       .getByRole('button')
       .click();
     await page.getByRole('button', { name: 'Safety Hazards' }).click();
     await page.getByRole('button', { name: 'Unsafe equipment' }).click();
     await page.getByPlaceholder('What is the nature of this').fill('Test report');
     await page.locator('input[type="file"]').click();
-    await page
-      .locator('input[type="file"]')
-      .setInputFiles('./utils/files/random_image.jpeg');
+    await page.locator('input[type="file"]').setInputFiles('./utils/files/random_image.jpeg');
     await page.locator('text=random_image.jpeg').click();
 
     await page.locator('text=random_image.jpeg').click();
