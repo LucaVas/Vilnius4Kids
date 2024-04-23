@@ -309,7 +309,7 @@ onBeforeMount(async () => {
         </Transition>
         <Transition>
           <div v-if="showTopics">
-            <FwbButtonGroup class="flex h-full w-full flex-col gap-5">
+            <FwbButtonGroup class="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-5">
               <FwbButton
                 v-for="topic in availableCategories?.reduce((acc: string[], curr) => {
                   if (!acc.includes(curr.topic)) {
@@ -334,7 +334,7 @@ onBeforeMount(async () => {
         </Transition>
         <Transition>
           <div v-if="showCategories">
-            <FwbButtonGroup class="flex h-full w-full flex-col gap-5">
+            <FwbButtonGroup class="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-5">
               <FwbButton
                 v-for="category in subCategories"
                 :key="category.id"
