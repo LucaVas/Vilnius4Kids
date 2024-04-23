@@ -131,7 +131,7 @@ const config = schema.parse({
         region: env.AWS_S3_REGION,
         bucket: env.AWS_S3_BUCKET_NAME,
         imageSize: env.AWS_S3_FILE_SIZE_MAX_IN_BYTES,
-        imageUploadTimeout: env.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS,
+        imageUploadTimeout: env.AWS_S3_FILE_UPLOAD_TIMEOUT_IN_SECONDS,
     },
 
     rabbitMq: {
