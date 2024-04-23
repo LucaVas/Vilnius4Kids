@@ -6,7 +6,7 @@ import { type ReportCategorySelect } from '../../../server/src/entities/report_c
 import { useRouter, useRoute } from 'vue-router';
 import { Playground } from '../../../server/src/entities/playground/playground';
 import { FwbAlert } from 'flowbite-vue';
-import AlertError from '@/components/AlertError.vue';
+import AlertMessage from '@/components/AlertMessage.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '@/constants';
 import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
@@ -243,14 +243,14 @@ onBeforeMount(async () => {
       </div>
       <ReportSentConfirmation :reportSent="reportSent" @goHome="router.push({ name: 'Home' })" />
       <div class="mb-4 flex flex-col gap-2" id="alerts-container">
-        <AlertError
+        <AlertMessage
           v-if="infoMessage"
           :type="'info'"
           data-testid="info-message"
           :message="infoMessage"
           :closable="true"
         />
-        <AlertError
+        <AlertMessage
           v-if="errorMessage"
           :type="'danger'"
           data-testid="error-message"

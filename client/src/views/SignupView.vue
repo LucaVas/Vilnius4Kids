@@ -3,7 +3,7 @@ import { signup } from '@/stores/user';
 import { ref } from 'vue';
 import PageForm from '@/components/PageForm.vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
-import AlertError from '@/components/AlertError.vue';
+import AlertMessage from '@/components/AlertMessage.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 
 const userForm = ref({
@@ -73,9 +73,9 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
 
-        <AlertError icon type="danger" v-if="errorMessage" :message="errorMessage">
+        <AlertMessage icon type="danger" v-if="errorMessage" :message="errorMessage">
           {{ errorMessage }}
-        </AlertError>
+        </AlertMessage>
 
         <div class="grid gap-2">
           <FwbButton

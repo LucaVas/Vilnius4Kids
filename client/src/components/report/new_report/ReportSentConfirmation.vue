@@ -7,7 +7,7 @@
         class="h-1/2 w-1/2 sm:h-1/3 sm:w-1/3 lg:h-1/5 lg:w-1/5"
         src="/src/assets/reports/report_sent_success.svg"
       />
-      <AlertError
+      <AlertMessage
         :type="'success'"
         data-testid="success-message"
         class="w-full lg:w-1/2"
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { FwbImg, FwbButtonGroup, FwbButton } from 'flowbite-vue';
-import AlertError from '@/components/AlertError.vue';
+import AlertMessage from '@/components/AlertMessage.vue';
 
 const { reportSent } = defineProps<{ reportSent: boolean }>();
 
