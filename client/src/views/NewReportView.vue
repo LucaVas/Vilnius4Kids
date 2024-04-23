@@ -25,6 +25,7 @@ import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '@/constants';
 import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
+import CategoriesTransition from '@/components/report/new_report/CategoriesTransition.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -156,7 +157,7 @@ async function uploadImages() {
         url: url.split('?')[0],
         type: file.type,
         name: file.name,
-        key: imageName
+        key: imageName,
       });
     } catch (e) {
       // if error while uploading, do continue report process, but inform user
@@ -307,34 +308,21 @@ onBeforeMount(async () => {
             </div>
           </div>
         </Transition>
-        <Transition>
-          <div v-if="showTopics">
-            <FwbButtonGroup class="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-5">
-              <FwbButton
-                v-for="topic in availableCategories?.reduce((acc: string[], curr) => {
-                  if (!acc.includes(curr.topic)) {
-                    acc.push(curr.topic);
-                  }
-                  return acc;
-                }, []) || []"
-                :key="topic"
-                @click="
-                  reportInfo.topic = topic;
-                  showCategories = true;
-                  showTopics = false;
-                  getCategoriesByTopic(topic);
-                "
-                color="purple"
-                outline
-                class="w-full"
-                >{{ topic }}</FwbButton
-              >
-            </FwbButtonGroup>
-          </div>
-        </Transition>
+        <CategoriesTransition
+          :showTopics="showTopics"
+          :availableCategories="availableCategories"
+          @getCategoriesByTopic="
+            (topic) => {
+              reportInfo.topic = topic;
+              showCategories = true;
+              showTopics = false;
+              getCategoriesByTopic(topic);
+            }
+          "
+        />
         <Transition>
           <div v-if="showCategories">
-            <FwbButtonGroup class="grid h-full w-full grid-cols-1 md:grid-cols-2 gap-5">
+            <FwbButtonGroup class="grid h-full w-full grid-cols-1 gap-5 md:grid-cols-2">
               <FwbButton
                 v-for="category in subCategories"
                 :key="category.id"
@@ -372,12 +360,12 @@ onBeforeMount(async () => {
                       :disabled="sendingReport"
                       accept="image/png, image/jpg"
                     >
-                    <p class="min-w-fit text-sm mt-3 text-gray-500 dark:text-gray-300">
-                      JPEG | JPG | PNG (Max 5MB)
-                    </p>
+                      <p class="mt-3 min-w-fit text-sm text-gray-500 dark:text-gray-300">
+                        JPEG | JPG | PNG (Max 5MB)
+                      </p>
                       <div
                         v-if="files.length !== 0"
-                        class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm max-h-[14rem] overflow-y-auto"
+                        class="mt-4 flex max-h-[14rem] flex-col gap-3 overflow-y-auto rounded-md border-[1px] border-gray-300 p-2 text-sm"
                       >
                         <div
                           v-for="file in files"
