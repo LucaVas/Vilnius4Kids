@@ -12,5 +12,5 @@ export default router({
     getUsername,
     isUserVerified,
     subscribe,
-    deleteUser
+    deleteUser,
 });

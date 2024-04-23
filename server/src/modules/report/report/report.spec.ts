@@ -135,7 +135,7 @@ describe('Report a new issue', async () => {
                 playgroundId: playground.id,
                 description: 'Test report description',
                 reportCategoryId: reportCategory.id,
-                imagesInfo: []
+                imagesInfo: [],
             })
         ).rejects.toThrow(
             /Error while submitting report. Please try again later/

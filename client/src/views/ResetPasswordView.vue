@@ -20,7 +20,6 @@ const successMessage = ref('');
 const loading = ref(false);
 
 const [resetPassword, errorMessage] = useErrorMessage(async () => {
-
   if (userForm.value.password !== repeatedPassword.value) {
     throw new Error('Passwords do not match');
   }
@@ -74,7 +73,13 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           {{ successMessage }}
         </FwbAlert>
 
-        <AlertMessage icon type="danger" v-if="errorMessage" :message="errorMessage" data-testid="error-message">
+        <AlertMessage
+          icon
+          type="danger"
+          v-if="errorMessage"
+          :message="errorMessage"
+          data-testid="error-message"
+        >
           {{ errorMessage }}
         </AlertMessage>
 

@@ -16,6 +16,7 @@ const mockMailService: MailService = {
     sendPasswordResetToken: vi.fn().mockResolvedValue(undefined),
     sendReport: vi.fn().mockResolvedValue(undefined),
     sendVerificationToken: vi.fn().mockResolvedValue(undefined),
+    sendUserDeletionEmail: vi.fn().mockResolvedValue(undefined),
 };
 const passwordResetService = buildPasswordResetService(mockMailService, db);
 

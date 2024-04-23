@@ -39,18 +39,18 @@ async function deleteUser(
 ) {
     try {
         // get images from database
-        const user = await database
-            .getRepository(User)
-            .findOne({
-                where: { id: content.user.id },
-                relations: ['reports'],
-            });
+        const user = await database.getRepository(User).findOne({
+            where: { id: content.user.id },
+            relations: ['reports'],
+        });
 
         if (user && user.reports.length > 0) {
             // delete images from s3 bucket
             user.reports.forEach((report) =>
                 report.images.forEach(async (image) => {
-                    logger.debug(`Starting deleting process for image with key ${image.key}`)
+                    logger.debug(
+                        `Starting deleting process for image with key ${image.key}`
+                    );
                     const params = {
                         Bucket: s3bucket,
                         Key: image.key,

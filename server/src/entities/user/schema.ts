@@ -60,4 +60,4 @@ export type UserInsert = z.infer<typeof userInsertSchema>;
 export type UserUpdate = z.infer<typeof userUpdateSchema>;
 export type UserSelect = z.infer<typeof userSchema>;
 export type UserLogin = z.infer<typeof userLoginSchema>;
-export type UserDelete = z.infer<typeof userDeleteSchema>
+export type UserDelete = z.infer<typeof userDeleteSchema>;

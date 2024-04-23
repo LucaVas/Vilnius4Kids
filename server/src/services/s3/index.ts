@@ -20,4 +20,3 @@ export const s3client = new aws.S3({
 export const s3bucket = bucket;
 export const s3imageSize = imageSize;
 export const s3imageUploadTimeout = imageUploadTimeout;
-

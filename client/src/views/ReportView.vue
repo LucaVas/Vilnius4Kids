@@ -10,7 +10,7 @@ import {
   FwbTimelineTime,
   FwbTimelineTitle,
   FwbTimelineBody,
-  FwbImg
+  FwbImg,
 } from 'flowbite-vue';
 import { trpc } from '../trpc';
 import { ref, onBeforeMount } from 'vue';
@@ -123,7 +123,7 @@ onBeforeMount(async () => {
     </div>
     <div v-if="currentReport!.images" class="flex flex-col">
       <FwbHeading tag="h5" class="mb-4">Images</FwbHeading>
-      <div class="max-h-[15rem] w-full overflow-x-scroll flex gap-3">
+      <div class="flex max-h-[15rem] w-full gap-3 overflow-x-scroll">
         <FwbImg
           v-for="image in currentReport!.images"
           :key="image.id"

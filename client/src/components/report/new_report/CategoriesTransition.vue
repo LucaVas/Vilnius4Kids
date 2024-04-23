@@ -1,6 +1,6 @@
 <template>
   <Transition>
-    <div v-if="showCategories" class="flex flex-col gap-5" >
+    <div v-if="showCategories" class="flex flex-col gap-5">
       <FwbButtonGroup class="grid h-full w-full grid-cols-1 gap-5 md:grid-cols-2">
         <FwbButton
           v-for="category in categories"

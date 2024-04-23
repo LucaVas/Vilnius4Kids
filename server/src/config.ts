@@ -181,8 +181,7 @@ const config = schema.parse({
                 queueName: env.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME,
                 options: {
                     durable: env.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE,
-                    persistent:
-                        env.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT,
+                    persistent: env.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT,
                 },
             },
         ],

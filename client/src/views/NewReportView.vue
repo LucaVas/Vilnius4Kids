@@ -134,7 +134,7 @@ async function submitReport(
     });
     errorMessage.value = '';
     reportSent.value = true;
-    showForm.value = false
+    showForm.value = false;
   } catch (error) {
     if (error instanceof TRPCClientError) {
       if (error.data.httpStatus === 403) {

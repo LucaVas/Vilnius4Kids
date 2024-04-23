@@ -82,7 +82,7 @@ const getPlaygroundsToShow = (playgrounds: Playground[] | undefined) => {
   return playgrounds
     ? playgrounds.filter((playground) => playgrounds.indexOf(playground) < limit.value)
     : [];
-  };
+};
 
 const filterPlaygrounds = () => {
   if (availablePlaygrounds === undefined) return;
