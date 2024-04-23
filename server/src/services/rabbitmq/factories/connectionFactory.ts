@@ -25,7 +25,9 @@ export class ConnectionFactory {
 
     async getConnection(retries = 0): Promise<Connection> {
         try {
-            logger.info(`Attempting to get a connection to RabbitMQ host`);
+            logger.info(
+                `Attempting to get a connection to RabbitMQ host ${this.host}`
+            );
             return await this.newConnection(this.host);
         } catch (e) {
             logger.error(`Error while connecting to RabbitMQ server: ${e}`);

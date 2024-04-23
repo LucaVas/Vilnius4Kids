@@ -53,6 +53,7 @@ Users will find the following features available:
 2. Make a new report where playground can be chosen from a list.
 3. View a specific report for logged-in user.
 4. Rate a playground.
+5. Delete a user.
 
 ### Administrators
 
@@ -71,7 +72,3 @@ The panel will offer more possible endpoints solutions, such as performing CRUD 
 ## Authors
 
 - [@LucaVas](https://www.github.com/LucaVas)
-
-## Acknowledgements
-
-The project is created as sprint's project for Turing College, module 3, sprint 4.
