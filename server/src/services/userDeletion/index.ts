@@ -1,6 +1,6 @@
 import { DataSource, QueryFailedError } from 'typeorm';
 import logger from '@server/logger';
-import { Report, User } from '@server/entities';
+import { User } from '@server/entities';
 import {
     MailService,
     RabbitMqService,
@@ -39,13 +39,18 @@ async function deleteUser(
 ) {
     try {
         // get images from database
-        const userReports = await database
-            .getRepository(Report)
-            .find({ where: { user: content.user }, relations: ['images'] });
-        if (userReports) {
+        const user = await database
+            .getRepository(User)
+            .findOne({
+                where: { id: content.user.id },
+                relations: ['reports'],
+            });
+
+        if (user && user.reports.length > 0) {
             // delete images from s3 bucket
-            userReports.forEach((report) =>
+            user.reports.forEach((report) =>
                 report.images.forEach(async (image) => {
+                    logger.debug(`Starting deleting process for image with key ${image.key}`)
                     const params = {
                         Bucket: s3bucket,
                         Key: image.key,
@@ -66,7 +71,7 @@ async function deleteUser(
                             );
                         }
                     } catch (err) {
-                        logger.info('Image not found in bucket.');
+                        logger.warn('Image not found in bucket.');
                     }
                 })
             );
