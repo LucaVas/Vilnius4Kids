@@ -46,7 +46,7 @@ export class Playground {
     address: Address;
 
     @ManyToMany(() => User, (user) => user.playgrounds, {
-        onDelete: 'CASCADE', // When a user is deleted, delete on cascade
+        onDelete: 'SET NULL', // When a user is deleted, set null
     })
     @JoinTable()
     users: User[];

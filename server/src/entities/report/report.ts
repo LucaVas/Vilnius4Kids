@@ -38,7 +38,7 @@ export class Report {
     category: ReportCategory;
 
     @OneToMany(() => ReportImage, (images) => images.report, {
-        eager: true
+        eager: true,
     })
     images: ReportImage[];
 
@@ -50,6 +50,8 @@ export class Report {
     @OneToMany(() => ReportStatusChangeLog, (log) => log.report)
     changeLogs: ReportStatusChangeLog[];
 
-    @ManyToOne(() => Playground, (playground) => playground.reports)
+    @ManyToOne(() => Playground, (playground) => playground.reports, {
+        onDelete: 'CASCADE', // When a playground is deleted, delete the report as well
+    })
     playground: Playground;
 }
