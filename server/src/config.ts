@@ -18,7 +18,9 @@ const schema = z
         isCi: z.coerce.boolean().default(false),
         port: z.coerce.number().default(3000),
 
-        logLevel: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
+        logLevel: z
+            .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+            .default('info'),
 
         auth: z.object({
             tokenKey: z.string().default(() => {
@@ -56,16 +58,23 @@ const schema = z
         }),
 
         rabbitMq: z.object({
-            user: z.string().default(''),
-            password: z.string().default(''),
+            user: z.string().default('guest'),
+            password: z.string().default('guest'),
             host: z.string().default('localhost'),
+            port: z.coerce.number().default(5672),
             mqChannelRetryDelays: z.coerce.number().default(10),
             mqChannelMaxRetries: z.coerce.number().default(5),
             mqConnectionRetryDelays: z.coerce.number().default(10),
             mqConnectionMaxRetries: z.coerce.number().default(5),
             queues: z.array(
                 z.object({
-                    name: z.string(),
+                    name: z.enum([
+                        'subscriptions',
+                        'reports',
+                        'password-resets',
+                        'account-verifications',
+                        'user-deletions',
+                    ]),
                     queueName: z.string(),
                     options: z.object({
                         durable: z.coerce.boolean().default(true),
@@ -138,6 +147,7 @@ const config = schema.parse({
         user: env.RABBIT_MQ_USER,
         password: env.RABBIT_MQ_PASSWORD,
         host: env.RABBIT_MQ_HOST,
+        port: env.RABBIT_MQ_PORT,
         mqChannelRetryDelays: env.RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS,
         mqChannelMaxRetries: env.RABBIT_MQ_CHANNEL_MAX_RETRIES,
         mqConnectionRetryDelays: env.RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS,
