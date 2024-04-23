@@ -126,11 +126,11 @@ const config = schema.parse({
     },
 
     s3: {
-        accessKeyId: env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+        accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
         region: env.AWS_S3_REGION,
         bucket: env.AWS_S3_BUCKET_NAME,
-        imageSize: env.AWS_S3_IMAGE_SIZE_MAX_IN_BYTES,
+        imageSize: env.AWS_S3_FILE_SIZE_MAX_IN_BYTES,
         imageUploadTimeout: env.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS,
     },
 
