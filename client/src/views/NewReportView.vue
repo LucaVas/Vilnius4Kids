@@ -25,6 +25,7 @@ import AlertError from '@/components/AlertError.vue';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '@/constants';
 import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
+import TopicsTransition from '@/components/report/new_report/TopicsTransition.vue';
 import CategoriesTransition from '@/components/report/new_report/CategoriesTransition.vue';
 
 const router = useRouter();
@@ -308,7 +309,7 @@ onBeforeMount(async () => {
             </div>
           </div>
         </Transition>
-        <CategoriesTransition
+        <TopicsTransition
           :showTopics="showTopics"
           :availableCategories="availableCategories"
           @getCategoriesByTopic="
@@ -320,25 +321,17 @@ onBeforeMount(async () => {
             }
           "
         />
-        <Transition>
-          <div v-if="showCategories">
-            <FwbButtonGroup class="grid h-full w-full grid-cols-1 gap-5 md:grid-cols-2">
-              <FwbButton
-                v-for="category in subCategories"
-                :key="category.id"
-                color="purple"
-                outline
-                @click="
-                  reportInfo.categoryId = category.id;
-                  showCategories = false;
-                  showForm = true;
-                "
-                class="w-full"
-                >{{ category.name }}</FwbButton
-              >
-            </FwbButtonGroup>
-          </div>
-        </Transition>
+        <CategoriesTransition
+          :categories="subCategories"
+          :showCategories="showCategories"
+          @select-category="
+            (category) => {
+              reportInfo.categoryId = category.id;
+              showCategories = false;
+              showForm = true;
+            }
+          "
+        />
         <Transition>
           <div v-if="showForm">
             <form @submit.prevent="null">
