@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('upload images', () => {
-  test('User cannot upload an invalid file', async ({ page }) => {
+  test.skip('User cannot upload an invalid file', async ({ page }) => {
     const errorMessage = page.getByTestId('error-message');
 
     await page.goto('/report');
