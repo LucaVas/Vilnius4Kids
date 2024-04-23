@@ -364,20 +364,20 @@ onBeforeMount(async () => {
               >
                 <template #footer>
                   <div class="flex w-full flex-col items-start">
-                    <p class="min-w-fit text-sm text-gray-500 dark:text-gray-300">
-                      JPEG | JPG | PNG (Max 5MB)
-                    </p>
                     <FwbFileInput
                       label="Files upload"
                       class="w-full"
-                      @update:model-value="(file) => files.push(file[0])"
+                      v-model="files"
                       multiple
                       :disabled="sendingReport"
                       accept="image/png, image/jpg"
                     >
+                    <p class="min-w-fit text-sm mt-3 text-gray-500 dark:text-gray-300">
+                      JPEG | JPG | PNG (Max 5MB)
+                    </p>
                       <div
                         v-if="files.length !== 0"
-                        class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm"
+                        class="mt-4 flex flex-col gap-3 rounded-md border-[1px] border-gray-300 p-2 text-sm max-h-[14rem] overflow-y-auto"
                       >
                         <div
                           v-for="file in files"
