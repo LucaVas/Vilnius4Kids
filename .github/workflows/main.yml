@@ -135,22 +135,6 @@ jobs:
           path: client/playwright-report/
           retention-days: 7
 
-  render-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/prod'
-    env:
-      NODE_ENV: production
-      RENDER_DEPLOY_HOOK_URL_CLIENT: ${{ secrets.RENDER_DEPLOY_HOOK_URL_CLIENT }}
-      RENDER_DEPLOY_HOOK_URL_SERVER: ${{ secrets.RENDER_DEPLOY_HOOK_URL_SERVER }}
-    steps:
-      - name: Deploy server
-        run: |
-          curl "$RENDER_DEPLOY_HOOK_URL_SERVER"
-      - name: Deploy client
-        run: |
-          curl "$RENDER_DEPLOY_HOOK_URL_CLIENT"
-
   aws-deploy:
     needs: test
     runs-on: ubuntu-latest
