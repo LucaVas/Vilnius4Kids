@@ -5,7 +5,7 @@
         alt="flowbite-vue"
         size="max-w-fit"
         class="h-1/2 w-1/2 sm:h-1/3 sm:w-1/3 lg:h-1/5 lg:w-1/5"
-        src="/src/assets/reports/report_sent_success.svg"
+        src="../../../assets/reports/report_sent_success.svg"
       />
       <AlertMessage
         :type="'success'"
