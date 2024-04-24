@@ -32,9 +32,9 @@ jobs:
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      AWS_S3_ACCESS_KEY_ID: ${{ vars.AWS_S3_ACCESS_KEY_ID }}
-      AWS_S3_BUCKET_NAME: ${{ vars.AWS_S3_BUCKET_NAME }}
-      AWS_S3_SECRET_ACCESS_KEY: ${{ vars.AWS_S3_SECRET_ACCESS_KEY }}
+      AWS_S3_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      AWS_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
       AWS_S3_REGION: ${{ vars.AWS_S3_REGION }}
       RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME }}
       RABBIT_MQ_REPORTS_QUEUE_NAME: ${{ vars.RABBIT_MQ_REPORTS_QUEUE_NAME }}
@@ -255,9 +255,9 @@ jobs:
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
                 "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
-                "AWS_S3_ACCESS_KEY_ID": "${{ vars.AWS_S3_ACCESS_KEY_ID }}",
-                "AWS_S3_BUCKET_NAME": "${{ vars.AWS_S3_BUCKET_NAME }}",
-                "AWS_S3_SECRET_ACCESS_KEY": "${{ vars.AWS_S3_SECRET_ACCESS_KEY }}",
+                "AWS_S3_ACCESS_KEY_ID": "${{ secrets.AWS_S3_ACCESS_KEY_ID }}",
+                "AWS_S3_BUCKET_NAME": "${{ secrets.AWS_S3_BUCKET_NAME }}",
+                "AWS_S3_SECRET_ACCESS_KEY": "${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}",
                 "AWS_S3_REGION": "${{ vars.AWS_S3_REGION }}",
                 "AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS": "${{ vars.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS }}",
                 "FILE_TYPES_ALLOWED": "${{ vars.AWS_S3_FILE_TYPES_ALLOWED }}",
