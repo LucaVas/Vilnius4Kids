@@ -10,6 +10,7 @@ import {
   FwbTimelineTime,
   FwbTimelineTitle,
   FwbTimelineBody,
+  FwbImg,
 } from 'flowbite-vue';
 import { trpc } from '../trpc';
 import { ref, onBeforeMount } from 'vue';
@@ -119,6 +120,19 @@ onBeforeMount(async () => {
           </FwbTimelineContent>
         </FwbTimelineItem>
       </FwbTimeline>
+    </div>
+    <div v-if="currentReport!.images" class="flex flex-col">
+      <FwbHeading tag="h5" class="mb-4">Images</FwbHeading>
+      <div class="flex max-h-[15rem] w-full gap-3 overflow-x-scroll">
+        <FwbImg
+          v-for="image in currentReport!.images"
+          :key="image.id"
+          :alt="image.name"
+          img-class="rounded-lg border-[1px]"
+          size="max-w-lg"
+          :src="image.url"
+        />
+      </div>
     </div>
   </div>
 </template>

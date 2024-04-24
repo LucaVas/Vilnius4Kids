@@ -7,7 +7,6 @@ import router from '..';
 
 const db = await createTestDatabase();
 
-
 describe('Get username', async () => {
     it('User can retrieve their username', async () => {
         const user = await db.getRepository(User).save(fakeUser());

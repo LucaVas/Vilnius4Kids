@@ -1,37 +1,27 @@
 <script setup lang="ts">
-import {
-  FwbA,
-  FwbButton,
-  FwbButtonGroup,
-  FwbHeading,
-  FwbP,
-  FwbTextarea,
-  FwbInput,
-  FwbTable,
-  FwbTableHead,
-  FwbTableHeadCell,
-  FwbTableBody,
-  FwbTableRow,
-  FwbTableCell,
-} from 'flowbite-vue';
-import { trpc } from '../trpc';
+import { FwbButton, FwbButtonGroup, FwbHeading, FwbP } from 'flowbite-vue';
+import { trpc } from '@/trpc';
 import { ref, onBeforeMount } from 'vue';
 import { type ReportCategorySelect } from '../../../server/src/entities/report_category/schema';
 import { useRouter, useRoute } from 'vue-router';
 import { Playground } from '../../../server/src/entities/playground/playground';
 import { FwbAlert } from 'flowbite-vue';
-import AlertError from '@/components/AlertError.vue';
+import AlertMessage from '@/components/AlertMessage.vue';
 import { TRPCClientError } from '@trpc/client';
-import { DEFAULT_SERVER_ERROR } from '../consts';
+import { DEFAULT_SERVER_ERROR } from '@/constants';
+import { filesTypesAllowed, maxFileSizeAllowed } from '../config';
+import TopicsTransition from '@/components/report/new_report/TopicsTransition.vue';
+import CategoriesTransition from '@/components/report/new_report/CategoriesTransition.vue';
+import PlaygroundsListTransition from '@/components/report/new_report/PlaygroundsListTransition.vue';
+import ReportContentTransition from '@/components/report/new_report/ReportContentTransition.vue';
+import ReportSentConfirmation from '@/components/report/new_report/ReportSentConfirmation.vue';
 
 const router = useRouter();
 const route = useRoute();
 const playgroundId = Number(route.params.id);
 
-const playgroundName = ref('');
 const availablePlaygrounds = ref<Playground[]>();
 const searchPlaygrounds = ref<Playground[]>();
-const limit = ref(5);
 const showPlaygroundSearch = ref(false);
 const showCategories = ref(false);
 const showTopics = ref(false);
@@ -43,55 +33,12 @@ const reportInfo = ref({
   topic: '',
   categoryId: 0,
   playgroundId: 0,
-  message: '',
 });
 const reportSent = ref(false);
+const sendingReport = ref(false);
 const errorMessage = ref('');
+const infoMessage = ref('');
 const isUserVerified = ref(true);
-
-function removeDiacritics(text: string) {
-  var output = '';
-
-  var normalized = text.normalize('NFD');
-  var i = 0;
-  var j = 0;
-
-  while (i < text.length) {
-    output += normalized[j];
-
-    j += text[i] == normalized[j] ? 1 : 2;
-    i++;
-  }
-
-  return output;
-}
-
-function filterPlaygrounds() {
-  if (availablePlaygrounds.value === undefined) return;
-  if (playgroundName.value === '') return;
-  if (limit.value !== 5) limit.value = 5;
-  searchPlaygrounds.value = availablePlaygrounds.value?.filter((playground) => {
-    const normalizedDistrict = removeDiacritics(playground.address.district.toLowerCase());
-    const normalizedStreet = removeDiacritics(playground.address.street.toLowerCase());
-    const normalizedInput = removeDiacritics(playgroundName.value.toLowerCase());
-
-    return (
-      normalizedDistrict.includes(normalizedInput) || normalizedStreet.includes(normalizedInput)
-    );
-  });
-}
-
-function showMorePlaygrounds() {
-  if (searchPlaygrounds.value === undefined) return;
-  limit.value <= searchPlaygrounds.value.length - 5
-    ? (limit.value += 5)
-    : (limit.value = searchPlaygrounds.value?.length);
-}
-
-function showLessPlaygrounds() {
-  if (searchPlaygrounds.value === undefined) return;
-  limit.value >= 10 && searchPlaygrounds.value.length >= 5 ? (limit.value -= 5) : limit.value;
-}
 
 function goBack() {
   if (playgroundId) {
@@ -117,17 +64,79 @@ function getCategoriesByTopic(topic: string) {
   subCategories.value = availableCategories.value?.filter((category) => category.topic === topic);
 }
 
-async function submitReport() {
+const allowedTypes = filesTypesAllowed.split(',').map((t) => t.trim());
+const allowedSize = Number(maxFileSizeAllowed);
+function isValidFiles(files: File[]): boolean {
+  for (const file of files) {
+    if (allowedTypes.every((type) => !type.includes(file.type))) {
+      errorMessage.value = 'One or more file types are not allowed.';
+      return false;
+    }
+    if (file.size > allowedSize) {
+      errorMessage.value = 'One or more image size is above the allowed limit.';
+      return false;
+    }
+  }
+  return true;
+}
+
+async function uploadImages(files: File[]) {
+  const imagesInfo = [];
+  for (const file of files) {
+    try {
+      // get secure url from server
+      const { url, imageName } = await trpc.s3Images.getSignedUrl.query();
+      // post image to s3 bucket
+      await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: file,
+      });
+      imagesInfo.push({
+        url: url.split('?')[0],
+        type: file.type,
+        name: file.name,
+        key: imageName,
+      });
+    } catch (e) {
+      // if error while uploading, do continue report process, but inform user
+      errorMessage.value =
+        'There was an issue while uploading your images. The report is submitted, but images might not be uploaded.';
+    }
+  }
+
+  return imagesInfo;
+}
+
+async function submitReport(
+  description: string,
+  categoryId: number,
+  playgroundId: number,
+  files: File[]
+) {
+  if (description.trim().length < 5) {
+    errorMessage.value = 'Report description must be at least 5 characters long.';
+    return;
+  }
+  if (!isValidFiles(files)) return;
+
+  sendingReport.value = true;
+
   try {
+    const imagesInfo = await uploadImages(files);
     await trpc.report.report.mutate({
-      description: reportInfo.value.message,
-      reportCategoryId: reportInfo.value.categoryId,
-      playgroundId: reportInfo.value.playgroundId,
+      description: description,
+      reportCategoryId: categoryId,
+      playgroundId: playgroundId,
+      imagesInfo: imagesInfo ?? [],
     });
+    errorMessage.value = '';
     reportSent.value = true;
+    showForm.value = false;
   } catch (error) {
     if (error instanceof TRPCClientError) {
-      console.log(error.data.httpStatus);
       if (error.data.httpStatus === 403) {
         errorMessage.value = 'You need to verify your email to report on a playground';
         return;
@@ -136,6 +145,8 @@ async function submitReport() {
     } else {
       errorMessage.value = DEFAULT_SERVER_ERROR;
     }
+  } finally {
+    sendingReport.value = false;
   }
 }
 
@@ -168,212 +179,85 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="pageLoaded" class="flex h-full w-full flex-col justify-between p-6">
-    <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
-    <FwbP class="mb-12 font-light">
-      A public playground for kids can be a wonderful place for children to play, socialize, and
-      develop important skills. However, there are potential issues that may arise, and it's crucial
-      to address them to ensure the safety and well-being of the children.</FwbP
-    >
+    <div v-if="!reportSent">
+      <FwbHeading tag="h3" class="mb-4">Report an issue</FwbHeading>
+      <FwbP class="mb-12 font-light">
+        A public playground for kids can be a wonderful place for children to play, socialize, and
+        develop important skills. However, there are potential issues that may arise, and it's
+        crucial to address them to ensure the safety and well-being of the children.</FwbP
+      >
+    </div>
     <div v-if="isUserVerified">
-      <div class="mb-4">
-        <Transition>
-          <div v-if="showPlaygroundSearch">
-            <FwbInput
-              v-model="playgroundName"
-              label="Search for a playground"
-              placeholder="Enter a playground name"
-              size="lg"
-              @keyup="filterPlaygrounds"
-            >
-              <template #prefix>
-                <svg
-                  aria-hidden="true"
-                  class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  />
-                </svg>
-              </template>
-            </FwbInput>
-            <FwbTable class="mt-4">
-              <FwbTableHead>
-                <FwbTableHeadCell>District</FwbTableHeadCell>
-                <FwbTableHeadCell>Address</FwbTableHeadCell>
-                <FwbTableHeadCell>
-                  <span class="sr-only">Select</span>
-                </FwbTableHeadCell>
-              </FwbTableHead>
-              <FwbTableBody>
-                <FwbTableRow
-                  v-for="playground in searchPlaygrounds?.filter(
-                    (playground) => searchPlaygrounds!.indexOf(playground) < limit
-                  ) || []"
-                  :key="playground.id"
-                >
-                  <FwbTableCell> {{ playground.address.district }}</FwbTableCell>
-                  <FwbTableCell>
-                    {{ playground.address.street }} {{ playground.address.number }}</FwbTableCell
-                  >
-                  <FwbTableCell>
-                    <FwbButton
-                      color="purple"
-                      square
-                      @click="
-                        reportInfo.playgroundId = playground.id;
-                        showPlaygroundSearch = false;
-                        showTopics = true;
-                      "
-                    >
-                      Report
-                    </FwbButton>
-                  </FwbTableCell>
-                </FwbTableRow>
-              </FwbTableBody>
-            </FwbTable>
-            <div class="my-4 flex w-full items-center justify-end gap-2">
-              <FwbButton @click="showMorePlaygrounds" outline color="purple"> Show more </FwbButton>
-              <FwbButton @click="showLessPlaygrounds" outline color="purple"> Show less </FwbButton>
-            </div>
-          </div>
-        </Transition>
-        <Transition>
-          <div v-if="showTopics">
-            <FwbButtonGroup class="flex h-full w-full flex-col gap-5">
-              <FwbButton
-                v-for="topic in availableCategories?.reduce((acc: string[], curr) => {
-                  if (!acc.includes(curr.topic)) {
-                    acc.push(curr.topic);
-                  }
-                  return acc;
-                }, []) || []"
-                :key="topic"
-                @click="
-                  reportInfo.topic = topic;
-                  showCategories = true;
-                  showTopics = false;
-                  getCategoriesByTopic(topic);
-                "
-                color="purple"
-                outline
-                class="w-full"
-                >{{ topic }}</FwbButton
-              >
-            </FwbButtonGroup>
-          </div>
-        </Transition>
-        <Transition>
-          <div v-if="showCategories">
-            <FwbButtonGroup class="flex h-full w-full flex-col gap-5">
-              <FwbButton
-                v-for="category in subCategories"
-                :key="category.id"
-                color="purple"
-                outline
-                @click="
-                  reportInfo.categoryId = category.id;
-                  showCategories = false;
-                  showForm = true;
-                "
-                class="w-full"
-                >{{ category.name }}</FwbButton
-              >
-            </FwbButtonGroup>
-          </div>
-        </Transition>
-        <Transition>
-          <div v-if="showForm">
-            <form>
-              <FwbTextarea
-                v-model="reportInfo.message"
-                :rows="5"
-                custom
-                label="Write a description of your issue"
-                placeholder="What is the nature of this report?"
-              >
-                <template #footer>
-                  <div class="flex items-center justify-end">
-                    <div class="flex gap-3">
-                      <FwbButton class="rounded-lg" color="purple" square>
-                        <svg
-                          class="h-6 w-6"
-                          fill="none"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </FwbButton>
-                      <FwbButton class="rounded-lg" color="purple" square>
-                        <svg
-                          class="h-6 w-6"
-                          fill="none"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </FwbButton>
-                    </div>
-                  </div>
-                </template>
-              </FwbTextarea>
-            </form>
-            <p class="ml-auto text-xs text-gray-500 dark:text-gray-400">
-              Remember, reporting an issue should follow our
-              <FwbA href="#">Community Guidelines</FwbA>.
-            </p>
-          </div>
-        </Transition>
+      <div class="mb-4" id="transitions-container">
+        <PlaygroundsListTransition
+          :showPlaygroundSearch="showPlaygroundSearch"
+          :availablePlaygrounds="availablePlaygrounds"
+          @selectPlayground="
+            (playground) => {
+              reportInfo.playgroundId = playground.id;
+              showPlaygroundSearch = false;
+              showTopics = true;
+            }
+          "
+        />
+        <TopicsTransition
+          :showTopics="showTopics"
+          :availableCategories="availableCategories"
+          @back="goBack()"
+          @getCategoriesByTopic="
+            (topic) => {
+              reportInfo.topic = topic;
+              showCategories = true;
+              showTopics = false;
+              getCategoriesByTopic(topic);
+            }
+          "
+        />
+        <CategoriesTransition
+          :categories="subCategories"
+          :showCategories="showCategories"
+          @back="goBack()"
+          @select-category="
+            (category) => {
+              reportInfo.categoryId = category.id;
+              showCategories = false;
+              showForm = true;
+            }
+          "
+        />
+        <ReportContentTransition
+          :showForm="showForm"
+          :sendingReport="sendingReport"
+          :reportSent="reportSent"
+          @back="goBack()"
+          @submitReport="
+            (report) =>
+              submitReport(
+                report.description,
+                reportInfo.categoryId,
+                reportInfo.playgroundId,
+                report.files
+              )
+          "
+        />
       </div>
-      <div class="mb-4">
-        <FwbAlert v-if="reportSent" type="success" data-testid="success-message">
-          Report sent successfully! Thank you for your contribution.
-        </FwbAlert>
-        <AlertError :message="errorMessage">
-          {{ errorMessage }}
-        </AlertError>
+      <ReportSentConfirmation :reportSent="reportSent" @goHome="router.push({ name: 'Home' })" />
+      <div class="mb-4 flex flex-col gap-2" id="alerts-container">
+        <AlertMessage
+          v-if="infoMessage"
+          :type="'info'"
+          data-testid="info-message"
+          :message="infoMessage"
+          :closable="true"
+        />
+        <AlertMessage
+          v-if="errorMessage"
+          :type="'danger'"
+          data-testid="error-message"
+          :message="errorMessage"
+        />
       </div>
-      <FwbButtonGroup class="flex w-full justify-between">
-        <FwbButton v-if="!reportSent" color="dark" outline square @click="goBack"> Back </FwbButton>
-        <FwbButton
-          v-if="showForm && !reportSent"
-          :disabled="reportSent"
-          square
-          color="purple"
-          @click="submitReport"
-        >
-          Submit report
-        </FwbButton>
-        <FwbButton
-          v-if="reportSent"
-          square
-          color="purple"
-          component="RouterLink"
-          tag="router-link"
-          :href="{ name: 'MyHome' } as any"
-        >
-          Back to my home
-        </FwbButton>
+      <FwbButtonGroup class="flex w-full justify-end" v-if="!reportSent">
         <FwbButton
           v-if="!showTopics && !showCategories && !showForm && !showPlaygroundSearch"
           @click="showPlaygroundSearch = true"

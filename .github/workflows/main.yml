@@ -14,21 +14,34 @@ jobs:
           POSTGRES_DB: testdb
         ports:
           - 5432:5432
+
+      rabbitmq:
+        image: rabbitmq:3.13-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: guest
+          RABBITMQ_DEFAULT_PASS: guest
+        ports:
+          - 5672:5672
+
     env:
       NODE_ENV: test
-      TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
-      TOKEN_EXPIRES_IN: ${{ vars.TOKEN_EXPIRATION }}
-      SMTP_SERVICE: ${{ vars.SMTP_SERVICE }}
-      SMTP_HOST: ${{ vars.SMTP_HOST }}
-      SMTP_PORT: ${{ vars.SMTP_PORT }}
-      SMTP_SECURE_CONNECTION: true
+      LOG_LEVEL: debug
+      TOKEN_KEY: supersecretkey
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-      SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
-      CLIENT_PATH: http://localhost:5173
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+      AWS_S3_ACCESS_KEY_ID: ${{ vars.AWS_S3_ACCESS_KEY_ID }}
+      AWS_S3_BUCKET_NAME: ${{ vars.AWS_S3_BUCKET_NAME }}
+      AWS_S3_SECRET_ACCESS_KEY: ${{ vars.AWS_S3_SECRET_ACCESS_KEY }}
+      AWS_S3_REGION: ${{ vars.AWS_S3_REGION }}
+      RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME }}
+      RABBIT_MQ_REPORTS_QUEUE_NAME: ${{ vars.RABBIT_MQ_REPORTS_QUEUE_NAME }}
+      RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME: ${{ vars.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME }}
+      RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4.1.1
@@ -75,6 +88,9 @@ jobs:
           DB_HOST: localhost
           DB_SSL: false
           PORT: 3000
+          RABBIT_MQ_USER: guest
+          RABBIT_MQ_PASSWORD: guest
+          RABBIT_MQ_HOST: localhost
 
       - name: Run migrations
         run: npm run migration:run -w=server
@@ -92,6 +108,8 @@ jobs:
           VITE_API_ORIGIN: http://localhost:3000
           VITE_API_PATH: /api/v1/trpc
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          VITE_AWS_S3_FILE_TYPES_ALLOWED: image/jpeg
+          VITE_AWS_S3_FILE_SIZE_MAX_IN_BYTES: 1000000
 
       - name: Health probe
         uses: Jtalk/url-health-check-action@v4
@@ -141,21 +159,26 @@ jobs:
       NODE_ENV: production
       TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
       TOKEN_EXPIRES_IN: ${{ vars.TOKEN_EXPIRATION }}
-      SMTP_SERVICE: ${{ vars.SMTP_SERVICE }}
-      SMTP_HOST: ${{ vars.SMTP_HOST }}
-      SMTP_PORT: ${{ vars.SMTP_PORT }}
-      SMTP_SECURE_CONNECTION: true
       SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
       SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-      SMTP_SENDER: ${{ secrets.SMTP_USERNAME }}
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
       CLIENT_PATH: ${{ vars.CLIENT_PATH }}
       API_ORIGIN: ${{ vars.API_ORIGIN }}
       API_PATH: ${{ vars.API_PATH }}
       API_PROXY_PASS: ${{ vars.API_PROXY_PASS }}
+      FILE_TYPES_ALLOWED: s{{ vars.AWS_S3_FILE_TYPES_ALLOWED }}
+      MAX_FILE_SIZE_ALLOWED_IN_BYTES: s{{ vars.AWS_S3_FILE_SIZE_MAX_IN_BYTES }}
       AWS_LIGHTSAIL_SERVICE: ${{ vars.AWS_LIGHTSAIL_SERVICE }}
       CLIENT_IMAGE_TAG: client-${{ github.sha }}
       SERVER_IMAGE_TAG: server-${{ github.sha }}
+      RABBIT_MQ_USER: ${{ secrets.RABBIT_MQ_USER }}
+      RABBIT_MQ_PASSWORD: ${{ secrets.RABBIT_MQ_PASSWORD }}
+      RABBIT_MQ_HOST: ${{ secrets.RABBIT_MQ_HOST }}
+      RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME }}
+      RABBIT_MQ_REPORTS_QUEUE_NAME: ${{ vars.RABBIT_MQ_REPORTS_QUEUE_NAME }}
+      RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME: ${{ vars.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME }}
+      RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}
+      RABBIT_MQ_USER_DELETIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -174,8 +197,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
 
       - name: Build server image
         run: >-
@@ -235,6 +258,7 @@ jobs:
               },
               "environment": {
                 "NODE_ENV": "production",
+                "LOG_LEVEL": "info",
                 "DB_SSL": "true",
                 "DB_SYNC": "true",
                 "DB_HOST": "${{ secrets.PROD_DB_HOST }}",
@@ -243,15 +267,26 @@ jobs:
                 "DB_PASSWORD": "${{ secrets.PROD_DB_PASSWORD }}",
                 "TOKEN_KEY": "${{ secrets.TOKEN_KEY }}",
                 "TOKEN_EXPIRES_IN": "${{ vars.TOKEN_EXPIRATION }}",
-                "SMTP_SERVICE": "${{ vars.SMTP_SERVICE }}",
-                "SMTP_HOST": "${{ vars.SMTP_HOST }}",
-                "SMTP_PORT": "${{ vars.SMTP_PORT }}",
-                "SMTP_SECURE_CONNECTION": "true",
                 "SMTP_USERNAME": "${{ secrets.SMTP_USERNAME }}",
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
                 "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
-                "GOOGLE_MAPS_API_KEY": "${{ secrets.GOOGLE_MAPS_API_KEY }}"
+                "AWS_S3_ACCESS_KEY_ID": "${{ vars.AWS_S3_ACCESS_KEY_ID }}",
+                "AWS_S3_BUCKET_NAME": "${{ vars.AWS_S3_BUCKET_NAME }}",
+                "AWS_S3_SECRET_ACCESS_KEY": "${{ vars.AWS_S3_SECRET_ACCESS_KEY }}",
+                "AWS_REGION": "${{ vars.AWS_REGION }}",
+                "AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS": "${{ vars.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS }}",
+                "FILE_TYPES_ALLOWED": "${{ vars.AWS_S3_FILE_TYPES_ALLOWED }}",
+                "MAX_FILE_SIZE_ALLOWED_IN_BYTES": "${{ vars.AWS_S3_FILE_SIZE_MAX_IN_BYTES }}",
+                "GOOGLE_MAPS_API_KEY": "${{ secrets.GOOGLE_MAPS_API_KEY }}",
+                "RABBIT_MQ_USER": "${{ secrets.RABBIT_MQ_USER }}",
+                "RABBIT_MQ_PASSWORD": "${{ secrets.RABBIT_MQ_PASSWORD }}",
+                "RABBIT_MQ_HOST": "${{ secrets.RABBIT_MQ_HOST }}",
+                "RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME": "${{ vars.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME }}",
+                "RABBIT_MQ_REPORTS_QUEUE_NAME": "${{ vars.RABBIT_MQ_REPORTS_QUEUE_NAME }}",
+                "RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME": "${{ vars.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME }}",
+                "RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME": "${{ vars.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME }}",
+                "RABBIT_MQ_USER_DELETIONS_QUEUE_NAME": "${{ vars.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME }}"
               }
             }
           }' > containers.json

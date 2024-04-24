@@ -9,6 +9,7 @@ import { User } from '../user/user';
 import { Playground } from '../playground/playground';
 import { ReportStatusChangeLog } from '../report_status_change_log/reportStatusChangeLog';
 import { ReportCategory } from '../report_category/reportCategory';
+import { ReportImage } from '../report_images/reportImage';
 import { ReportStatus } from './ReportStatus';
 
 @Entity('reports')
@@ -36,6 +37,11 @@ export class Report {
     })
     category: ReportCategory;
 
+    @OneToMany(() => ReportImage, (images) => images.report, {
+        eager: true,
+    })
+    images: ReportImage[];
+
     @ManyToOne(() => User, (user) => user.reports, {
         onDelete: 'CASCADE', // When a user is deleted, delete the report as well
     })
@@ -44,6 +50,8 @@ export class Report {
     @OneToMany(() => ReportStatusChangeLog, (log) => log.report)
     changeLogs: ReportStatusChangeLog[];
 
-    @ManyToOne(() => Playground, (playground) => playground.reports)
+    @ManyToOne(() => Playground, (playground) => playground.reports, {
+        onDelete: 'CASCADE', // When a playground is deleted, delete the report as well
+    })
     playground: Playground;
 }

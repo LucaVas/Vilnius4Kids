@@ -29,28 +29,28 @@ test.describe.serial('save, see and remove favorite playgrounds', () => {
     await page.goto('/playgrounds');
 
     const map = page.getByTestId('playgrounds-map');
-    await expect(map).not.toBeHidden({ timeout: 5000 });
+    await expect(map).not.toBeHidden();
 
-    await page.locator('div[role="button"]').nth(5).click({ timeout: 50000 });
+    await page.locator('div[role="button"]').nth(5).click();
     const infoBox = page.getByTestId('infobox');
     await expect(infoBox).not.toBeHidden();
 
     const saveBtn = page.getByRole('button', { name: /Save/i });
     await expect(saveBtn).not.toBeHidden();
-    await saveBtn.click({ timeout: 5000 });
+    await saveBtn.click();
     const unsaveBtn = page.getByRole('button', { name: /Unsave/i });
-    await expect(unsaveBtn).not.toBeHidden({ timeout: 5000 });
+    await expect(unsaveBtn).not.toBeHidden();
 
     await page.getByRole('link', { name: 'My playgrounds' }).first().click();
 
     const playgroundCard = page.getByTestId('playground-card');
-    await expect(playgroundCard).not.toBeHidden({ timeout: 5000 });
+    await expect(playgroundCard).not.toBeHidden();
     await page.reload();
-    await expect(playgroundCard).not.toBeHidden({ timeout: 5000 });
+    await expect(playgroundCard).not.toBeHidden();
 
     await page.getByTestId('delete-playground-button').click();
-    await expect(playgroundCard).toBeHidden({ timeout: 5000 });
+    await expect(playgroundCard).toBeHidden();
     await page.reload();
-    await expect(playgroundCard).toBeHidden({ timeout: 5000 });
+    await expect(playgroundCard).toBeHidden();
   });
 });

@@ -5,7 +5,7 @@ import { ReportStatus } from './ReportStatus';
 
 export type BareReport = Omit<
     Report,
-    'user' | 'changeLogs' | 'playground' | 'category'
+    'user' | 'changeLogs' | 'playground' | 'category' | 'images'
 >;
 
 export const reportSchema = validates<BareReport>().with({
@@ -21,7 +21,6 @@ export const reportSchema = validates<BareReport>().with({
         })
         .describe('Report description'),
     status: z.nativeEnum(ReportStatus).describe('Report status'),
-
     createdAt: z.date(),
     updatedAt: z.date(),
 });
@@ -36,6 +35,14 @@ export const reportInsertSchema = reportSchema
     .extend({
         playgroundId: z.number().int().positive(),
         reportCategoryId: z.number().int().positive(),
+        imagesInfo: z.array(
+            z.object({
+                url: z.string(),
+                type: z.string(),
+                name: z.string(),
+                key: z.string(),
+            })
+        ),
     });
 
 export const reportUpdateSchema = reportSchema.omit({
@@ -46,7 +53,7 @@ export const reportUpdateSchema = reportSchema.omit({
 export const reportOptionalIdSchema = reportSchema
     .pick({ id: true })
     .optional();
-export const reportIdSchema = reportSchema.pick({ id: true })
+export const reportIdSchema = reportSchema.pick({ id: true });
 
 export type ReportSelect = z.infer<typeof reportSchema>;
 export type ReportInsert = z.infer<typeof reportInsertSchema>;

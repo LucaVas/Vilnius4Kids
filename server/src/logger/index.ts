@@ -1,6 +1,12 @@
+import path from 'path';
 import pino from 'pino';
+import config from '@server/config';
+
+const { logLevel } = config;
 
 export default pino({
+    level: logLevel,
+    name: path.basename(__filename),
     transport: {
         target: 'pino-pretty',
         options: {

@@ -4,12 +4,8 @@ Client for application Vilnius4Kids.
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables.
+To run the client, you will need to add environment variables to your .env file.
 To ease the process, a '.env.example' file is already provided, that you need to fill out and rename to '.env'.
-
-`VITE_API_ORIGIN`= your API origin url, for example "http://localhost:3000"
-`VITE_API_PATH`= your API endpoint, for example "/api/v1/trpc"
-`VITE_GOOGLE_MAPS_API_KEY`= your Google Maps API Key
 
 ## Run Locally
 
@@ -19,42 +15,37 @@ Clone the project
   git clone https://link-to-project
 ```
 
-Go to the client root directory
+Go to the root directory and install dependencies (if you have not already done it while spinning up the server):
 
 ```bash
-  cd client
-```
-
-Install dependencies
-
-```bash
-  npm install
+  npm ci
 ```
 
 Start the server in development mode
 
 ```bash
-  npm run dev
+  npm run dev -w=client
 ```
 
+The client will run on http://localhost:5173.
 
 ## Running Tests
 
 To run all tests (make sure server is running):
 
 ```bash
-  npm run test
+  npm run test -w=client
 ```
 
 To run unit tests:
 
 ```bash
-  npm run test:unit
+  npm run test:unit -w=client
 ```
 
 To run E2E tests (make sure server is running):
 
 ```bash
-  npm run test:e2e
+  npm run test:e2e -w=client
 ```
 

@@ -1,9 +1,9 @@
-import jsonwebtoken from 'jsonwebtoken'
-import config from '@server/config'
-import { buildAuthenticatedProcedure } from './buildAuthenticatedProcedure'
+import jsonwebtoken from 'jsonwebtoken';
+import config from '@server/config';
+import { buildAuthenticatedProcedure } from './buildAuthenticatedProcedure';
 
-const { tokenKey } = config.auth
+const { tokenKey } = config.auth;
 
-const verifyToken = (token: string) => jsonwebtoken.verify(token, tokenKey)
+const verifyToken = (token: string) => jsonwebtoken.verify(token, tokenKey);
 
-export const authenticatedProcedure = buildAuthenticatedProcedure(verifyToken)
+export const authenticatedProcedure = buildAuthenticatedProcedure(verifyToken);

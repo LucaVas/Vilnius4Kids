@@ -3,13 +3,31 @@ import { PasswordChangeRequest, User } from '@server/entities';
 import { fakeUser } from '@server/entities/tests/fakes';
 import { Role } from '@server/entities/user/Role';
 import bcrypt from 'bcrypt';
+import buildPasswordResetService from '@server/services/passwordReset';
+import { MailService } from '@server/services/types';
 import router from '../index';
+import { passwordResetProducer } from '.';
 
 const db = await createTestDatabase();
 const { sendPasswordResetLink } = router.createCaller({ db } as any);
+// Define a mock implementation for the MailService interface
+const mockMailService: MailService = {
+    sendSubscriptionEmail: vi.fn().mockResolvedValue(undefined),
+    sendPasswordResetToken: vi.fn().mockResolvedValue(undefined),
+    sendReport: vi.fn().mockResolvedValue(undefined),
+    sendVerificationToken: vi.fn().mockResolvedValue(undefined),
+    sendUserDeletionEmail: vi.fn().mockResolvedValue(undefined),
+};
+const passwordResetService = buildPasswordResetService(mockMailService, db);
 
 describe('Send password reset link', async () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
     it('Send a link for user', async () => {
+        const spy = vi.spyOn(passwordResetProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         // Given
         const user = await db
             .getRepository(User)
@@ -18,12 +36,16 @@ describe('Send password reset link', async () => {
         const { message } = await sendPasswordResetLink({ email: user.email });
 
         // THEN
+        expect(spy).toBeCalledTimes(1);
         expect(message).toBe(
-            'We have sent an email with a password reset link to your inbox.'
+            'Thank you! We will send an email with a password reset link to your inbox.'
         );
     });
 
     it('Replaces a change request if it already exists', async () => {
+        const spy = vi.spyOn(passwordResetProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         // Given
         const user = await db
             .getRepository(User)
@@ -38,7 +60,14 @@ describe('Send password reset link', async () => {
 
         await sendPasswordResetLink({ email: user.email });
 
-        // THEN
+        // // THEN
+        await passwordResetService.processCommand({
+            command: 'resetPassword',
+            content: {
+                user,
+            },
+            timestamp: new Date(),
+        });
         const secondChangeRequest = await db
             .getRepository(PasswordChangeRequest)
             .findOneBy({ user });
@@ -56,5 +85,18 @@ describe('Send password reset link', async () => {
         await expect(
             sendPasswordResetLink({ email: notSavedUser.email })
         ).rejects.toThrow(`Error while resetting user password.`);
+    });
+
+    it('Throws error if RabbitMQ producer fails', async () => {
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.USER }));
+
+        const spy = vi.spyOn(passwordResetProducer, 'push');
+        spy.mockRejectedValue(new Error('RabbitMQ error'));
+
+        await expect(
+            sendPasswordResetLink({ email: user.email })
+        ).rejects.toThrow(`Error while sending password reset token.`);
     });
 });

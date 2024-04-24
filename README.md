@@ -1,3 +1,5 @@
+[![Test, Build, and Deploy](https://github.com/LucaVas/Vilnius4Kids/actions/workflows/main.yml/badge.svg)](https://github.com/LucaVas/Vilnius4Kids/actions/workflows/main.yml)
+
 # Vilnius4Kids
 
 Explore the city with Vilnius4Kids, the must-have app for parents, caregivers, and anyone looking to make the most of outdoor playtime for kids.
@@ -53,6 +55,7 @@ Users will find the following features available:
 2. Make a new report where playground can be chosen from a list.
 3. View a specific report for logged-in user.
 4. Rate a playground.
+5. Delete a user.
 
 ### Administrators
 
@@ -71,7 +74,3 @@ The panel will offer more possible endpoints solutions, such as performing CRUD 
 ## Authors
 
 - [@LucaVas](https://www.github.com/LucaVas)
-
-## Acknowledgements
-
-The project is created as sprint's project for Turing College, module 3, sprint 4.

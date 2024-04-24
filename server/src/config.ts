@@ -18,6 +18,10 @@ const schema = z
         isCi: z.coerce.boolean().default(false),
         port: z.coerce.number().default(3000),
 
+        logLevel: z
+            .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace'])
+            .default('info'),
+
         auth: z.object({
             tokenKey: z.string().default(() => {
                 if (isDevTest) {
@@ -42,6 +46,42 @@ const schema = z
                 user: z.string().email().default(''),
                 pass: z.string().default(''),
             }),
+        }),
+
+        s3: z.object({
+            accessKeyId: z.string(),
+            secretAccessKey: z.string(),
+            region: z.string(),
+            bucket: z.string(),
+            imageSize: z.coerce.number().default(5000000),
+            imageUploadTimeout: z.coerce.number().default(30),
+        }),
+
+        rabbitMq: z.object({
+            user: z.string().default('guest'),
+            password: z.string().default('guest'),
+            host: z.string().default('localhost'),
+            port: z.coerce.number().default(5672),
+            mqChannelRetryDelays: z.coerce.number().default(10),
+            mqChannelMaxRetries: z.coerce.number().default(5),
+            mqConnectionRetryDelays: z.coerce.number().default(10),
+            mqConnectionMaxRetries: z.coerce.number().default(5),
+            queues: z.array(
+                z.object({
+                    name: z.enum([
+                        'subscriptions',
+                        'reports',
+                        'password-resets',
+                        'account-verifications',
+                        'user-deletions',
+                    ]),
+                    queueName: z.string(),
+                    options: z.object({
+                        durable: z.coerce.boolean().default(true),
+                        persistent: z.coerce.boolean().default(true),
+                    }),
+                })
+            ),
         }),
 
         database: z.object({
@@ -77,7 +117,7 @@ const schema = z
             ssl: z.preprocess(coerceBoolean, z.boolean().default(false)),
         }),
 
-        clientPath: z.string(),
+        clientPath: z.string().default('http://localhost:5173'),
         googleMapsApiKey: z.string(),
     })
     .readonly();
@@ -86,11 +126,75 @@ const config = schema.parse({
     env: env.NODE_ENV,
     port: env.PORT,
     isCi: env.CI,
+    logLevel: env.LOG_LEVEL,
 
     auth: {
         tokenKey: env.TOKEN_KEY,
         expiresIn: env.TOKEN_EXPIRES_IN,
         passwordCost: env.PASSWORD_COST,
+    },
+
+    s3: {
+        accessKeyId: env.AWS_S3_ACCESS_KEY_ID,
+        secretAccessKey: env.AWS_S3_SECRET_ACCESS_KEY,
+        region: env.AWS_S3_REGION,
+        bucket: env.AWS_S3_BUCKET_NAME,
+        imageSize: env.AWS_S3_FILE_SIZE_MAX_IN_BYTES,
+        imageUploadTimeout: env.AWS_S3_FILE_UPLOAD_TIMEOUT_IN_SECONDS,
+    },
+
+    rabbitMq: {
+        user: env.RABBIT_MQ_USER,
+        password: env.RABBIT_MQ_PASSWORD,
+        host: env.RABBIT_MQ_HOST,
+        port: env.RABBIT_MQ_PORT,
+        mqChannelRetryDelays: env.RABBIT_MQ_CHANNEL_RETRY_DELAYS_MS,
+        mqChannelMaxRetries: env.RABBIT_MQ_CHANNEL_MAX_RETRIES,
+        mqConnectionRetryDelays: env.RABBIT_MQ_CONNECTION_RETRY_DELAYS_MS,
+        mqConnectionMaxRetries: env.RABBIT_MQ_CONNECTION_MAX_RETRIES,
+        queues: [
+            {
+                name: 'subscriptions',
+                queueName: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'reports',
+                queueName: env.RABBIT_MQ_REPORTS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_REPORTS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_REPORTS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'password-resets',
+                queueName: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_PASSWORD_RESETS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'account-verifications',
+                queueName: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_DURABLE,
+                    persistent:
+                        env.RABBIT_MQ_ACCOUNT_VERIFICATIONS_QUEUE_PERSISTENT,
+                },
+            },
+            {
+                name: 'user-deletions',
+                queueName: env.RABBIT_MQ_USER_DELETIONS_QUEUE_NAME,
+                options: {
+                    durable: env.RABBIT_MQ_USER_DELETIONS_QUEUE_DURABLE,
+                    persistent: env.RABBIT_MQ_USER_DELETIONS_QUEUE_PERSISTENT,
+                },
+            },
+        ],
     },
 
     database: {

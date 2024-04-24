@@ -4,27 +4,8 @@ Server for application Vilnius4Kids.
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables.
+To run the server, you will need to add environment variables to your .env file.
 To ease the process, a '.env.example' file is already provided, that you need to fill out and rename to '.env'.
-
-
-`TOKEN_KEY`= your token key
-
-`SMTP_HOST`= your SMTP host (default 'smtp.gmail.com')
-`SMTP_PORT`= SMTP port (default 465)
-`SMTP_SERVICE`= SMTP Service provide (default 'Gmail')
-`SMTP_USERNAME`= your email username
-`SMTP_PASSWORD`= your app password
-
-`DB_USER`= your database user, (default 'postgres')
-`DB_PASSWORD`= your database password, (default 'postgres')
-`DB_NAME`= your database name (default 'vilnius4kidsdb')
-`DB_SSL`= flag to enable SSL (default false)
-`DB_HOST`= your database host (default 'localhost')
-`DB_PORT`= your database port (default 5432)
-`DB_TYPE`= your database type (default 'postgres')
-
-`CLIENT_PATH`= the client base url, e.g. 'http://localhost:5173'
 
 ## Preparation
 
@@ -32,35 +13,25 @@ Make sure to create a database locally. By default, database name that the appli
 
 ## Run Locally
 
-Go to the server root directory
+Go to the root directory and run the following command to install dependencies (if you have not already done it while spinning up the client) and run migrations:
 
 ```bash
-  cd server
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Run migrations
-
-```bash
-  npm migration:run
+  npm ci && npm migration:run -w=server
 ```
 
 Start the server in development mode
 
 ```bash
-  npm run dev
+  npm run dev -w=server
 ```
+
+Server will be running at http://localhost:3000/.
 
 
 ## Running Tests
 
-To run all tests:
+To run all server unit tests:
 
 ```bash
-  npm run test
+  npm run test -w=server
 ```

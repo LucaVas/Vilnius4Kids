@@ -13,7 +13,7 @@ import { ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import RatingStars from '@/components/RatingStars.vue';
 import { TRPCClientError } from '@trpc/client';
-import { DEFAULT_SERVER_ERROR } from '../consts';
+import { DEFAULT_SERVER_ERROR } from '@/constants';
 
 const route = useRoute();
 const playgroundId = Number(route.params.id);
@@ -198,7 +198,7 @@ async function removePlaygroundFromFavorites(id: number) {
           <div class="ms-2 h-2.5 w-80 rounded-full bg-gray-200 dark:bg-gray-700"></div>
           <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
         </div>
-        <div class="flex w-full max-w-[25rem] items-center sm:max-w-4xl sm:max-w-full">
+        <div class="flex w-full max-w-[25rem] items-center sm:max-w-4xl">
           <div class="ms-2 h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700"></div>
           <div class="ms-2 h-2.5 w-full rounded-full bg-gray-300 dark:bg-gray-600"></div>
           <div class="ms-2 h-2.5 w-24 rounded-full bg-gray-300 dark:bg-gray-600"></div>
@@ -226,7 +226,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="savePlayground(currentPlayground.id)"
-          ><template #prefix></template>Add to favourites<template #suffix></template
+          ><template #prefix></template>Add to favorites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"
@@ -235,7 +235,7 @@ async function removePlaygroundFromFavorites(id: number) {
           :loading="loadingSave"
           loading-position="suffix"
           @click="removePlaygroundFromFavorites(currentPlayground.id)"
-          ><template #prefix></template>Remove from favourites<template #suffix></template
+          ><template #prefix></template>Remove from favorites<template #suffix></template
         ></FwbButton>
         <FwbButton
           color="purple"

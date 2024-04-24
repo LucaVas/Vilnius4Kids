@@ -5,26 +5,34 @@ import { Report, User } from '@server/entities';
 import { getStatusFromString } from '@server/entities/report/ReportStatus';
 import { Role } from '@server/entities/user/Role';
 import router from '..';
+import { reportProducer } from '../report';
 
 const db = await createTestDatabase();
 
 describe('Update an existing report', async () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('User can update an existing report', async () => {
+        const spy = vi.spyOn(reportProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await db
             .getRepository(User)
             .save(fakeUser({ role: Role.ADMIN }));
         const { updateReport } = router.createCaller(authContext({ db }, user));
 
         const existing = await db.getRepository(Report).save(fakeReport());
-        const { message, report } = await updateReport({
+        const { message } = await updateReport({
             id: existing.id,
             description: 'description',
             status: getStatusFromString('in progress')!,
         });
 
-        expect(message).toEqual('Report updated successfully.');
-        expect(report.description).toEqual('description');
-        expect(report.status).toEqual('in progress');
+        expect(spy).toBeCalledTimes(1);
+
+        expect(message).toEqual('Thank you for updating this report!');
     });
 
     it('User cannot update a non existing report', async () => {
@@ -89,6 +97,27 @@ describe('Update an existing report', async () => {
             })
         ).rejects.toThrow(
             `Only administrators have permission to access this resource.`
+        );
+    });
+
+    it('Throws error if RabbitMq producer fails', async () => {
+        const spy = vi.spyOn(reportProducer, 'push');
+        spy.mockRejectedValue(new Error('RabbitMQ error'));
+
+        const user = await db
+            .getRepository(User)
+            .save(fakeUser({ role: Role.ADMIN }));
+        const { updateReport } = router.createCaller(authContext({ db }, user));
+
+        const existing = await db.getRepository(Report).save(fakeReport());
+        await expect(
+            updateReport({
+                id: existing.id,
+                description: 'description',
+                status: getStatusFromString('in progress')!,
+            })
+        ).rejects.toThrow(
+            /Error while updating report. Please try again later./
         );
     });
 });

@@ -44,11 +44,12 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
           <input
             type="text"
             v-model="email"
+            data-testid="subscription-email"
             class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 ps-10 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500"
             placeholder="your@email.com"
           />
         </div>
-        <FwbButton color="purple" size="lg" class="ml-4">Subscribe</FwbButton>
+        <FwbButton color="purple" type="submit" size="lg" class="ml-4">Subscribe</FwbButton>
       </div>
 
       <FwbAlert
@@ -58,7 +59,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
         closable
         border
         class="mb-2 w-full"
-        data-testid="successMessage"
+        data-testid="success-message"
       >
         {{ successMessage }}
       </FwbAlert>
@@ -70,7 +71,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
         closable
         border
         class="mb-2 w-full"
-        data-testid="errorMessage"
+        data-testid="error-message"
       >
         {{ errorMessage }}
       </FwbAlert>

@@ -14,7 +14,7 @@ export default publicProcedure
         });
 
         if (!user) {
-            logger.error(`User with email [${email}] does not exist.`)
+            logger.error(`User with email [${email}] does not exist.`);
             throw new TRPCError({
                 code: 'NOT_FOUND',
                 message: 'Error while verifying user.',
@@ -22,7 +22,9 @@ export default publicProcedure
         }
 
         if (user.isRegistered) {
-            logger.error(`User with email [${email}] has already been verified.`)
+            logger.error(
+                `User with email [${email}] has already been verified.`
+            );
             throw new TRPCError({
                 code: 'BAD_REQUEST',
                 message: 'Error while verifying user.',
@@ -35,7 +37,7 @@ export default publicProcedure
         );
 
         if (!isMatch) {
-            logger.error(`Invalid token for user with email [${email}].`)
+            logger.error(`Invalid token for user with email [${email}].`);
             throw new TRPCError({
                 code: 'UNAUTHORIZED',
                 message: 'Error while verifying user.',

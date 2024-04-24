@@ -1,12 +1,20 @@
 import { createTestDatabase } from '@tests/utils/database';
 import { User } from '@server/entities';
 import userRouter from '..';
+import { accountVerificationProducer } from '.';
 
 const db = await createTestDatabase();
 const { signup } = userRouter.createCaller({ db } as any);
 
 describe('Signup', async () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('Signs user up with valid credentials', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username',
             email: 'test@test.com',
@@ -32,13 +40,11 @@ describe('Signup', async () => {
     });
 
     it('Throws error if email already exists', async () => {
-        await db
-            .getRepository(User)
-            .save({
-                username: 'some-username-2',
-                email: 'newtest@test.com',
-                password: 'test123456',
-            });
+        await db.getRepository(User).save({
+            username: 'some-username-2',
+            email: 'newtest@test.com',
+            password: 'test123456',
+        });
 
         await expect(
             signup({
@@ -52,6 +58,9 @@ describe('Signup', async () => {
     });
 
     it('Throws error with invalid password', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         await expect(
             signup({
                 username: 'some-username',
@@ -62,6 +71,9 @@ describe('Signup', async () => {
     });
 
     it('Signup if email has trailing spaces', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username-3',
             email: ' \t test@testmail.com\t   \t',
@@ -72,6 +84,9 @@ describe('Signup', async () => {
     });
 
     it('Signup if email if uppercase', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username-4',
             email: 'TEST@TESTINGMAIL.COM',
@@ -82,18 +97,22 @@ describe('Signup', async () => {
     });
 
     it('Verification token is created at signup and user is unregistered', async () => {
+        const spy = vi.spyOn(accountVerificationProducer, 'push');
+        spy.mockImplementationOnce(() => Promise.resolve(true));
+
         const user = await signup({
             username: 'some-username-5',
             email: 'TEST@TESTINGMAIL1.COM',
             password: 'Password123.',
         });
 
-        const signedUpUser = await db.getRepository(User).findOne({
-            where: { id: user.id },
-            relations: ['verificationToken'],
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        const signedUpUser = await db.getRepository(User).findOneBy({
+            id: user.id,
         });
 
-        expect(signedUpUser?.verificationToken.token).not.toBe(null);
-        expect(signedUpUser?.isRegistered).toBe(false);
+        expect(signedUpUser).not.toBe(null);
+        expect(signedUpUser!.isRegistered).toBe(false);
     });
 });

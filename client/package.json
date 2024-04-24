@@ -8,7 +8,7 @@
     "test": "run-p test:unit test:e2e",
     "test:unit": "vitest",
     "test:e2e:pretest": "esbuild --platform=node ./e2e/utils/superjson/es.ts --bundle --outfile=./e2e/utils/superjson/common.js",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --trace on",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:chromium": "playwright test --project chromium",
     "build-only": "vite build",

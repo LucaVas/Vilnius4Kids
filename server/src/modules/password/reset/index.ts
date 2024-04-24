@@ -16,7 +16,7 @@ export default publicProcedure
             where: { email },
             relations: {
                 passwordChangeRequest: true,
-            }
+            },
         });
 
         if (!user) {
@@ -26,7 +26,7 @@ export default publicProcedure
                 message: 'Error while resetting user password.',
             });
         }
-        
+
         // check if user has open password change request
         if (!user.passwordChangeRequest) {
             logger.error(

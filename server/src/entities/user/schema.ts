@@ -3,7 +3,16 @@ import { validates } from '@vilnius4kids/server/src/utils/validation';
 import { User } from './user';
 import { Role } from './Role';
 
-export type BareUser = Omit<User, 'address' | 'playgrounds' | 'reports' | 'ratings' | 'verificationToken' | 'subscription' | 'passwordChangeRequest'>;
+export type BareUser = Omit<
+    User,
+    | 'address'
+    | 'playgrounds'
+    | 'reports'
+    | 'ratings'
+    | 'verificationToken'
+    | 'subscription'
+    | 'passwordChangeRequest'
+>;
 export type AuthUser = Pick<BareUser, 'id' | 'username' | 'role'>;
 
 export const userSchema = validates<BareUser>().with({
@@ -19,6 +28,10 @@ export const userSchema = validates<BareUser>().with({
     isRegistered: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date(),
+});
+
+export const userDeleteSchema = userSchema.pick({
+    id: true,
 });
 
 export const userInsertSchema = userSchema.omit({
@@ -47,3 +60,4 @@ export type UserInsert = z.infer<typeof userInsertSchema>;
 export type UserUpdate = z.infer<typeof userUpdateSchema>;
 export type UserSelect = z.infer<typeof userSchema>;
 export type UserLogin = z.infer<typeof userLoginSchema>;
+export type UserDelete = z.infer<typeof userDeleteSchema>;
