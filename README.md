@@ -1,3 +1,5 @@
+[![Test, Build, and Deploy](https://github.com/LucaVas/Vilnius4Kids/actions/workflows/main.yml/badge.svg)](https://github.com/LucaVas/Vilnius4Kids/actions/workflows/main.yml)
+
 # Vilnius4Kids
 
 Explore the city with Vilnius4Kids, the must-have app for parents, caregivers, and anyone looking to make the most of outdoor playtime for kids.
