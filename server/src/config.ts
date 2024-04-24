@@ -117,7 +117,7 @@ const schema = z
             ssl: z.preprocess(coerceBoolean, z.boolean().default(false)),
         }),
 
-        clientPath: z.string(),
+        clientPath: z.string().default('http://localhost:5173'),
         googleMapsApiKey: z.string(),
     })
     .readonly();
