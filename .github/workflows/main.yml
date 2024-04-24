@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgres:16.1-alpine
@@ -32,9 +32,9 @@ jobs:
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
       GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      AWS_S3_ACCESS_KEY_ID: ${{ vars.AWS_S3_ACCESS_KEY_ID }}
-      AWS_S3_BUCKET_NAME: ${{ vars.AWS_S3_BUCKET_NAME }}
-      AWS_S3_SECRET_ACCESS_KEY: ${{ vars.AWS_S3_SECRET_ACCESS_KEY }}
+      AWS_S3_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      AWS_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
       AWS_S3_REGION: ${{ vars.AWS_S3_REGION }}
       RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME: ${{ vars.RABBIT_MQ_SUBSCRIPTIONS_QUEUE_NAME }}
       RABBIT_MQ_REPORTS_QUEUE_NAME: ${{ vars.RABBIT_MQ_REPORTS_QUEUE_NAME }}
@@ -135,25 +135,9 @@ jobs:
           path: client/playwright-report/
           retention-days: 7
 
-  render-deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/prod'
-    env:
-      NODE_ENV: production
-      RENDER_DEPLOY_HOOK_URL_CLIENT: ${{ secrets.RENDER_DEPLOY_HOOK_URL_CLIENT }}
-      RENDER_DEPLOY_HOOK_URL_SERVER: ${{ secrets.RENDER_DEPLOY_HOOK_URL_SERVER }}
-    steps:
-      - name: Deploy server
-        run: |
-          curl "$RENDER_DEPLOY_HOOK_URL_SERVER"
-      - name: Deploy client
-        run: |
-          curl "$RENDER_DEPLOY_HOOK_URL_CLIENT"
-
   aws-deploy:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.ref == 'refs/heads/prod'
     env:
       NODE_ENV: production
@@ -196,9 +180,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_LIGHTSAIL_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_LIGHTSAIL_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_LIGHTSAIL_SECRET_ACCESS_KEY }}
 
       - name: Build server image
         run: >-
@@ -271,10 +255,10 @@ jobs:
                 "SMTP_PASSWORD": "${{ secrets.SMTP_PASSWORD }}",
                 "SMTP_SENDER": "${{ secrets.SMTP_USERNAME }}",
                 "CLIENT_PATH": "${{ vars.CLIENT_PATH }}",
-                "AWS_S3_ACCESS_KEY_ID": "${{ vars.AWS_S3_ACCESS_KEY_ID }}",
-                "AWS_S3_BUCKET_NAME": "${{ vars.AWS_S3_BUCKET_NAME }}",
-                "AWS_S3_SECRET_ACCESS_KEY": "${{ vars.AWS_S3_SECRET_ACCESS_KEY }}",
-                "AWS_REGION": "${{ vars.AWS_REGION }}",
+                "AWS_S3_ACCESS_KEY_ID": "${{ secrets.AWS_S3_ACCESS_KEY_ID }}",
+                "AWS_S3_BUCKET_NAME": "${{ secrets.AWS_S3_BUCKET_NAME }}",
+                "AWS_S3_SECRET_ACCESS_KEY": "${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}",
+                "AWS_S3_REGION": "${{ vars.AWS_S3_REGION }}",
                 "AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS": "${{ vars.AWS_S3_IMAGE_UPLOAD_TIMEOUT_IN_SECONDS }}",
                 "FILE_TYPES_ALLOWED": "${{ vars.AWS_S3_FILE_TYPES_ALLOWED }}",
                 "MAX_FILE_SIZE_ALLOWED_IN_BYTES": "${{ vars.AWS_S3_FILE_SIZE_MAX_IN_BYTES }}",
