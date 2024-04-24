@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     services:
       postgres:
         image: postgres:16.1-alpine
@@ -137,7 +137,7 @@ jobs:
 
   aws-deploy:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: github.ref == 'refs/heads/prod'
     env:
       NODE_ENV: production
