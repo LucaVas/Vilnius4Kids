@@ -16,7 +16,7 @@ export default authenticatedProcedure
             ctx: { db, authUser },
         }) => {
             const [playground, reportCategory, user] = await Promise.all([
-                db.getRepository(Playground).findOneBy({ id: playgroundId }),
+                db.getRepository(Playground).findOneBy({ id: playgroundId }) ,
                 db
                     .getRepository(ReportCategory)
                     .findOneBy({ id: reportCategoryId }),

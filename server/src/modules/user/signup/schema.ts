@@ -14,8 +14,9 @@ export const signupSchema = z.object({
         .string()
         .trim()
         .toLowerCase()
-        .min(3, 'Username must be at least 3 characters long')
-        .max(60, 'Username must be at most 60 characters long')
+        .regex(/^[A-Za-z][A-Za-z0-9_]{2,29}$/,
+            'Username must start with a letter, contain only letters, numbers and underscores, and be between 3 and 30 characters long'
+        )
         .describe('User username'),
     password: z.coerce
         .string()

@@ -16,7 +16,7 @@ describe('Signup', async () => {
         spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await signup({
-            username: 'some-username',
+            username: 'some_username',
             email: 'test@test.com',
             password: 'Password123.',
         });
@@ -41,14 +41,14 @@ describe('Signup', async () => {
 
     it('Throws error if email already exists', async () => {
         await db.getRepository(User).save({
-            username: 'some-username-2',
+            username: 'some_username_2',
             email: 'newtest@test.com',
             password: 'test123456',
         });
 
         await expect(
             signup({
-                username: 'some-username-2',
+                username: 'some_username_2',
                 email: 'newtest@test.com',
                 password: 'Password123.',
             })
@@ -63,7 +63,7 @@ describe('Signup', async () => {
 
         await expect(
             signup({
-                username: 'some-username',
+                username: 'some_username',
                 email: 'test@test.com',
                 password: 'some',
             })
@@ -75,7 +75,7 @@ describe('Signup', async () => {
         spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await signup({
-            username: 'some-username-3',
+            username: 'some_username_3',
             email: ' \t test@testmail.com\t   \t',
             password: 'Password123.',
         });
@@ -88,7 +88,7 @@ describe('Signup', async () => {
         spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await signup({
-            username: 'some-username-4',
+            username: 'some_username_4',
             email: 'TEST@TESTINGMAIL.COM',
             password: 'Password123.',
         });
@@ -96,12 +96,43 @@ describe('Signup', async () => {
         expect(user).toHaveProperty('id');
     });
 
+    it('Throws error with invalid username', async () => {
+        await expect(
+            signup({
+                username: '<br>   <br>',
+                email: 'test@test.com',
+                password: 'some',
+            })
+        ).rejects.toThrow(/Username must start with a letter/);
+    });
+
+    it('Throws error with short username', async () => {
+        await expect(
+            signup({
+                username: 'a',
+                email: 'test@test.com',
+                password: 'some',
+            })
+        ).rejects.toThrow(/Username must start with a letter/);
+    });
+
+    it('Throws error with invalid username', async () => {
+        await expect(
+            signup({
+                username:
+                    'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef',
+                email: 'test@test.com',
+                password: 'some',
+            })
+        ).rejects.toThrow(/Username must start with a letter/);
+    });
+
     it('Verification token is created at signup and user is unregistered', async () => {
         const spy = vi.spyOn(accountVerificationProducer, 'push');
         spy.mockImplementationOnce(() => Promise.resolve(true));
 
         const user = await signup({
-            username: 'some-username-5',
+            username: 'some_username_5',
             email: 'TEST@TESTINGMAIL1.COM',
             password: 'Password123.',
         });
