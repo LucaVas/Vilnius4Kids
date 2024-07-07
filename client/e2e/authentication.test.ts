@@ -75,3 +75,37 @@ test('visitor can log out', async ({ page }) => {
   await expect(logoutButton).toBeHidden();
   await expect(page).toHaveURL('/login');
 });
+
+test('visitor cannot signup with wrong details', async ({ page }) => {
+  await page.goto('/signup');
+  const errorMessage = page.getByTestId('error-message');
+  const form = page.getByRole('form', { name: 'Signup' });
+
+  await expect(errorMessage).toBeHidden();
+
+  // too long username
+  await page.reload();
+
+  await expect(errorMessage).toBeHidden();
+
+  await form
+    .locator('input[id="username"]')
+    .fill('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  await form.locator('input[type="email"]').fill('a@a.com');
+  await form.locator('input[type="password"]').fill(password);
+  await form.locator('button[type="submit"]').click();
+
+  await expect(errorMessage).toBeVisible();
+
+  // invalid username
+  await page.reload();
+
+  await expect(errorMessage).toBeHidden();
+
+  await form.locator('input[id="username"]').fill('<br>   <br>');
+  await form.locator('input[type="email"]').fill('a@a.com');
+  await form.locator('input[type="password"]').fill(password);
+  await form.locator('button[type="submit"]').click();
+
+  await expect(errorMessage).toBeVisible();
+});
