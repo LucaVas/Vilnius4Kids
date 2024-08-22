@@ -1,4 +1,4 @@
-import type { Address } from "@vilnius4kids/server/src/entities";
+import type { Address } from '@vilnius4kids/server/src/entities';
 
 export type Marker = {
   id: number;
