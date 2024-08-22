@@ -35,12 +35,12 @@ const goTo = async (linkName: string) => {
 
 <template>
   <div class="dropdown">
-    <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+    <div tabindex="0" role="button" class="btn btn-circle btn-ghost">
       <component :is="NavbarBurger" />
     </div>
     <ul
       tabindex="0"
-      class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+      class="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
     >
       <li
         v-for="link in navigation"

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 import { trpc } from '@/trpc';
 import { Address } from '../../../server/src/entities/address/address';
+import { FwbButton, FwbButtonGroup, FwbCard, FwbSpinner, FwbBadge } from 'flowbite-vue';
 import { authUserId } from '@/stores/user';
 import useErrorMessage from '@/composables/useErrorMessage/index';
-import PlaygroundMap from '@/components/PlaygroundMap.vue';
+import { GoogleMap, AdvancedMarker } from 'vue3-google-map';
+import { googleMapsApiKey } from '@/config';
 import { type Marker } from '@/components/types/Map';
-import { FwbSpinner } from 'flowbite-vue';
 
 // const loadingSave = ref(false);
 // const pageLoaded = ref(false);
@@ -17,51 +18,6 @@ import { FwbSpinner } from 'flowbite-vue';
 // const playgroundDistance = ref('');
 // const distanceRetrieved = ref(false);
 // const retrievingDistance = ref(false);
-
-// type CustomMarkerOptions = {
-//   title: string;
-//   position: CustomMarkerPosition;
-// };
-// type CustomMarkerPinOptions = {
-//   background: string;
-// };
-// type CustomMarkerPosition = { lat: number; lng: number };
-
-// const pinOptions = ref<CustomMarkerPinOptions>({ background: '#FBBC04' });
-
-// const mapInfo = ref({
-//   center: {
-//     lat: 54.6872,
-//     lng: 25.2797,
-//   },
-//   options: {
-//     mapTypeId: 'roadmap',
-//     mapTypeControl: false,
-//     zoomControl: false,
-//     scaleControl: false,
-//     streetViewControl: true,
-//     rotateControl: true,
-//     fullscreenControl: true,
-//     gestureHandling: 'greedy',
-//     styles: [
-//       {
-//         featureType: 'poi',
-//         // deselects all point of interest areas
-//         stylers: [{ visibility: 'off' }],
-//       },
-//       {
-//         featureType: 'poi.school',
-//         stylers: [{ visibility: 'on' }],
-//       },
-//       {
-//         featureType: 'administrative',
-//         // deselects all administrative areas
-//         stylers: [{ visibility: 'off' }],
-//       },
-//     ],
-//   },
-//   markers: [] as CustomMarker[],
-// });
 
 // const openedMarkerID = ref<number | null>();
 
@@ -141,64 +97,67 @@ import { FwbSpinner } from 'flowbite-vue';
 //   }
 // });
 
-const geolocationLoading = ref(false);
-const userLocation = ref();
-const center = ref({
-  lat: 54.6872,
-  lng: 25.2797,
-});
-const geolocationAllowed = ref(false);
-const getUserLocation = () => {
-  geolocationLoading.value = true;
+const props = defineProps<{
+  center: string,
+  markers: Marker[];
+}>();
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-      userLocation.value = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      geolocationAllowed.value = true;
-      geolocationLoading.value = false;
-      // if (playgroundLocation.value) calculateDistance();
-    }),
-      (error: GeolocationPositionError) => {
-        geolocationAllowed.value = false;
-        geolocationLoading.value = false;
-        console.error(
-          'Geolocation is not supported or not allowed. Allow geolocation to use distance calculation feature.' +
-            error.message
-        );
-      };
-  }
-};
-
-const markers = ref<Marker[]>([]);
-const pageLoaded = ref(false);
-onBeforeMount(async () => {
-  pageLoaded.value = false;
-  const { playgrounds } = await trpc.playground.getPlaygrounds.query();
-  markers.value = playgrounds.map((p) => ({
-    id: p.id,
-    position: {
-      lat: Number(p.latitude),
-      lng: Number(p.longitude),
-    },
-    address: p.address,
-    saved: p.users.some((user) => user.id === authUserId.value),
-  }));
-  getUserLocation();
-  pageLoaded.value = true;
+const mapInfo = ref({
+  center: {
+    lat: 54.6872,
+    lng: 25.2797,
+  },
+  options: {
+    mapTypeId: 'roadmap',
+    mapTypeControl: false,
+    zoomControl: false,
+    scaleControl: false,
+    streetViewControl: true,
+    rotateControl: true,
+    fullscreenControl: true,
+    gestureHandling: 'greedy',
+    styles: [
+      {
+        featureType: 'poi',
+        // deselects all point of interest areas
+        stylers: [{ visibility: 'off' }],
+      },
+      {
+        featureType: 'poi.school',
+        stylers: [{ visibility: 'on' }],
+      },
+      {
+        featureType: 'administrative',
+        // deselects all administrative areas
+        stylers: [{ visibility: 'off' }],
+      },
+    ],
+  },
+  markers: props.markers,
 });
 </script>
 
 <template>
-  <div class="flex h-full w-full items-center justify-center" data-testid="playgrounds-map">
-    <PlaygroundMap
-      v-if="pageLoaded"
-      :markers="markers"
-      :center="userLocation"
-      class="h-full w-full"
+  <GoogleMap
+    :language="`US-en`"
+    :api-key="googleMapsApiKey"
+    class="map"
+    :center="center ?? mapInfo.center"
+    :zoom="12"
+    :map-id="`DEMO_MAP_ID`"
+    :options="mapInfo.options"
+  >
+    <AdvancedMarker
+      v-for="marker in markers"
+      :key="marker.id"
+      :options="{ position: marker.position }"
     />
-    <FwbSpinner v-else size="12" color="purple" class="absolute left-1/2 top-1/2" />
-  </div>
+  </GoogleMap>
 </template>
+
+<style scoped>
+.map {
+  width: 100svw;
+  height: 100svh;
+}
+</style>
