@@ -50,7 +50,7 @@ const goTo = async (linkName: string) => {
       >
         <FwbNavbarLink
           class="text-lg text-gray-500 hover:text-gray-900 md:text-base"
-          :is-active="route.name === link.name"
+          :isActive="route.name === link.name"
           @click="goTo(link.name)"
           link-attr="to"
           component="RouterLink"
