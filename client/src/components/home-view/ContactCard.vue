@@ -23,7 +23,7 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
       <p class="text-sm font-medium text-gray-500">
         Subscribe to our newsletter and get the latest updates and news.
       </p>
-      <div class="flex flex-col md:flex-row gap-2 w-full lg:w-1/2">
+      <div class="flex w-full flex-col gap-2 md:flex-row lg:w-1/2">
         <div class="relative w-full">
           <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
             <component :is="EmailIcon" />
