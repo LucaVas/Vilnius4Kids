@@ -1,38 +1,23 @@
 <script lang="ts" setup>
-import { FwbFooter, FwbFooterCopyright, FwbFooterLink, FwbFooterLinkGroup } from 'flowbite-vue';
-import Navbar from '@/components/Navbar.vue';
+import { FwbFooter, FwbFooterCopyright } from 'flowbite-vue';
+import AppNavbar from '@/components/AppNavbar.vue';
 
-const { links, tag } = defineProps<{
+const { links } = defineProps<{
   links: {
     label: string;
     name: string;
   }[];
-  tag: string;
 }>();
 </script>
 
 <template>
-  <Navbar :links="links" :tag="tag" />
+  <AppNavbar :links="links" />
 
   <main class="flex w-screen flex-col items-center justify-start px-6 py-8">
     <RouterView />
   </main>
 
-  <div>
-    <FwbFooter>
-      <FwbFooterCopyright by="Vilnius4kids" class="mb-2" />
-      <FwbFooterLinkGroup>
-        <FwbFooterLink href="#"> About </FwbFooterLink>
-        <FwbFooterLink href="#"> Privacy Policy </FwbFooterLink>
-        <FwbFooterLink href="#"> Licensing </FwbFooterLink>
-        <FwbFooterLink href="#"> Contact </FwbFooterLink>
-      </FwbFooterLinkGroup>
-    </FwbFooter>
-  </div>
+  <FwbFooter>
+    <FwbFooterCopyright by="Vilnius4kids" class="text-xs" />
+  </FwbFooter>
 </template>
-
-<style scoped>
-main {
-  min-height: 75svh;
-}
-</style>

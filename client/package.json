@@ -46,6 +46,7 @@
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.16",
     "chance": "^1.1.11",
+    "daisyui": "^4.12.10",
     "dotenv": "^16.3.1",
     "eslint": "^8.45.0",
     "eslint-plugin-vue": "^9.15.1",

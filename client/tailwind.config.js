@@ -1,4 +1,5 @@
 import flowbitePlugin from 'flowbite/plugin';
+import daisyui from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -10,7 +11,7 @@ export default {
     '../node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
     '../node_modules/flowbite/**/*.{js,jsx,ts,tsx}',
   ],
-  plugins: [flowbitePlugin],
+  plugins: [flowbitePlugin, daisyui],
   theme: {
     fontFamily: {
       body: ['"Inter var"', '"Inter"', '"Open Sans"', 'Helvetica', 'Arial', 'sans-serif'],

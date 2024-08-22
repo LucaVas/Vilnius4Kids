@@ -6,7 +6,6 @@ import HeroSection from '@/components/home-view/HeroSection.vue';
 <template>
   <div class="flex flex-col gap-8">
     <HeroSection />
-
     <ContactCard />
   </div>
 </template>
