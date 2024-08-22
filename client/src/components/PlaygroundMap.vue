@@ -118,17 +118,11 @@ const mapInfo = ref({
     gestureHandling: 'greedy',
     styles: [
       {
-        featureType: 'poi',
-        // deselects all point of interest areas
-        stylers: [{ visibility: 'off' }],
-      },
-      {
         featureType: 'poi.school',
-        stylers: [{ visibility: 'on' }],
+        stylers: [{ visibility: 'on' }, { "saturation": -100 }, { "color": "#99FF33" }],
       },
       {
         featureType: 'administrative',
-        // deselects all administrative areas
         stylers: [{ visibility: 'off' }],
       },
     ],
@@ -146,6 +140,16 @@ const mapInfo = ref({
     :zoom="12"
     :map-id="`DEMO_MAP_ID`"
     :options="mapInfo.options"
+    :disable-default-ui="true"
+    :gesture-handling="`greedy`"
+    :map-type-id="`roadmap`"
+    :map-type-control="false"
+    :zoom-control="false"
+    :scale-control="false"
+    :street-view-control="true"
+    :rotate-control="true"
+    :fullscreen-control="true"
+    :styles="mapInfo.options.styles"
   >
     <AdvancedMarker
       v-for="marker in markers"

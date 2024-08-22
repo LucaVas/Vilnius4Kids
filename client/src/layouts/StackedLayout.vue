@@ -13,7 +13,7 @@ const { links } = defineProps<{
 <template>
   <AppNavbar :links="links" />
 
-  <main class="flex w-screen flex-col items-center justify-start px-6 py-8">
+  <main class="flex w-screen flex-col items-center justify-start">
     <RouterView />
   </main>
 

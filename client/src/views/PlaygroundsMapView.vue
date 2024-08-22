@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount } from 'vue';
 import { trpc } from '@/trpc';
-import { Address } from '../../../server/src/entities/address/address';
 import { authUserId } from '@/stores/user';
 import useErrorMessage from '@/composables/useErrorMessage/index';
 import PlaygroundMap from '@/components/PlaygroundMap.vue';
@@ -17,51 +16,6 @@ import { FwbSpinner } from 'flowbite-vue';
 // const playgroundDistance = ref('');
 // const distanceRetrieved = ref(false);
 // const retrievingDistance = ref(false);
-
-// type CustomMarkerOptions = {
-//   title: string;
-//   position: CustomMarkerPosition;
-// };
-// type CustomMarkerPinOptions = {
-//   background: string;
-// };
-// type CustomMarkerPosition = { lat: number; lng: number };
-
-// const pinOptions = ref<CustomMarkerPinOptions>({ background: '#FBBC04' });
-
-// const mapInfo = ref({
-//   center: {
-//     lat: 54.6872,
-//     lng: 25.2797,
-//   },
-//   options: {
-//     mapTypeId: 'roadmap',
-//     mapTypeControl: false,
-//     zoomControl: false,
-//     scaleControl: false,
-//     streetViewControl: true,
-//     rotateControl: true,
-//     fullscreenControl: true,
-//     gestureHandling: 'greedy',
-//     styles: [
-//       {
-//         featureType: 'poi',
-//         // deselects all point of interest areas
-//         stylers: [{ visibility: 'off' }],
-//       },
-//       {
-//         featureType: 'poi.school',
-//         stylers: [{ visibility: 'on' }],
-//       },
-//       {
-//         featureType: 'administrative',
-//         // deselects all administrative areas
-//         stylers: [{ visibility: 'off' }],
-//       },
-//     ],
-//   },
-//   markers: [] as CustomMarker[],
-// });
 
 // const openedMarkerID = ref<number | null>();
 
@@ -100,29 +54,6 @@ import { FwbSpinner } from 'flowbite-vue';
 //   }
 // }
 
-// function getUserLocation() {
-//   geolocationLoading.value = true;
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-//       userLocation.value = {
-//         lat: position.coords.latitude,
-//         lng: position.coords.longitude,
-//       };
-//       geolocationAllowed.value = true;
-//       geolocationLoading.value = false;
-//       if (playgroundLocation.value) calculateDistance();
-//     }),
-//       (error: GeolocationPositionError) => {
-//         geolocationAllowed.value = false;
-//         geolocationLoading.value = false;
-//         console.error(
-//           'Geolocation is not supported or not allowed. Allow geolocation to use distance calculation feature.' +
-//             error.message
-//         );
-//       };
-//   }
-// }
-
 // const [calculateDistance, errorMessage] = useErrorMessage(async () => {
 //   distanceRetrieved.value = false;
 //   retrievingDistance.value = true;
@@ -142,12 +73,8 @@ import { FwbSpinner } from 'flowbite-vue';
 // });
 
 const geolocationLoading = ref(false);
-const userLocation = ref();
-const center = ref({
-  lat: 54.6872,
-  lng: 25.2797,
-});
 const geolocationAllowed = ref(false);
+const userLocation = ref();
 const getUserLocation = () => {
   geolocationLoading.value = true;
 
@@ -192,7 +119,7 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="flex h-full w-full items-center justify-center" data-testid="playgrounds-map">
+  <div class="flex h-full w-full" data-testid="playgrounds-map">
     <PlaygroundMap
       v-if="pageLoaded"
       :markers="markers"
