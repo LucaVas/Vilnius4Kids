@@ -1,18 +1,17 @@
 <script lang="ts" setup>
 import { FwbFooter, FwbFooterCopyright, FwbFooterLink, FwbFooterLinkGroup } from 'flowbite-vue';
-import Navbar from '@/components/Navbar.vue';
+import AppNavbar from '@/components/AppNavbar.vue';
 
-const { links, tag } = defineProps<{
+const { links } = defineProps<{
   links: {
     label: string;
     name: string;
   }[];
-  tag: string;
 }>();
 </script>
 
 <template>
-  <Navbar :links="links" :tag="tag" />
+  <AppNavbar :links="links" />
 
   <main class="flex w-screen flex-col items-center justify-start px-6 py-8">
     <RouterView />
