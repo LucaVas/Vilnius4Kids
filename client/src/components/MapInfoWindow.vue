@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { InfoWindow } from 'vue3-google-map';
-import type { Marker, Location } from '@/components/types/Map';
-import MapInfoWindowCard from '@/components/map/MapInfoWindowCard.vue';
+import MapInfoWindowCard from '@/components/MapInfoWindowCard.vue';
+import { useMapStore } from '@/stores/mapStore';
 
-defineProps<{
-  marker: Marker | undefined;
-  userLocation: Location | undefined;
-}>();
+const mapStore = useMapStore()
 
 defineEmits<{
   (e: 'close'): void;
@@ -17,9 +14,9 @@ defineEmits<{
 
 <template>
   <InfoWindow
-    v-if="marker"
+    v-if="mapStore.openedMarker"
     :options="{
-      position: marker.position,
+      position: mapStore.openedMarker.position,
       maxWidth: 320,
       minWidth: 320,
       pixelOffset: {
@@ -30,8 +27,6 @@ defineEmits<{
     @closeclick="$emit('close')"
   >
     <MapInfoWindowCard
-      :userLocation="userLocation"
-      :marker="marker"
       @save="(id) => $emit('save', id)"
       @unsave="(id) => $emit('unsave', id)"
     />
