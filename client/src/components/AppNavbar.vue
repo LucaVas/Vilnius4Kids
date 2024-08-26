@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import NavbarMenu from '@/components/navbar/NavbarMenu.vue';
+import NavbarMenu from '@/components/NavbarMenu.vue';
 
 const { links } = defineProps<{
   links: {

@@ -6,7 +6,6 @@ import { trpc } from '../trpc';
 const links = ref([
   { label: 'My playgrounds', name: 'MyHome' },
   { label: 'Find a playground', name: 'Playgrounds' },
-  { label: 'Report an issue', name: 'NewReport' },
 ]);
 
 onBeforeMount(async () => {
