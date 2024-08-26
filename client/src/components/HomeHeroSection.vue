@@ -31,7 +31,7 @@ const heroDescription = ref('The best playgrounds in Vilnius, at your fingertips
           color="purple"
           component="RouterLink"
           tag="router-link"
-          :href="{ name: 'Demo' } as any"
+          :href="{ name: 'Playgrounds' } as any"
         >
           Find a playground
           <template #suffix>
