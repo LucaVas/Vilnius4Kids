@@ -20,7 +20,6 @@ onBeforeMount(async () => {
 onUnmounted(() => {
   playgroundStore.$reset();
 });
-
 </script>
 
 <template>
