@@ -13,10 +13,12 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="card w-full bg-base-100 shadow-md min-w-[15rem]">
+  <div class="card w-full min-w-[15rem] bg-base-100 shadow-md">
     <div class="card-body space-y-1 p-5">
       <div class="flex items-center justify-between">
-        <h2 class="card-title text-[1.1rem]">{{ playground.address.street }} {{ playground.address.number }}</h2>
+        <h2 class="card-title text-[1.1rem]">
+          {{ playground.address.street }} {{ playground.address.number }}
+        </h2>
         <component class="w-6" :is="PinnedIcon" />
       </div>
       <FwbButtonGroup class="flex w-full gap-3">
