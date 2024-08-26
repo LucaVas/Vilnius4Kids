@@ -4,8 +4,7 @@ import { googleMapsApiKey, googleMapsMapId } from '@/config';
 import MapInfoWindow from '@/components/MapInfoWindow.vue';
 import { useMapStore } from '@/stores/mapStore';
 
-const mapStore = useMapStore()
-
+const mapStore = useMapStore();
 </script>
 
 <template>
@@ -28,7 +27,11 @@ const mapStore = useMapStore()
     :my-location-enabled="true"
     :styles="mapStore.styles"
   >
-    <AdvancedMarker v-if="mapStore.userLocation" :options="{ position: mapStore.userLocation }" :pin-options="{ background: '#FBBC04', scale: 0.5 }"/>
+    <AdvancedMarker
+      v-if="mapStore.userLocation"
+      :options="{ position: mapStore.userLocation }"
+      :pin-options="{ background: '#FBBC04', scale: 0.5 }"
+    />
 
     <AdvancedMarker
       v-for="marker in mapStore.playgrounds"
@@ -37,12 +40,7 @@ const mapStore = useMapStore()
       @click="mapStore.openMarker(marker)"
       :pin-options="{ scale: 0.5 }"
     />
-    <MapInfoWindow
-      @close="mapStore.closeMarker()"
-      @save="(id) => mapStore.savePlayground(id)"
-      @unsave="(id) => mapStore.unsavePlayground(id)"
-      class="mb-3 mr-3"
-    />
+    <MapInfoWindow @close="mapStore.closeMarker()" class="mb-3 mr-3" />
   </GoogleMap>
 </template>
 

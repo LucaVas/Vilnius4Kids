@@ -5,7 +5,7 @@ import useErrorMessage from '@/composables/useErrorMessage/index';
 import { trpc } from '@/trpc';
 import { useMapStore } from '@/stores/mapStore';
 
-const mapStore = useMapStore()
+const mapStore = useMapStore();
 
 const retrievingDistance = ref(false);
 const distanceRetrieved = ref(false);

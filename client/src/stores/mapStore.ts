@@ -13,6 +13,7 @@ type MapStoreState = {
   userLocation: null | Location;
   geolocationLoading: boolean;
   geolocationAllowed: boolean;
+  saveUnsaveBtnLoading: boolean;
 };
 
 export const useMapStore = defineStore('mapStore', {
@@ -39,15 +40,16 @@ export const useMapStore = defineStore('mapStore', {
     userLocation: null,
     geolocationLoading: false,
     geolocationAllowed: false,
+    saveUnsaveBtnLoading: false,
   }),
   getters: {
-    mapCenter(state) {
-      if (this.openedMarker) {
-        return this.openedMarker.position;
+    mapCenter(state): Location {
+      if (state.openedMarker) {
+        return state.openedMarker.position;
       }
-      if (this.lastMarker) {
-        return this.lastMarker;
-      } else return this.userLocation ?? this.cityCenter;
+      if (state.lastMarker) {
+        return state.lastMarker.position;
+      } else return state.userLocation ?? state.cityCenter;
     },
   },
   actions: {
@@ -61,11 +63,35 @@ export const useMapStore = defineStore('mapStore', {
       this.lastMarker = this.openedMarker;
       this.openedMarker = null;
     },
-    savePlayground(id: number): void {
-      (this.playgrounds as Marker[]).filter((p) => p.id === id).map((p) => (p.saved = true));
+    async savePlayground(): Promise<void> {
+      this.saveUnsaveBtnLoading = true;
+      if (this.openedMarker) {
+        try {
+          await trpc.playground.addFavoritePlayground.mutate({
+            id: this.openedMarker.id,
+          });
+          this.playgrounds
+            .filter((p) => p.id === this.openedMarker?.id)
+            .map((p) => (p.saved = true));
+        } catch (e) {
+          //
+        } finally {
+          this.saveUnsaveBtnLoading = false;
+        }
+      }
     },
-    unsavePlayground(id: number) {
-      (this.playgrounds as Marker[]).filter((p) => p.id === id).map((p) => (p.saved = false));
+    async unsavePlayground(id: number) {
+      this.saveUnsaveBtnLoading = true;
+      if (this.openedMarker) {
+        try {
+          await trpc.playground.deleteFavoritePlayground.mutate({ id });
+          this.playgrounds.filter((p) => p.id === id).map((p) => (p.saved = false));
+        } catch (e) {
+          //
+        } finally {
+          this.saveUnsaveBtnLoading = false;
+        }
+      }
     },
     async populate(): Promise<void> {
       try {
