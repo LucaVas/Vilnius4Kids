@@ -4,7 +4,7 @@ import HomeHeroSection from '@/components/HomeHeroSection.vue';
 </script>
 
 <template>
-  <div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-8 p-3">
     <HomeHeroSection />
     <HomeSubscriptionCard />
   </div>

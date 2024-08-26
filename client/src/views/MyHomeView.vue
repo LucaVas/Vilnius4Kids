@@ -32,7 +32,10 @@ onBeforeMount(async () => {
     <FwbSpinner size="12" color="purple" class="absolute top-1/4" />
   </div>
   <div v-else class="w-full overflow-auto p-3">
-    <div v-if="favoritePlaygrounds.length > 0" class="flex flex-col gap-4">
+    <div
+      v-if="favoritePlaygrounds.length > 0"
+      class="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
       <PlaygroundCard
         v-for="playground in favoritePlaygrounds"
         :key="playground.id"

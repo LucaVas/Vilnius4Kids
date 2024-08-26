@@ -13,7 +13,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="card w-full bg-base-100 shadow-md min-w-[20rem]">
+  <div class="card w-full bg-base-100 shadow-md min-w-[15rem]">
     <div class="card-body space-y-1 p-5">
       <div class="flex items-center justify-between">
         <h2 class="card-title text-[1.1rem]">{{ playground.address.street }} {{ playground.address.number }}</h2>
