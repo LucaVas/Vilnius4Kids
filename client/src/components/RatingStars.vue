@@ -27,24 +27,28 @@ function calculateRating(starNumber: number) {
 onBeforeMount(() => {
   afterRate.value = props.ratingScheme.rating;
 });
+
+defineEmits<{
+  (e: 'rate', rating: number): void;
+}>();
 </script>
 
 <template>
   <div class="flex items-center">
     <svg
-      v-for="i in 5"
-      :key="i"
+      v-for="star in 5"
+      :key="star"
       class="star"
       aria-hidden="true"
-      :data-testid="'rating-star-' + i"
+      :data-testid="'rating-star-' + star"
       xmlns="http://www.w3.org/2000/svg"
-      :fill="getFill(i)"
+      :fill="getFill(star)"
       viewBox="0 0 22 20"
-      @mouseover="rateHover = i"
+      @mouseover="rateHover = star"
       @mouseleave="rateHover = 0"
       @click="
-        $emit('rate', i);
-        calculateRating(i);
+        $emit('rate', star);
+        calculateRating(star);
       "
     >
       <path
