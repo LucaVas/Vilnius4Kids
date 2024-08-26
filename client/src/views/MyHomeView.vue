@@ -29,23 +29,10 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="!pageLoaded">
-    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
+    <FwbSpinner size="12" color="purple" class="absolute top-1/4" />
   </div>
-  <div v-else class="px-2">
-    <FwbAlert
-      icon
-      border
-      type="info"
-      class="mb-2 mt-2"
-      v-if="!isUserVerified"
-      data-testid="notVerifiedInfoMessage"
-    >
-      You have not verified your email address. Some features might be disabled.
-    </FwbAlert>
-    <div
-      v-if="favoritePlaygrounds.length > 0"
-      class="grid grid-flow-row justify-items-center gap-4 overflow-y-auto p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
+  <div v-else class="w-full overflow-auto p-3">
+    <div v-if="favoritePlaygrounds.length > 0" class="flex flex-col gap-4">
       <PlaygroundCard
         v-for="playground in favoritePlaygrounds"
         :key="playground.id"
