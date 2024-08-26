@@ -43,10 +43,10 @@ onMounted(() => {
 <template>
   <div class="flex w-full items-center justify-center">
     <FwbSpinner v-if="retrievingDistance" size="4" color="purple" />
-    <FwbBadge v-if="!mapStore.userLocation" size="sm" type="red" class="w-full"
-      >Geolocation not available</FwbBadge
+    <FwbBadge v-if="!mapStore.userLocation" size="xs" type="red" class="w-full text-center"
+      >Distance not available. Make sure you allow your location to be discovered.</FwbBadge
     >
-    <FwbBadge v-if="distanceRetrieved" size="sm" type="indigo" class="w-full"
+    <FwbBadge v-if="distanceRetrieved" size="sm" type="indigo" class="w-full text-center"
       >{{ playgroundDistance }} away from you.</FwbBadge
     >
     <FwbBadge v-if="errorMessage" size="sm" type="red" class="w-full">{{ errorMessage }}</FwbBadge>
