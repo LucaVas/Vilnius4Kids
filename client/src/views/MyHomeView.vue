@@ -4,7 +4,7 @@ import { ref, onBeforeMount } from 'vue';
 import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 import EmptyCard from '@/components/EmptyCard.vue';
 import PlaygroundCard from '@/components/PlaygroundCard.vue';
-import { FwbSpinner, FwbAlert } from 'flowbite-vue';
+import { FwbSpinner } from 'flowbite-vue';
 
 const favoritePlaygrounds = ref<PlaygroundSelectWithAddress[]>([]);
 const isUserVerified = ref(true);
@@ -29,22 +29,12 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="!pageLoaded">
-    <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
+    <FwbSpinner size="12" color="purple" class="absolute top-1/4" />
   </div>
-  <div v-else class="px-2">
-    <FwbAlert
-      icon
-      border
-      type="info"
-      class="mb-2 mt-2"
-      v-if="!isUserVerified"
-      data-testid="notVerifiedInfoMessage"
-    >
-      You have not verified your email address. Some features might be disabled.
-    </FwbAlert>
+  <div v-else class="w-full overflow-auto p-3">
     <div
       v-if="favoritePlaygrounds.length > 0"
-      class="grid grid-flow-row justify-items-center gap-4 overflow-y-auto p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      class="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <PlaygroundCard
         v-for="playground in favoritePlaygrounds"

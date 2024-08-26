@@ -11,13 +11,13 @@ const { links } = defineProps<{
 </script>
 
 <template>
-  <AppNavbar :links="links" />
+  <div class="flex h-screen w-screen flex-col items-center justify-between">
+    <AppNavbar :links="links" class="flex-none" />
 
-  <main class="flex w-screen flex-col items-center justify-start">
-    <RouterView />
-  </main>
+    <RouterView class="flex-1" />
 
-  <FwbFooter>
-    <FwbFooterCopyright by="Vilnius4kids" class="text-xs" />
-  </FwbFooter>
+    <FwbFooter class="w-full flex-none rounded-none">
+      <FwbFooterCopyright by="Vilnius4kids" class="text-xs" />
+    </FwbFooter>
+  </div>
 </template>

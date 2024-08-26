@@ -14,7 +14,7 @@ const heroDescription = ref('The best playgrounds in Vilnius, at your fingertips
   >
     <div class="space-y-10 lg:w-1/2">
       <h2
-        class="flex items-center justify-center text-5xl font-bold text-gray-800 dark:text-gray-100 lg:justify-start"
+        class="flex items-center justify-center text-4xl font-bold text-gray-800 dark:text-gray-100 lg:justify-start"
       >
         {{ appName }}
       </h2>
