@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { login } from '@/stores/user';
 import { ref } from 'vue';
-import PageForm from '@/components/PageForm.vue';
+import BaseForm from '@/components/BaseForm.vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
 import { useRouter } from 'vue-router';
 import useErrorMessage from '@/composables/useErrorMessage';
@@ -24,7 +24,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen justify-center">
-    <PageForm heading="Log in" formLabel="Login" @submit="submitLogin" data-testid="login-form">
+    <BaseForm heading="Log in" formLabel="Login" @submit="submitLogin" data-testid="login-form">
       <template #default>
         <FwbInput
           placeholder="Email"
@@ -87,6 +87,6 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
       </template>
-    </PageForm>
+    </BaseForm>
   </div>
 </template>

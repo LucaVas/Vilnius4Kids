@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import NavbarMenu from '@/components/NavbarMenu.vue';
+import AppNavbarMenu from '@/components/AppNavbarMenu.vue';
 
 const { links } = defineProps<{
   links: {
@@ -15,7 +15,7 @@ const appName = ref('Vilnius4Kids');
 <template>
   <div class="navbar bg-base-100">
     <div class="navbar-start">
-      <NavbarMenu :links="links" />
+      <AppNavbarMenu :links="links" />
     </div>
 
     <div class="navbar-end">
