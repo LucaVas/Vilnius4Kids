@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { signup } from '@/stores/user';
 import { ref } from 'vue';
-import PageForm from '@/components/PageForm.vue';
+import BaseForm from '@/components/BaseForm.vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
-import AlertMessage from '@/components/AlertMessage.vue';
+import AppAlert from '@/components/AppAlert.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 
 const userForm = ref({
@@ -25,7 +25,7 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen w-full justify-center">
-    <PageForm heading="Sign up" formLabel="Signup" @submit="submitSignup" data-testid="signup-form">
+    <BaseForm heading="Sign up" formLabel="Signup" @submit="submitSignup" data-testid="signup-form">
       <template #default>
         <FwbInput
           type="text"
@@ -73,9 +73,9 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
 
-        <AlertMessage icon type="danger" v-if="errorMessage" :message="errorMessage">
+        <AppAlert icon type="danger" v-if="errorMessage" :message="errorMessage">
           {{ errorMessage }}
-        </AlertMessage>
+        </AppAlert>
 
         <div class="grid gap-2">
           <FwbButton
@@ -114,6 +114,6 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
       </template>
-    </PageForm>
+    </BaseForm>
   </div>
 </template>

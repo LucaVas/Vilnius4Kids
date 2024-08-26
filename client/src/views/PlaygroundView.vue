@@ -237,17 +237,7 @@ async function removePlaygroundFromFavorites(id: number) {
           @click="removePlaygroundFromFavorites(currentPlayground.id)"
           ><template #prefix></template>Remove from favorites<template #suffix></template
         ></FwbButton>
-        <FwbButton
-          color="purple"
-          outline
-          square
-          data-testid="report-button"
-          component="RouterLink"
-          tag="router-link"
-          :href="{ name: 'PlaygroundReport', params: { id: currentPlayground.id } } as any"
-          >Report</FwbButton
-        ></FwbButtonGroup
-      >
+      </FwbButtonGroup>
     </FwbButtonGroup>
   </div>
 </template>

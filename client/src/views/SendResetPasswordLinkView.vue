@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 import { trpc } from '../trpc';
-import PageForm from '@/components/PageForm.vue';
+import BaseForm from '@/components/BaseForm.vue';
 
 const userEmail = ref('');
 const hasSucceeded = ref(false);
@@ -23,7 +23,7 @@ const [sendResetPasswordLink, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen justify-center">
-    <PageForm
+    <BaseForm
       heading="Find your account"
       formLabel="Find account"
       @submit="sendResetPasswordLink"
@@ -85,6 +85,6 @@ const [sendResetPasswordLink, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
       </template>
-    </PageForm>
+    </BaseForm>
   </div>
 </template>

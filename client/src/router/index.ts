@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { authenticate, hideForAuth, showForVerified } from './guards';
+import { authenticate, hideForAuth } from './guards';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
 import HomeViewVue from '@/views/HomeView.vue';
@@ -26,27 +26,6 @@ const router = createRouter({
           path: '/playgrounds/:id',
           name: 'Playground',
           component: () => import('../views/PlaygroundView.vue'),
-        },
-        {
-          path: 'playgrounds/:id/report',
-          name: 'PlaygroundReport',
-          component: () => import('../views/NewReportView.vue'),
-        },
-        {
-          path: '/report',
-          name: 'NewReport',
-          component: () => import('../views/NewReportView.vue'),
-        },
-        {
-          path: 'reports/:id',
-          name: 'Report',
-          component: () => import('../views/ReportView.vue'),
-        },
-        {
-          path: '/myReports',
-          name: 'MyReports',
-          beforeEnter: [showForVerified],
-          component: () => import('../views/MyReportsView.vue'),
         },
       ],
     },

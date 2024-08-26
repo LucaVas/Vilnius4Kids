@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import PageForm from '@/components/PageForm.vue';
+import BaseForm from '@/components/BaseForm.vue';
 import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue';
-import AlertMessage from '@/components/AlertMessage.vue';
+import AppAlert from '@/components/AppAlert.vue';
 import useErrorMessage from '../composables/useErrorMessage/index';
 import { trpc } from '../trpc';
 
@@ -38,7 +38,7 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen w-full justify-center">
-    <PageForm
+    <BaseForm
       heading="Reset password"
       formLabel="Reset password"
       @submit="resetPassword"
@@ -73,7 +73,7 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           {{ successMessage }}
         </FwbAlert>
 
-        <AlertMessage
+        <AppAlert
           icon
           type="danger"
           v-if="errorMessage"
@@ -81,7 +81,7 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           data-testid="error-message"
         >
           {{ errorMessage }}
-        </AlertMessage>
+        </AppAlert>
 
         <div class="grid gap-2">
           <FwbButton
@@ -109,6 +109,6 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           </FwbButton>
         </div>
       </template>
-    </PageForm>
+    </BaseForm>
   </div>
 </template>
