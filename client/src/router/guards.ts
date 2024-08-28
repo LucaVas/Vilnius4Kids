@@ -9,19 +9,19 @@ export const authenticate = () => {
 
 export const showForVerified = async () => {
   const { isVerified } = await trpc.user.isUserVerified.query();
-  if (!isVerified) return { name: 'MyHome' };
+  if (!isVerified) return { name: 'FavoritePlaygrounds' };
 
   return true;
 };
 
 export const showForAdmin = () => {
-  if (!isAdmin.value) return { name: 'MyHome' };
+  if (!isAdmin.value) return { name: 'FavoritePlaygrounds' };
 
   return true;
 };
 
 export const hideForAuth = () => {
-  if (isLoggedIn.value) return { name: 'MyHome' };
+  if (isLoggedIn.value) return { name: 'FavoritePlaygrounds' };
 
   return true;
 };

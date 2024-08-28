@@ -2,7 +2,7 @@
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { FwbNavbarLink } from 'flowbite-vue';
-import { logout } from '@/stores/user';
+import { isLoggedIn, logout } from '@/stores/user';
 import NavbarBurger from '@/components/icons/NavbarBurger.vue';
 
 const props = defineProps<{
@@ -58,8 +58,9 @@ const goTo = async (linkName: string) => {
           {{ link.label }}
         </FwbNavbarLink>
       </li>
-      <div class="divider"></div>
-      <li>
+
+      <li v-if="isLoggedIn">
+        <div class="divider"></div>
         <FwbNavbarLink
           @click.prevent="logoutUser"
           link="#"

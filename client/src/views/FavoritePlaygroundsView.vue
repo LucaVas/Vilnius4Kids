@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { trpc } from '@/trpc';
 import { ref, onBeforeMount } from 'vue';
-import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 import EmptyCard from '@/components/EmptyCard.vue';
 import PlaygroundCard from '@/components/PlaygroundCard.vue';
 import { FwbSpinner } from 'flowbite-vue';
+import { type PlaygroundSelectWithAddress } from '../../../server/src/entities/playground/schema';
 
 const favoritePlaygrounds = ref<PlaygroundSelectWithAddress[]>([]);
 const isUserVerified = ref(true);

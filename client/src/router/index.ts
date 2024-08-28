@@ -1,21 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { authenticate, hideForAuth } from './guards';
-import HomeLayout from '@/layouts/HomeLayout.vue';
-import MyHomeLayoutVue from '@/layouts/MyHomeLayout.vue';
 import HomeViewVue from '@/views/HomeView.vue';
+import StackedLayout from '@/layouts/StackedLayout.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: MyHomeLayoutVue,
+      component: StackedLayout,
       beforeEnter: [authenticate],
       children: [
         {
-          path: '/myHome',
-          name: 'MyHome',
-          component: () => import('../views/MyHomeView.vue'),
+          path: '',
+          name: 'FavoritePlaygrounds',
+          component: () => import('../views/FavoritePlaygroundsView.vue'),
+        },
+      ],
+    },
+    {
+      path: '',
+      component: StackedLayout,
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          beforeEnter: [hideForAuth],
+          component: HomeViewVue,
+        },
+        {
+          path: '/playgrounds/:id',
+          name: 'Playground',
+          component: () => import('../views/PlaygroundView.vue'),
+        },
+        {
+          path: '/playgrounds',
+          name: 'Playgrounds',
+          component: () => import('../views/PlaygroundsMapView.vue'),
         },
       ],
     },
@@ -61,32 +82,10 @@ const router = createRouter({
     {
       path: '/:catchAll(.*)',
       name: 'NotFound',
-      component: HomeLayout,
+      component: StackedLayout,
       meta: {
         requiresAuth: false,
       },
-    },
-    {
-      path: '',
-      component: HomeLayout,
-      children: [
-        {
-          path: '',
-          name: 'Home',
-          beforeEnter: [hideForAuth],
-          component: HomeViewVue,
-        },
-        {
-          path: '/playgrounds/:id',
-          name: 'Playground',
-          component: () => import('../views/PlaygroundView.vue'),
-        },
-        {
-          path: '/playgrounds',
-          name: 'Playgrounds',
-          component: () => import('../views/PlaygroundsMapView.vue'),
-        },
-      ],
     },
   ],
 });

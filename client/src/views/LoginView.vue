@@ -18,7 +18,7 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
   loading.value = true;
   await login(userForm.value);
 
-  router.push({ name: 'MyHome' });
+  router.push({ name: 'FavoritePlaygrounds' });
 });
 </script>
 
