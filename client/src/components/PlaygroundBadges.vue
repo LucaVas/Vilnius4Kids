@@ -14,15 +14,15 @@ const rate = async (rating: number) => {
 </script>
 
 <template>
+  <FwbAlert icon type="danger" v-if="ratingErrorMessage" data-testid="ratingErrorMessage">
+    {{ ratingErrorMessage }}
+  </FwbAlert>
+
   <div
     v-if="playgroundStore.openPlayground"
     class="mt-2 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
     id="badges"
   >
-    <FwbAlert icon type="danger" v-if="ratingErrorMessage" data-testid="ratingErrorMessage">
-      {{ ratingErrorMessage }}
-    </FwbAlert>
-
     <div class="flex flex-row justify-evenly gap-2">
       <FwbBadge size="sm" type="indigo">{{
         playgroundStore.openPlayground.address.district

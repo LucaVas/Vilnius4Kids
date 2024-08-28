@@ -3,6 +3,7 @@ import { trpc } from '@/trpc';
 import type { Playground } from '@vilnius4kids/server/src/entities';
 import { TRPCClientError } from '@trpc/client';
 import { DEFAULT_SERVER_ERROR } from '@/constants';
+import { isLoggedIn } from './user';
 
 type PlaygroundsStore = {
   isPageLoaded: boolean;
@@ -45,19 +46,25 @@ export const usePlaygroundStore = defineStore('playgroundStore', {
   actions: {
     async populate(id: number): Promise<void> {
       try {
-        const [playground, { count, rating }, { playgrounds }] = await Promise.all([
+        const [playground, { count, rating }] = await Promise.all([
           trpc.playground.getPlayground.query({ id }),
           trpc.rating.getRating.query({ id }),
-          trpc.playground.getFavoritePlaygrounds.query(),
-          trpc.user.isUserVerified.query(),
         ]);
-
         this.openPlayground = playground;
         this.ratingScheme = {
           rating,
           count,
         };
-        this.isSaved = playgrounds.some((p) => p.id === id);
+
+        this.isSaved = false; //
+        if (isLoggedIn.value) {
+          const [{ playgrounds, isVerified }] = await Promise.all([
+            trpc.playground.getFavoritePlaygrounds.query(),
+            trpc.user.isUserVerified.query(),
+          ]);
+          this.isSaved = playgrounds.some((p) => p.id === id);
+        }
+
         this.isPageLoaded = true;
       } catch (e) {
         console.log(e);
