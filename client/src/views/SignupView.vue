@@ -103,17 +103,6 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
             >Sign up
             <template #suffix> </template>
           </FwbButton>
-          <FwbButton
-            class="flex items-center justify-center"
-            color="purple"
-            component="RouterLink"
-            tag="router-link"
-            :href="{ name: 'Demo' } as any"
-            outline
-            type="submit"
-            size="xl"
-            >Try without account
-          </FwbButton>
         </div>
       </template>
 
