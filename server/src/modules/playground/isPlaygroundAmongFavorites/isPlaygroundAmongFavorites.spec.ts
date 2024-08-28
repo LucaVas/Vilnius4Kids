@@ -6,19 +6,18 @@ import router from '..';
 
 const db = await createTestDatabase();
 const user = await db.getRepository(User).save(fakeUser());
-const { getFavoritePlaygrounds } = router.createCaller(
+const { isPlaygroundAmongFavorites } = router.createCaller(
     authContext({ db }, user)
 );
 
 describe('Get favorite playgrounds', async () => {
     it('User gets no favorite playgrounds, if none is saved', async () => {
-        const { playgrounds } = await getFavoritePlaygrounds();
+        const isAmongFavorites = await isPlaygroundAmongFavorites({ id: 1 });
 
-        expect(playgrounds.length).toEqual(0);
-        expect(playgrounds).toEqual([]);
+        expect(isAmongFavorites).toBe(false);
     });
 
-    it('User can get existing favorite playgrounds', async () => {
+    it('User can retrieve if existing playgrounds are among favorites', async () => {
         const [playground1, playground2] = await Promise.all([
             db
                 .getRepository(Playground)
@@ -28,10 +27,16 @@ describe('Get favorite playgrounds', async () => {
                 .save(fakePlayground({ users: [user] })),
         ]);
 
-        const { playgrounds } = await getFavoritePlaygrounds();
+        const [is1AmongFavorites, is2AmongFavorites] = await Promise.all([
+            isPlaygroundAmongFavorites({
+                id: playground1.id,
+            }),
+            await isPlaygroundAmongFavorites({
+                id: playground2.id,
+            }),
+        ]);
 
-        expect(playgrounds.length).toEqual(2);
-        expect(playgrounds[0].id).toEqual(playground1.id);
-        expect(playgrounds[1].id).toEqual(playground2.id);
+        expect(is1AmongFavorites).toBe(true);
+        expect(is2AmongFavorites).toBe(true);
     });
 });
