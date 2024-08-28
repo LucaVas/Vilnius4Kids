@@ -26,8 +26,16 @@ onUnmounted(() => {
   <div v-if="!playgroundStore.isPageLoaded || !playgroundStore.openPlayground">
     <FwbSpinner size="12" color="purple" class="absolute left-1/2 top-1/2" />
   </div>
-  <div v-else class="flex h-full w-full flex-col gap-4 p-4" data-testid="playground-view-card">
-    <FwbCarousel :pictures="playgroundStore.pictures" slide :slide-interval="5000" />
+  <div
+    v-else
+    class="flex h-full w-full flex-col gap-4 p-4"
+    data-testid="playground-view-card"
+  >
+    <FwbCarousel
+      :pictures="playgroundStore.pictures"
+      slide
+      :slide-interval="5000"
+    />
 
     <PlaygroundBadges />
 

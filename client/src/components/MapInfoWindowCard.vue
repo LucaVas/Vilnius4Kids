@@ -14,7 +14,8 @@ const mapStore = useMapStore();
         class="mb-2 text-lg font-bold tracking-tight text-gray-900"
         data-testid="infobox-playground-address"
       >
-        {{ mapStore.openedMarker.address.street }} {{ mapStore.openedMarker.address.number }},
+        {{ mapStore.openedMarker.address.street }}
+        {{ mapStore.openedMarker.address.number }},
         {{ mapStore.openedMarker.address.zipCode }} -
         {{ mapStore.openedMarker.address.city }}
       </h5>

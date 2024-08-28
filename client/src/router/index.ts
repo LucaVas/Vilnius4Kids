@@ -17,16 +17,6 @@ const router = createRouter({
           name: 'MyHome',
           component: () => import('../views/MyHomeView.vue'),
         },
-        {
-          path: '/playgrounds',
-          name: 'Playgrounds',
-          component: () => import('../views/PlaygroundsMapView.vue'),
-        },
-        {
-          path: '/playgrounds/:id',
-          name: 'Playground',
-          component: () => import('../views/PlaygroundView.vue'),
-        },
       ],
     },
     {
@@ -34,14 +24,20 @@ const router = createRouter({
       name: 'Verify',
       beforeEnter: [hideForAuth],
       component: () => import('../views/VerifyTokenView.vue'),
-      props: (route) => ({ email: route.query.email, token: route.query.token }),
+      props: (route) => ({
+        email: route.query.email,
+        token: route.query.token,
+      }),
     },
     {
       path: '/resetPassword',
       name: 'ResetPassword',
       beforeEnter: [hideForAuth],
       component: () => import('../views/ResetPasswordView.vue'),
-      props: (route) => ({ email: route.query.email, token: route.query.token }),
+      props: (route) => ({
+        email: route.query.email,
+        token: route.query.token,
+      }),
     },
     {
       path: '/reset',
@@ -61,6 +57,7 @@ const router = createRouter({
       beforeEnter: [hideForAuth],
       component: () => import('../views/SignupView.vue'),
     },
+
     {
       path: '/:catchAll(.*)',
       name: 'NotFound',
@@ -72,17 +69,22 @@ const router = createRouter({
     {
       path: '',
       component: HomeLayout,
-      beforeEnter: [hideForAuth],
       children: [
         {
           path: '',
           name: 'Home',
+          beforeEnter: [hideForAuth],
           component: HomeViewVue,
         },
         {
-          path: '/demo',
-          name: 'Demo',
-          component: () => import('../views/DemoView.vue'),
+          path: '/playgrounds/:id',
+          name: 'Playground',
+          component: () => import('../views/PlaygroundView.vue'),
+        },
+        {
+          path: '/playgrounds',
+          name: 'Playgrounds',
+          component: () => import('../views/PlaygroundsMapView.vue'),
         },
       ],
     },

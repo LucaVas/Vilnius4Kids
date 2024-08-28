@@ -24,7 +24,12 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen justify-center">
-    <BaseForm heading="Log in" formLabel="Login" @submit="submitLogin" data-testid="login-form">
+    <BaseForm
+      heading="Log in"
+      formLabel="Login"
+      @submit="submitLogin"
+      data-testid="login-form"
+    >
       <template #default>
         <FwbInput
           placeholder="Email"
@@ -45,7 +50,12 @@ const [submitLogin, errorMessage] = useErrorMessage(async () => {
           class="focus:border-teal text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
-        <FwbAlert icon type="danger" v-if="errorMessage" data-testid="errorMessage">
+        <FwbAlert
+          icon
+          type="danger"
+          v-if="errorMessage"
+          data-testid="errorMessage"
+        >
           {{ errorMessage }}
         </FwbAlert>
 

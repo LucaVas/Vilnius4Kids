@@ -17,6 +17,11 @@ onBeforeMount(async () => {
 <template>
   <div class="flex h-full w-full" data-testid="playgrounds-map">
     <Map v-if="pageLoaded" class="h-full w-full" />
-    <FwbSpinner v-else size="12" color="purple" class="absolute left-1/2 top-1/2" />
+    <FwbSpinner
+      v-else
+      size="12"
+      color="purple"
+      class="absolute left-1/2 top-1/2"
+    />
   </div>
 </template>

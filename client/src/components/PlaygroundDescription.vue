@@ -6,7 +6,10 @@ const playgroundStore = usePlaygroundStore();
 
 <template>
   <div class="mb-4" v-if="playgroundStore.openPlayground">
-    <p v-if="playgroundStore.openPlayground.description" class="text-base leading-7 text-gray-900">
+    <p
+      v-if="playgroundStore.openPlayground.description"
+      class="text-base leading-7 text-gray-900"
+    >
       {{ playgroundStore.openPlayground.description }}
     </p>
 

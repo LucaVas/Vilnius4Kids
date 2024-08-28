@@ -20,7 +20,10 @@ const playgroundStore = usePlaygroundStore();
       Playground with moderate risk of injury.
     </FwbAlert>
     <FwbAlert
-      v-if="playgroundStore.ratingScheme.count !== 0 && playgroundStore.ratingScheme.rating <= 2.5"
+      v-if="
+        playgroundStore.ratingScheme.count !== 0 &&
+        playgroundStore.ratingScheme.rating <= 2.5
+      "
       closable
       icon
       type="danger"

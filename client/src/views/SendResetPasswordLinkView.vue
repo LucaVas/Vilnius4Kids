@@ -38,11 +38,21 @@ const [sendResetPasswordLink, errorMessage] = useErrorMessage(async () => {
           class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0"
         />
 
-        <FwbAlert icon type="danger" v-if="errorMessage" data-testid="error-message">
+        <FwbAlert
+          icon
+          type="danger"
+          v-if="errorMessage"
+          data-testid="error-message"
+        >
           {{ errorMessage }}
         </FwbAlert>
 
-        <FwbAlert icon type="success" v-if="hasSucceeded" data-testid="success-message">
+        <FwbAlert
+          icon
+          type="success"
+          v-if="hasSucceeded"
+          data-testid="success-message"
+        >
           {{ successMessage }}
         </FwbAlert>
 

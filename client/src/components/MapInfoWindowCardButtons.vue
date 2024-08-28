@@ -22,7 +22,12 @@ const mapStore = useMapStore();
       square
     >
       <a
-        :href="getGMapsUrl(mapStore.openedMarker.position.lat, mapStore.openedMarker.position.lng)"
+        :href="
+          getGMapsUrl(
+            mapStore.openedMarker.position.lat,
+            mapStore.openedMarker.position.lng
+          )
+        "
         target="_blank"
         rel="noreferrer"
         ><img src="@/assets/map.png" alt="Maps icon" class="max-h-7"
@@ -62,7 +67,9 @@ const mapStore = useMapStore();
       data-testid="go-to-playground-button"
       component="RouterLink"
       tag="router-link"
-      :href="{ name: 'Playground', params: { id: mapStore.openedMarker.id } } as any"
+      :href="
+        { name: 'Playground', params: { id: mapStore.openedMarker.id } } as any
+      "
     >
       View
     </FwbButton>

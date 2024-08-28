@@ -13,7 +13,9 @@ import { FwbButton } from 'flowbite-vue';
       alt="image of void"
     />
     <div class="flex flex-col items-center justify-center gap-4 px-2 pb-4">
-      <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+      <h5
+        class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
+      >
         No playgrounds saved yet
       </h5>
       <div class="flex items-center justify-between">

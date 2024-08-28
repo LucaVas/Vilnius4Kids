@@ -69,7 +69,11 @@ const [resetPassword, errorMessage] = useErrorMessage(async () => {
           class="text-sm font-medium text-gray-900 focus:border-violet-500 focus:outline-none focus:ring-0 dark:text-white"
         />
 
-        <FwbAlert v-if="hasSucceeded" type="success" data-testid="success-message">
+        <FwbAlert
+          v-if="hasSucceeded"
+          type="success"
+          data-testid="success-message"
+        >
           {{ successMessage }}
         </FwbAlert>
 

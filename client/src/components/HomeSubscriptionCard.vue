@@ -17,7 +17,9 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
 </script>
 
 <template>
-  <div class="max-w-screen rounded-lg border-gray-200 bg-white p-8 sm:m-0 sm:p-12 md:p-12">
+  <div
+    class="max-w-screen rounded-lg border-gray-200 bg-white p-8 sm:m-0 sm:p-12 md:p-12"
+  >
     <form class="space-y-8" @submit.prevent="subscribe">
       <h5 class="text-2xl font-medium text-black">Stay tuned!</h5>
       <p class="text-sm font-medium text-gray-500">
@@ -25,7 +27,9 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
       </p>
       <div class="flex w-full flex-col gap-2 md:flex-row lg:w-1/2">
         <div class="relative w-full">
-          <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5">
+          <div
+            class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3.5"
+          >
             <component :is="EmailIcon" />
           </div>
           <input
@@ -36,7 +40,9 @@ const [subscribe, errorMessage] = useErrorMessage(async () => {
             placeholder="your@email.com"
           />
         </div>
-        <FwbButton color="purple" type="submit" outline size="lg">Subscribe</FwbButton>
+        <FwbButton color="purple" type="submit" outline size="lg"
+          >Subscribe</FwbButton
+        >
       </div>
 
       <div id="alerts">
