@@ -58,9 +58,10 @@ export const usePlaygroundStore = defineStore('playgroundStore', {
 
         this.isSaved = false; //
         if (isLoggedIn.value) {
-          const isAmongFavorites = await trpc.playground.isPlaygroundAmongFavorites.query({
-            id,
-          });
+          const isAmongFavorites =
+            await trpc.playground.isPlaygroundAmongFavorites.query({
+              id,
+            });
           this.isSaved = isAmongFavorites;
         }
 

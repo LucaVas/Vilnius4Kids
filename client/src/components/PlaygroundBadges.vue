@@ -67,7 +67,7 @@ const rate = async (rating: number) => {
   <AppAuthenticateModal
     :isOpen="isAuthModalOpen"
     @close="isAuthModalOpen = false"
-    >If you wish to rate this playground, you must log in
-    or create an account.</AppAuthenticateModal
+    >If you wish to rate this playground, you must log in or create an
+    account.</AppAuthenticateModal
   >
 </template>

@@ -4,7 +4,9 @@ import ArrowRight from '@/components/icons/ArrowRight.vue';
 import { ref } from 'vue';
 
 const appName = ref('Vilnius4Kids');
-const heroDescription = ref('The best playgrounds in Vilnius, at your fingertips.');
+const heroDescription = ref(
+  'The best playgrounds in Vilnius, at your fingertips.'
+);
 </script>
 
 <template>

@@ -17,7 +17,10 @@ const errorMessage = ref('');
 
 onMounted(async () => {
   try {
-    await trpc.verificationToken.verify.mutate({ email: props.email, token: props.token });
+    await trpc.verificationToken.verify.mutate({
+      email: props.email,
+      token: props.token,
+    });
     hasSucceeded.value = true;
     isVerifying.value = false;
     logout();
@@ -33,7 +36,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="isVerifying" class="flex h-screen flex-col items-center gap-4 px-2 py-10">
+  <div
+    v-if="isVerifying"
+    class="flex h-screen flex-col items-center gap-4 px-2 py-10"
+  >
     We are verifying your account, please wait...
     <FwbSpinner size="12" color="purple" />
   </div>

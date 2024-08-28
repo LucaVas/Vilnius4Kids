@@ -25,7 +25,12 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
 
 <template>
   <div class="flex h-screen w-full justify-center">
-    <BaseForm heading="Sign up" formLabel="Signup" @submit="submitSignup" data-testid="signup-form">
+    <BaseForm
+      heading="Sign up"
+      formLabel="Signup"
+      @submit="submitSignup"
+      data-testid="signup-form"
+    >
       <template #default>
         <FwbInput
           type="text"
@@ -60,11 +65,15 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
         />
 
         <FwbAlert v-if="hasSucceeded" type="info" data-testid="tokenMessage">
-          A confirmation email has been sent to {{ userForm.email }}. Please confirm it to activate
-          your account.
+          A confirmation email has been sent to {{ userForm.email }}. Please
+          confirm it to activate your account.
         </FwbAlert>
 
-        <FwbAlert v-if="hasSucceeded" type="success" data-testid="successMessage">
+        <FwbAlert
+          v-if="hasSucceeded"
+          type="success"
+          data-testid="successMessage"
+        >
           You have successfully signed up! You can now log in.
           <RouterLink
             :to="{ name: 'Login' }"
@@ -73,7 +82,12 @@ const [submitSignup, errorMessage] = useErrorMessage(async () => {
           >
         </FwbAlert>
 
-        <AppAlert icon type="danger" v-if="errorMessage" :message="errorMessage">
+        <AppAlert
+          icon
+          type="danger"
+          v-if="errorMessage"
+          :message="errorMessage"
+        >
           {{ errorMessage }}
         </AppAlert>
 

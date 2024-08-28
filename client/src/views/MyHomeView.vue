@@ -12,7 +12,9 @@ const pageLoaded = ref(false);
 
 async function removeFromPlaygrounds(id: number) {
   await trpc.playground.deleteFavoritePlayground.mutate({ id });
-  favoritePlaygrounds.value = favoritePlaygrounds.value.filter((p) => p.id !== id);
+  favoritePlaygrounds.value = favoritePlaygrounds.value.filter(
+    (p) => p.id !== id
+  );
 }
 
 onBeforeMount(async () => {

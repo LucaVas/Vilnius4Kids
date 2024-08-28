@@ -12,7 +12,11 @@ import type { Ref } from 'vue';
  * @returns The result of the provided function, if no error occurred.
  * @throws The error that occurred, if `doRethrow` is `true`.
  */
-export async function handleError(errorMessage: Ref<string>, fn: Function, doRethrow = false) {
+export async function handleError(
+  errorMessage: Ref<string>,
+  fn: Function,
+  doRethrow = false
+) {
   try {
     const result = await fn();
 
@@ -31,12 +35,13 @@ export async function handleError(errorMessage: Ref<string>, fn: Function, doRet
  * Wraps the provided function in a try/catch block and sets the error message to
  * the provided `errorMessage` ref if an error occurs.
  */
-export function withError<Args extends any[], Return, T extends (...args: Args) => Return>(
-  errorMessage: Ref<string>,
-  fn: T,
-  doRethrow = false
-): T {
-  return ((...args: Args) => handleError(errorMessage, () => fn(...args), doRethrow)) as T;
+export function withError<
+  Args extends any[],
+  Return,
+  T extends (...args: Args) => Return,
+>(errorMessage: Ref<string>, fn: T, doRethrow = false): T {
+  return ((...args: Args) =>
+    handleError(errorMessage, () => fn(...args), doRethrow)) as T;
 }
 
 function getErrorMessage(error: unknown) {

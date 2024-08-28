@@ -25,7 +25,11 @@ export const useMapStore = defineStore('mapStore', {
     styles: [
       {
         featureType: 'poi.school',
-        stylers: [{ visibility: 'on' }, { saturation: -100 }, { color: '#99FF33' }],
+        stylers: [
+          { visibility: 'on' },
+          { saturation: -100 },
+          { color: '#99FF33' },
+        ],
       },
       {
         featureType: 'administrative',
@@ -85,7 +89,9 @@ export const useMapStore = defineStore('mapStore', {
       if (this.openedMarker) {
         try {
           await trpc.playground.deleteFavoritePlayground.mutate({ id });
-          this.playgrounds.filter((p) => p.id === id).map((p) => (p.saved = false));
+          this.playgrounds
+            .filter((p) => p.id === id)
+            .map((p) => (p.saved = false));
         } catch (e) {
           //
         } finally {
@@ -113,14 +119,16 @@ export const useMapStore = defineStore('mapStore', {
       this.geolocationLoading = true;
 
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-          this.userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          this.geolocationAllowed = true;
-          this.geolocationLoading = false;
-        }),
+        navigator.geolocation.getCurrentPosition(
+          (position: GeolocationPosition) => {
+            this.userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+            this.geolocationAllowed = true;
+            this.geolocationLoading = false;
+          }
+        ),
           (error: GeolocationPositionError) => {
             this.geolocationAllowed = false;
             this.geolocationLoading = false;
