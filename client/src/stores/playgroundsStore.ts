@@ -58,11 +58,10 @@ export const usePlaygroundStore = defineStore('playgroundStore', {
 
         this.isSaved = false; //
         if (isLoggedIn.value) {
-          const [{ playgrounds, isVerified }] = await Promise.all([
-            trpc.playground.getFavoritePlaygrounds.query(),
-            trpc.user.isUserVerified.query(),
-          ]);
-          this.isSaved = playgrounds.some((p) => p.id === id);
+          const isAmongFavorites = await trpc.playground.isPlaygroundAmongFavorites.query({
+            id,
+          });
+          this.isSaved = isAmongFavorites;
         }
 
         this.isPageLoaded = true;
@@ -89,7 +88,9 @@ export const usePlaygroundStore = defineStore('playgroundStore', {
       this.saveUnsaveBtnLoading = true;
       if (this.openPlayground) {
         try {
-          await trpc.playground.deleteFavoritePlayground.mutate({ id: this.openPlayground.id });
+          await trpc.playground.deleteFavoritePlayground.mutate({
+            id: this.openPlayground.id,
+          });
           this.isSaved = false;
         } catch (e) {
           //

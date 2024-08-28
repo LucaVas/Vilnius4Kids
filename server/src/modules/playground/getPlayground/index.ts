@@ -2,7 +2,7 @@ import { Playground } from '@server/entities';
 import { TRPCError } from '@trpc/server';
 import logger from '@server/logger';
 import { publicProcedure } from '@server/trpc';
-import { playgroundIdSchema } from '../../../entities/playground/schema';
+import { playgroundIdSchema } from '@server/entities/playground/schema';
 
 export default publicProcedure
     .input(playgroundIdSchema)
