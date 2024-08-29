@@ -4,7 +4,9 @@ import { FwbButton, FwbAlert } from 'flowbite-vue';
 import { ref, onMounted } from 'vue';
 import { Loader } from '@googlemaps/js-api-loader';
 import { googleMapsApiKey } from '../config';
-import type { AutocompletedAddress, Location } from '../components/types/Map';
+import type { AutocompletedAddress } from '../components/types/Map';
+import { trpc } from '../trpc';
+import useErrorMessage from '@/composables/useErrorMessage/index';
 
 const playgroundToAdd = ref({
   isPrivate: false,
@@ -14,20 +16,20 @@ const playgroundToAdd = ref({
     number: 0,
     zipCode: 0,
     city: '',
-    district: '',
   },
-  location: {} as Location,
+  latitude: 0,
+  longitude: 0,
   comments: '',
 });
 
 const loading = ref(false);
 const autocompleteErrorMessage = ref('');
-const errorMessage = ref('');
-const submit = () => {
+
+const [submit, errorMessage] = useErrorMessage(async () => {
   loading.value = true;
-  console.log(playgroundToAdd.value);
+  await trpc.playground.referPlayground.mutate(playgroundToAdd.value);
   loading.value = false;
-};
+});
 
 const autocompleteOptions = ref({
   types: ['address'],
@@ -71,12 +73,9 @@ const autocomplete = async () => {
           number: Number(location.address_components[0].long_name),
           zipCode: Number(location.address_components[5].long_name),
           city: location.address_components[2].long_name,
-          district: location.address_components[3].long_name,
         },
-        location: {
-          lat: location.geometry.location.lat(),
-          lng: location.geometry.location.lng(),
-        },
+        latitude: location.geometry.location.lat(),
+        longitude: location.geometry.location.lng(),
       };
     }
   });
@@ -92,7 +91,7 @@ const autocomplete = async () => {
   >
     <template #default>
       <p class="mb-4 text-sm text-gray-600">
-        Fill out the details below to add a new playground.
+        Fill out the details below to refer a new playground.
       </p>
 
       <input

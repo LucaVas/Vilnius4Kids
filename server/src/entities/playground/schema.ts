@@ -22,6 +22,37 @@ export const playgroundSchema = validates<BarePlayground>().with({
     description: z.string().max(500),
 });
 
+export const playgroundReferralSchema = playgroundSchema
+    .pick({
+        isPrivate: true,
+        isOpen: true,
+        latitude: true,
+        longitude: true,
+    })
+    .extend({
+        comments: z.string().max(500),
+        fullAddress: z.object({
+            street: z
+                .string()
+                .trim()
+                .toLowerCase()
+                .min(3, {
+                    message: 'Street should be at least 3 characters long.',
+                })
+                .max(255, { message: 'Street cannot exceed 255 characters.' })
+                .describe('Street name'),
+            number: z.number().int().positive().describe('Street number'),
+            zipCode: z.number().int().positive().describe('Zip code'),
+            city: z
+                .string()
+                .trim()
+                .toLowerCase()
+                .min(2)
+                .max(255, { message: 'City cannot exceed 255 characters.' })
+                .describe('City name')
+        }),
+    });
+
 export const playgroundInsertSchema = playgroundSchema
     .omit({
         id: true,

@@ -9,9 +9,11 @@ import getPlaygrounds from './getPlaygrounds';
 import getFavoritePlaygrounds from './getFavoritePlaygrounds';
 import getDistance from './getDistance';
 import isPlaygroundAmongFavorites from './isPlaygroundAmongFavorites';
+import referPlayground from './referPlayground';
 
 export default router({
     addPlayground,
+    referPlayground,
     addFavoritePlayground,
     deletePlayground,
     deleteFavoritePlayground,
