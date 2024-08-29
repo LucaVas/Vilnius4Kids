@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="flex h-full flex-col justify-between p-8">
+  <div class="flex h-full flex-col justify-between p-8 w-full max-w-[40rem]">
     <div>
       <FwbHeading tag="h2" class="text-black">{{ heading }}</FwbHeading>
 

@@ -91,8 +91,8 @@ const autocomplete = async () => {
     data-testid="add-playground-form"
   >
     <template #default>
-      <p class="mb-4 text-gray-600">
-        Fill out the details below to add a new playground to the map.
+      <p class="mb-4 text-sm text-gray-600">
+        Fill out the details below to add a new playground.
       </p>
 
       <input
@@ -115,7 +115,7 @@ const autocomplete = async () => {
       <div>
         <div class="form-control">
           <label class="label cursor-pointer">
-            <span class="label-text">Is it private?</span>
+            <span class="label-text font-semibold">Is it private?</span>
             <input
               type="checkbox"
               :checked="playgroundToAdd.isPrivate"
@@ -126,7 +126,7 @@ const autocomplete = async () => {
 
         <div class="form-control">
           <label class="label cursor-pointer">
-            <span class="label-text">Is it open?</span>
+            <span class="label-text font-semibold">Is it open?</span>
             <input
               type="checkbox"
               :checked="playgroundToAdd.isOpen"
@@ -139,7 +139,7 @@ const autocomplete = async () => {
       <textarea
         v-model="playgroundToAdd.comments"
         placeholder="Any comments? (Optional)"
-        class="textarea textarea-bordered textarea-sm w-full max-w-xs"
+        class="textarea textarea-bordered textarea-sm w-full"
       />
 
       <FwbAlert
