@@ -25,7 +25,6 @@ const router = createRouter({
         {
           path: '',
           name: 'Home',
-          beforeEnter: [hideForAuth],
           component: HomeViewVue,
         },
         {
@@ -37,6 +36,11 @@ const router = createRouter({
           path: '/playgrounds',
           name: 'Playgrounds',
           component: () => import('../views/PlaygroundsMapView.vue'),
+        },
+        {
+          path: '/playgrounds/new',
+          name: 'AddPlayground',
+          component: () => import('../views/AddPlaygroundView.vue'),
         },
       ],
     },

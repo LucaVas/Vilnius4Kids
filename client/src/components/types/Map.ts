@@ -13,3 +13,53 @@ export type Location = {
   lat: number;
   lng: number;
 };
+
+export type AutocompletedAddress = {
+  address_components: [
+    {
+      long_name: string;
+      short_name: string;
+      types: string[];
+    },
+    {
+      long_name: string;
+      short_name: string;
+      types: string[];
+    },
+    {
+      long_name: string;
+      short_name: string;
+      types: string[];
+    },
+    {
+      long_name: string;
+      short_name: string;
+      types: string[];
+    },
+    {
+      long_name: string;
+      short_name: string;
+      types: string[];
+    },
+    {
+      long_name: string;
+      short_name: string;
+      types: string;
+    },
+  ];
+  geometry: {
+    location: {
+      lat: () => number;
+      lng: () => number;
+    };
+    viewport: {
+      south: number;
+      west: number;
+      north: number;
+      east: number;
+    };
+  };
+  icon: string;
+  name: string;
+  html_attributions: string[];
+};

@@ -18,6 +18,12 @@ const baseLinks = ref<BaseLink[]>([
     showForAuth: true,
     showForGuest: true,
   },
+  {
+    label: 'Add a playground',
+    name: 'AddPlayground',
+    showForAuth: true,
+    showForGuest: true,
+  },
   { label: 'Login', name: 'Login', showForAuth: false, showForGuest: true },
   { label: 'Signup', name: 'Signup', showForAuth: false, showForGuest: true },
 ]);
