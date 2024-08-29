@@ -43,7 +43,7 @@ const mapStore = useMapStore();
       outline
       class="min-w-[3rem]"
       loading-position="suffix"
-      @click="mapStore.savePlayground()"
+      @click="mapStore.savePlayground();"
       ><template #prefix></template>Save
       <template #suffix></template>
     </FwbButton>

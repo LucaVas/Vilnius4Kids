@@ -7,7 +7,7 @@ defineProps<{
 }>();
 
 defineEmits<{
-  submit: [];
+  (e: 'submit'): void;
 }>();
 </script>
 

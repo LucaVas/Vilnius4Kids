@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { Location, Marker } from '@/components/types/Map';
 import { trpc } from '@/trpc';
-import { authUserId } from '@/stores/user';
+import { authUserId, isLoggedIn } from '@/stores/user';
 
 type MapStoreState = {
   cityCenter: Location;
@@ -14,6 +14,7 @@ type MapStoreState = {
   geolocationLoading: boolean;
   geolocationAllowed: boolean;
   saveUnsaveBtnLoading: boolean;
+  authModalOpen: boolean;
 };
 
 export const useMapStore = defineStore('mapStore', {
@@ -45,6 +46,7 @@ export const useMapStore = defineStore('mapStore', {
     geolocationLoading: false,
     geolocationAllowed: false,
     saveUnsaveBtnLoading: false,
+    authModalOpen: false,
   }),
   getters: {
     mapCenter(state): Location {
@@ -68,6 +70,11 @@ export const useMapStore = defineStore('mapStore', {
       this.openedMarker = null;
     },
     async savePlayground(): Promise<void> {
+      if (!isLoggedIn.value) {
+        this.authModalOpen = true;
+        return;
+      }
+
       this.saveUnsaveBtnLoading = true;
       if (this.openedMarker) {
         try {

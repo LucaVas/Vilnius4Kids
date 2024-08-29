@@ -3,6 +3,7 @@ import { GoogleMap, AdvancedMarker } from 'vue3-google-map';
 import { googleMapsApiKey, googleMapsMapId } from '@/config';
 import MapInfoWindow from '@/components/MapInfoWindow.vue';
 import { useMapStore } from '@/stores/mapStore';
+import AppAuthenticateModal from './AppAuthenticateModal.vue';
 
 const mapStore = useMapStore();
 </script>
@@ -37,11 +38,18 @@ const mapStore = useMapStore();
       v-for="marker in mapStore.playgrounds"
       :key="marker.id"
       :options="{ position: marker.position, gmpDraggable: false }"
-      @click="mapStore.openMarker(marker)"
+      @click="mapStore.openMarker(marker);"
       :pin-options="{ scale: 0.5 }"
     />
     <MapInfoWindow @close="mapStore.closeMarker()" class="mb-3 mr-3" />
   </GoogleMap>
+
+  <AppAuthenticateModal
+    :isOpen="mapStore.authModalOpen"
+    @close="mapStore.authModalOpen = false"
+    >If you wish to save this playground, you must log in or create an
+    account.</AppAuthenticateModal
+  >
 </template>
 
 <style scoped>
