@@ -31,7 +31,12 @@ const mapStore = useMapStore();
     <AdvancedMarker
       v-if="mapStore.userLocation"
       :options="{ position: mapStore.userLocation }"
-      :pin-options="{ background: '#FBBC04', scale: 0.5 }"
+      :pin-options="{
+        background: '#652ee3',
+        borderColor: '#ffffff',
+        glyphColor: '#ffffff',
+        scale: 0.8,
+      }"
     />
 
     <AdvancedMarker
@@ -39,7 +44,7 @@ const mapStore = useMapStore();
       :key="marker.id"
       :options="{ position: marker.position, gmpDraggable: false }"
       @click="mapStore.openMarker(marker)"
-      :pin-options="{ scale: 0.5 }"
+      :pin-options="{ scale: 0.8 }"
     />
     <MapInfoWindow @close="mapStore.closeMarker()" class="mb-3 mr-3" />
   </GoogleMap>
