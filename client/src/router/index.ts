@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { authenticate, hideForAuth } from './guards';
 import HomeViewVue from '@/views/HomeView.vue';
 import StackedLayout from '@/layouts/StackedLayout.vue';
+import AuthenticationLayout from '@/layouts/AuthenticationLayout.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,17 +71,23 @@ const router = createRouter({
       beforeEnter: [hideForAuth],
       component: () => import('../views/SendResetPasswordLinkView.vue'),
     },
+
     {
-      path: '/login',
-      name: 'Login',
+      path: '/',
+      component: AuthenticationLayout,
       beforeEnter: [hideForAuth],
-      component: () => import('../views/LoginView.vue'),
-    },
-    {
-      path: '/signup',
-      name: 'Signup',
-      beforeEnter: [hideForAuth],
-      component: () => import('../views/SignupView.vue'),
+      children: [
+        {
+          path: '/login',
+          name: 'Login',
+          component: () => import('../views/LoginView.vue'),
+        },
+        {
+          path: '/signup',
+          name: 'Signup',
+          component: () => import('../views/SignupView.vue'),
+        },
+      ],
     },
 
     {
