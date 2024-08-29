@@ -15,7 +15,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "clean": "run-p lint format typecheck"
+    "prepare": "run-p lint format typecheck"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.16",
